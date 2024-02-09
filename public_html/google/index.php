@@ -23,6 +23,7 @@ if (isset($_SESSION['movingwifi-gCal']))
 	
 	$data = apiRequest($urlResourceOwnerDetails, $token['access_token']);
 	print '<pre>';
+	print_r($token);
 	print_r($data);
 	print '</pre>';
 }
