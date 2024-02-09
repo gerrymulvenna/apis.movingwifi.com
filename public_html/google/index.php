@@ -18,15 +18,11 @@ if (!isset($_GET['code'])) {
 
     // display Connect to Google button
 	print head($title);
-	print '<div class="card large">
-	<form method="GET" action="' . $urlAuthorize . '">
-	<input type="hidden" name="client_id" value="' . $client_id . '">
-	<input type="hidden" name="response_type" value="code">
-	<input type="hidden" name="redirect_uri" value="' . $redirect_uri . '">
-	<input type="hidden" name="scope" value="' . implode(' ', $scopes) . '">
-	<input type="hidden" name="state" value="' . $state . '">
-	<input class="tertiary" type="submit" value="Connect to Google">
-	</form></div>';
+	print generic_button("google", "Connect to Google",['client_id'=>$client_id,
+	                                                    'response_type'=>'code',
+														'redirect_uri'=>$redirect_uri,
+														'scope'=>implode(' ', $scopes)
+														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
 }
 // Check given state against previously stored one to mitigate CSRF attack
 elseif (empty($_GET['state']) || empty($_SESSION['oauth2state']) || $_GET['state'] !== $_SESSION['oauth2state']) {

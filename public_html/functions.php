@@ -79,6 +79,28 @@ function footer($button, $text)
 {
 	$html = '<div class="footer"><div class="card large">' . $text . '<a class="button secondary" href="./?operation=revoke">' . $button . '</a></div></div></footer>';
 	return $html;
-}	
+}
+
+/**
+ * return HTML for a generic form with a submit button and hidden variables passed as an associative array
+ *
+ * @param string $id Used as ID and NAME in the form / submit button 
+ * @param string $text Text used on the submit button 
+ * @param array $vars Key / value pairs included in the form as HIDDEN fields
+ * @param string $method POST or GET 
+ * @param string $action Script to process the form
+ * @return string HTML markup for a single button form with hidden fields
+*/
+function generic_button($id, $text, $vars, $class = "tertiary", $method = "GET", $action = "./")
+{
+	$html = '<div class="card large"><form action="' . $action . '" method="' . $method . '">';
+	foreach ($vars as $key => $value)
+	{
+		$html .= '<input type="hidden" id="' . $key . '" name="' . $key . '" value="' . $value . '">';
+	}
+	$html .= '<input type="submit" name="' . $id . '" id="' . $id . '" value="' . $text . '" class="' . $class . '"></form></div>';
+	return $html;
+}
+	
 
 ?>
