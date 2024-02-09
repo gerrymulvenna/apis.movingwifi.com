@@ -14,15 +14,17 @@ $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
 $scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.events.public.readonly','https://www.googleapis.com/auth/calendar.events.owned.readonly','https://www.googleapis.com/auth/calendar.events.readonly'];
 
 $title = "Google Calendar API Test";
+
 // If we have a cookie, get the connection details
 if (isset($_SESSION['movingwifi-gCal']))
 {
 	$token = unserialize($_SESSION['movingwifi-gCal']);
 	print head($title, "Home");
-	print '<pre>';
-	print_r($token);
-	print '</pre>';
 	
+	$data = apiRequest($urlResourceOwnerDetails, $token['access_token']);
+	print '<pre>';
+	print_r($data);
+	print '</pre>';
 }
 // If we don't have an authorization code then get one
 elseif (!isset($_GET['code'])) {
