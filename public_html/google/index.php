@@ -9,8 +9,18 @@ $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
 $scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.events.public.readonly','https://www.googleapis.com/auth/calendar.events.owned.readonly','https://www.googleapis.com/auth/calendar.events.readonly'];
 
 $title = "Google Calendar API Test";
+// If we have a cookie, get the connection details
+if (isset($_SESSION['movingwifi-gCal'])
+{
+	$token = unserialize($_SESSION['movingwifi-gCal']);
+	print head($title, "Home");
+	print '<pre>';
+	print_r($token);
+	print '</pre>';
+	
+}
 // If we don't have an authorization code then get one
-if (!isset($_GET['code'])) {
+elseif (!isset($_GET['code'])) {
 	$state = getRandomState();
 
     // store state in the session.
@@ -39,11 +49,19 @@ elseif (empty($_GET['state']) || empty($_SESSION['oauth2state']) || $_GET['state
 }
 else
 {
-	print head($title, "Connected");
 	$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
-	print '<pre>';
-	print_r($response);
-	print '</pre>';
+	if ($response['code'] == 200)
+	{
+		print head($title, "Connected");
+		$_SESSION['movingwifi-gCal'] = serialize($response['response']);
+	}
+	else
+	{
+		print head($title, "Error - not connected");
+		print '<pre>';
+		print_r($response);
+		print '</pre>';
+	}
 	print footer("Revoke access", "");
 }
 
