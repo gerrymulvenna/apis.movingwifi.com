@@ -10,7 +10,7 @@ $scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.
 
 $title = "Google Calendar API Test";
 // If we have a cookie, get the connection details
-if (isset($_SESSION['movingwifi-gCal'])
+if (isset($_SESSION['movingwifi-gCal']))
 {
 	$token = unserialize($_SESSION['movingwifi-gCal']);
 	print head($title, "Home");
