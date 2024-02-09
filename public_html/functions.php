@@ -114,10 +114,10 @@ function generic_button($id, $text, $vars, $class = "tertiary", $method = "GET",
  */
 function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, $callback)
 {
-	$params = ['grant_type'=>$grant_type,'code'=>$code,'return_uri'=>$callback];
+	$params = ['grant_type'=>$grant_type,'code'=>$code,'redirect_uri'=>$callback];
     // Set up cURL options.
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url . '?' . $params);
+    curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_setopt($ch, CURLOPT_USERPWD, $client_id . ':' . $client_secret);
