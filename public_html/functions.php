@@ -114,7 +114,7 @@ function generic_button($id, $text, $vars, $class = "tertiary", $method = "GET",
  */
 function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, $callback)
 {
-	$params = http_build_query(['grant_type'=>$grant_type,'code'=>$code,'return_uri'=>$callback]);
+	$params = ['grant_type'=>$grant_type,'code'=>$code,'return_uri'=>$callback];
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url . '?' . $params);
@@ -123,6 +123,9 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
     curl_setopt($ch, CURLOPT_USERPWD, $client_id . ':' . $client_secret);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+	
 	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/x-www-form-urlencoded', 'Accept' => 'application/json']);
     // Output the header in the response.
     curl_setopt($ch, CURLOPT_HEADER, TRUE);
