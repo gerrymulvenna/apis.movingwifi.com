@@ -145,4 +145,41 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
 	return $data;
 }
 
+/**
+ * sends an API call using GET method and Bearer authentication
+ *
+ * @param string $url destination address
+ * @param string $access_token Access token 
+ * @param array $vars Associative array of variables to send with the request
+ */
+function apiRequest($url, $access_token, $vars = [])
+{
+    // Set up cURL options.
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
+	curl_setopt($ch, CURLOPT_POST, true);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $vars);
+	
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'Authorisation' => 'Bearer ' . $access_token]);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+	
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
+
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = substr($response, $header_size);
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
+}
+
 ?>

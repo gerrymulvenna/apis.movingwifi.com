@@ -1,8 +1,13 @@
 <?php
 error_reporting(-1);
 session_start();
+//set Timezone
+date_default_timezone_set('Europe/London');
+
 require "../functions.php";
 require "credentials.php";  //api_key, client_id, client_secret, redirect_uri
+
+// Google API details
 $urlAuthorize = 'https://accounts.google.com/o/oauth2/v2/auth';
 $urlAccessToken = 'https://oauth2.googleapis.com/token';
 $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
@@ -52,8 +57,10 @@ else
 	$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
 	if ($response['code'] == 200)
 	{
+		$token = $response['response'];
 		print head($title, "Connected");
-		$_SESSION['movingwifi-gCal'] = serialize($response['response']);
+		$token['access_token_expiry'] = time() + $token['expires_in'];
+		$_SESSION['movingwifi-gCal'] = serialize($token);
 	}
 	else
 	{
