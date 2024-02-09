@@ -40,9 +40,9 @@ elseif (empty($_GET['state']) || empty($_SESSION['oauth2state']) || $_GET['state
 else
 {
 	print head($title, "Connected");
+	$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri)
 	print '<pre>';
-	print_r($_REQUEST);
-	print_r($_SESSION);
+	print_r($response);
 	print '</pre>';
 	print footer("Revoke access", "");
 }

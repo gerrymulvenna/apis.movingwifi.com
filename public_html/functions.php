@@ -102,5 +102,44 @@ function generic_button($id, $text, $vars, $class = "tertiary", $method = "GET",
 	return $html;
 }
 	
+/**
+ * uses cURL to issue a basic authenticated request
+ *
+ * @param string $url The destination address
+ * @param string $grant_type Value of grant_type parameter in the request
+ * @param string $code Code value
+ * @param string $client_id user value
+ * @param string $client_secret password value
+ * @param string $callback the return_uri address
+ */
+function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, $callback)
+{
+	$params = http_build_query(['grant_type'=>$grant_type,'code'=>$code,'return_uri'=>$callback]);
+    // Set up cURL options.
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url . '?' . $params);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
+    curl_setopt($ch, CURLOPT_USERPWD, $client_id . ':' . $client_secret);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/x-www-form-urlencoded', 'Accept' => 'application/json']);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+	
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
+
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = substr($response, $header_size);
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
+}
 
 ?>
