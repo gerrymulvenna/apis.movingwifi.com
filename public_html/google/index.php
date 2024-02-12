@@ -62,7 +62,7 @@ else
 	{
 		$token = $response['response'];
 		print head($title, "Connected");
-		$token['access_token_expiry'] = time() + $token['expires_in'];
+		$token->access_token_expiry = time() + $token->expires_in;
 		$_SESSION['movingwifi-gCal'] = serialize($token);
 	}
 	else
