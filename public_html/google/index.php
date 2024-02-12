@@ -21,7 +21,7 @@ if (isset($_SESSION['movingwifi-gCal']))
 	$token = unserialize($_SESSION['movingwifi-gCal']);
 	print head($title, "Home");
 	
-	$data = apiRequest($urlResourceOwnerDetails, $token->"access_token");
+	$data = apiRequest($urlResourceOwnerDetails, $token['access_token']);
 	print '<pre>';
 	print_r($token);
 	print_r($data);
