@@ -139,7 +139,7 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
     // Set the header, response, error and http code.
 	$data = [];
 	$data['header'] = substr($response, 0, $header_size);
-    $data['response'] = substr($response, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
     $data['error'] = $error;
     $data['code'] = $http_code;
 	return $data;
@@ -176,7 +176,7 @@ function apiRequest($url, $access_token, $vars = [])
     // Set the header, response, error and http code.
 	$data = [];
 	$data['header'] = substr($response, 0, $header_size);
-    $data['response'] = substr($response, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
     $data['error'] = $error;
     $data['code'] = $http_code;
 	return $data;
