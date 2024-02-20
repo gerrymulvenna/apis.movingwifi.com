@@ -86,7 +86,7 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 			unset($_SESSION['oauth2state']); 
 			unset($_SESSION['movingwifi-gCal']);
 		}
-		print footer("Revoke");
+		print footer("Revoke", "");
 	}
 }
 // If we don't have an authorization code then get one
