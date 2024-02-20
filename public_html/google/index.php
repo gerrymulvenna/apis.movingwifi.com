@@ -95,7 +95,7 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 		$token = unserialize($_SESSION['movingwifi-gCal']);
 		if ($now <  $token->access_token_expiry)
 		{
-			print head($title, "Owner details");
+			print head($title, "Connected");
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("user", "Get user details",['operation'=>'user'], "tertiary", "GET", "./");
 		}
