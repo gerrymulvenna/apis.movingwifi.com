@@ -15,17 +15,57 @@ $scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.
 
 $title = "Google Calendar API Test";
 
-// If we have a cookie, get the connection details
-if (isset($_SESSION['movingwifi-gCal']))
+if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 {
+	if ($_GET['state'] == $_SESSION['oauth2state'])
+	{
+		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
+		if ($response['code'] == 200)
+		{
+			$token = $response['response'];
+			print head($title, "Connected");
+			$token->access_token_expiry = time() + $token->expires_in;
+			$_SESSION['movingwifi-gCal'] = serialize($token);
+		}
+		else
+		{
+			print head($title, "Error - not connected");
+			print '<pre>';
+			print_r($response);
+			print '</pre>';
+		}
+	}
+	else
+	{
+		unset($_SESSION['oauth2state']); 
+
+		print head($title, "Error - invalid state");
+		print '<pre>';
+		print_r($_REQUEST);
+		print_r($_SESSION);
+		print '</pre>';
+	}
+}
+
+// If we have a cookie, get the connection details
+elseif (isset($_SESSION['movingwifi-gCal']))
+{
+	$now = time();
 	$token = unserialize($_SESSION['movingwifi-gCal']);
-	print head($title, "Home");
-	
-	$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
-	print '<pre>';
-	print_r($token);
-	print_r($data);
-	print '</pre>';
+	if ($now <  $token->access_token_expiry)
+	{
+		print head($title, "Owner details");
+		
+		$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
+		print '<pre>';
+		print_r($data);
+		print '</pre>';
+	}
+	else
+	{
+		print head($title, "Revoked");
+		unset($_SESSION['oauth2state']); 
+	}
 }
 // If we don't have an authorization code then get one
 elseif (!isset($_GET['code'])) {
@@ -42,37 +82,4 @@ elseif (!isset($_GET['code'])) {
 														'scope'=>implode(' ', $scopes)
 														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
 }
-// Check given state against previously stored one to mitigate CSRF attack
-elseif (empty($_GET['state']) || empty($_SESSION['oauth2state']) || $_GET['state'] !== $_SESSION['oauth2state']) {
-
-    if (isset($_SESSION['oauth2state'])) {
-        unset($_SESSION['oauth2state']);
-    }
-
-    print head($title, "Error - invalid state");
-	print '<pre>';
-	print_r($_SESSION);
-	print '</pre>';
-
-}
-else
-{
-	$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
-	if ($response['code'] == 200)
-	{
-		$token = $response['response'];
-		print head($title, "Connected");
-		$token->access_token_expiry = time() + $token->expires_in;
-		$_SESSION['movingwifi-gCal'] = serialize($token);
-	}
-	else
-	{
-		print head($title, "Error - not connected");
-		print '<pre>';
-		print_r($response);
-		print '</pre>';
-	}
-	print footer("Revoke access", "");
-}
-
 ?>
