@@ -50,21 +50,43 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 // If we have a cookie, get the connection details
 elseif (isset($_SESSION['movingwifi-gCal']))
 {
-	$now = time();
-	$token = unserialize($_SESSION['movingwifi-gCal']);
-	if ($now <  $token->access_token_expiry)
+	if (isset($_REQUEST['operation']))
 	{
-		print head($title, "Owner details");
-		
-		$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
-		print '<pre>';
-		print_r($data);
-		print '</pre>';
+		if($_REQUEST['operation'] == 'cookie')
+		{
+			$token = unserialize($_SESSION['movingwifi-gCal']);
+			print head($title, "Cookie");
+			print '<pre>';
+			print_r($token);
+			print '</pre>';
+		}
+		elseif($_REQUEST['operation'] == 'revoke')
+		{
+			print head($title, "Disconnected");
+			unset($_SESSION['movingwifi-gCal']);
+		}
 	}
 	else
 	{
-		print head($title, "Revoked");
-		unset($_SESSION['oauth2state']); 
+		$now = time();
+		$token = unserialize($_SESSION['movingwifi-gCal']);
+		if ($now <  $token->access_token_expiry)
+		{
+			print head($title, "Owner details");
+			print generic_button("cookie", "Display cooke",['operation'=>'cookie'], "tertiary", "GET", "./");
+			
+			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
+			print '<pre>';
+			print_r($data);
+			print '</pre>';
+		}
+		else
+		{
+			print head($title, "Revoked");
+			unset($_SESSION['oauth2state']); 
+			unset($_SESSION['movingwifi-gCal']);
+		}
+		print footer("Revoke");
 	}
 }
 // If we don't have an authorization code then get one
