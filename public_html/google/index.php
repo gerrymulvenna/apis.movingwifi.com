@@ -67,6 +67,27 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 			print head($title, "Disconnected");
 			unset($_SESSION['movingwifi-gCal']);
 		}
+		elseif($_REQUEST['operation'] == 'user')
+		{
+			$token = unserialize($_SESSION['movingwifi-gCal']);
+			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
+			if ($data['code'] == 200)
+			{
+				print head($title, "User");
+				print '<pre>';
+				print_r($data['response']);
+				print '</pre>';
+				print footer("Revoke", "");
+			}
+			else
+			{
+				print head($title, "User");
+				print '<pre>';
+				print_r($data);
+				print '</pre>';
+				print footer("Revoke", "");
+			}
+		}
 	}
 	else
 	{
@@ -75,12 +96,8 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 		if ($now <  $token->access_token_expiry)
 		{
 			print head($title, "Owner details");
-			print generic_button("cookie", "Display cooke",['operation'=>'cookie'], "tertiary", "GET", "./");
-			
-			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
-			print '<pre>';
-			print_r($data);
-			print '</pre>';
+			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+			print generic_button("user", "Get user details",['operation'=>'user'], "tertiary", "GET", "./");
 		}
 		else
 		{
