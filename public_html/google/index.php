@@ -26,6 +26,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 			print head($title, "Connected");
 			$token->access_token_expiry = time() + $token->expires_in;
 			$_SESSION['movingwifi-gCal'] = serialize($token);
+			print footer("Revoke", "");
 		}
 		else
 		{
@@ -59,6 +60,7 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 			print '<pre>';
 			print_r($token);
 			print '</pre>';
+			print footer("Revoke", "");
 		}
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
