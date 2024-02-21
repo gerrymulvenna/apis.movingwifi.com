@@ -7,13 +7,16 @@ date_default_timezone_set('Europe/London');
 require "../functions.php";
 require "credentials.php";  //api_key, client_id, client_secret, redirect_uri
 
-// Google API details
+// API details
 $urlAuthorize = 'https://accounts.google.com/o/oauth2/v2/auth';
 $urlAccessToken = 'https://oauth2.googleapis.com/token';
 $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
 $scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.events.public.readonly','https://www.googleapis.com/auth/calendar.events.owned.readonly','https://www.googleapis.com/auth/calendar.events.readonly'];
 
+// service-specific strings
 $title = "Google Calendar API Test";
+$connect = "Connect to Google";
+$cookie = "movingwifi-gCal";
 
 if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 {
@@ -25,7 +28,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 			$token = $response['response'];
 			print head($title, "Connected");
 			$token->access_token_expiry = time() + $token->expires_in;
-			$_SESSION['movingwifi-gCal'] = serialize($token);
+			$_SESSION[$cookie] = serialize($token);
 			print footer("Revoke", "");
 		}
 		else
@@ -49,13 +52,13 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 }
 
 // If we have a cookie, get the connection details
-elseif (isset($_SESSION['movingwifi-gCal']))
+elseif (isset($_SESSION[$cookie]))
 {
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$token = unserialize($_SESSION['movingwifi-gCal']);
+			$token = unserialize($_SESSION[$cookie]);
 			print head($title, "Cookie");
 			print '<pre>';
 			print_r($token);
@@ -65,11 +68,11 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
 			print head($title, "Disconnected");
-			unset($_SESSION['movingwifi-gCal']);
+			unset($_SESSION[$cookie]);
 		}
 		elseif($_REQUEST['operation'] == 'user')
 		{
-			$token = unserialize($_SESSION['movingwifi-gCal']);
+			$token = unserialize($_SESSION[$cookie]);
 			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
 			if ($data['code'] == 200)
 			{
@@ -92,7 +95,7 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 	else
 	{
 		$now = time();
-		$token = unserialize($_SESSION['movingwifi-gCal']);
+		$token = unserialize($_SESSION[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
 			print head($title, "Connected");
@@ -103,7 +106,7 @@ elseif (isset($_SESSION['movingwifi-gCal']))
 		{
 			print head($title, "Revoked");
 			unset($_SESSION['oauth2state']); 
-			unset($_SESSION['movingwifi-gCal']);
+			unset($_SESSION[$cookie]);
 		}
 		print footer("Revoke", "");
 	}
@@ -115,9 +118,9 @@ elseif (!isset($_GET['code'])) {
     // store state in the session.
     $_SESSION['oauth2state'] = $state;
 
-    // display Connect to Google button
+    // display Connect to button
 	print head($title);
-	print generic_button("google", "Connect to Google",['client_id'=>$client_id,
+	print generic_button("connect", $connect,['client_id'=>$client_id,
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
 														'scope'=>implode(' ', $scopes)
