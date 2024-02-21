@@ -112,9 +112,13 @@ function generic_button($id, $text, $vars, $class = "tertiary", $method = "GET",
  * @param string $client_secret password value
  * @param string $callback the return_uri address
  */
-function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, $callback)
+function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, $callback, $method = 'GET')
 {
 	$params = ['grant_type'=>$grant_type,'code'=>$code,'redirect_uri'=>$callback];
+	if ($method == 'GET')
+	{
+		$url = $url . '?' . http_build_query($params);
+	}
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
@@ -123,8 +127,11 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
     curl_setopt($ch, CURLOPT_USERPWD, $client_id . ':' . $client_secret);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
-	curl_setopt($ch, CURLOPT_POST, true);
-	curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+	if ($method == 'POST')
+	{
+		curl_setopt($ch, CURLOPT_POST, true);
+		curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+	}
 	
 	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/x-www-form-urlencoded', 'Accept' => 'application/json']);
     // Output the header in the response.

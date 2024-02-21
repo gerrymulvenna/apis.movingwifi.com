@@ -6,7 +6,7 @@ session_start();
 date_default_timezone_set('Europe/London');
 
 require "../functions.php";
-require "credentials.php";  //api_key, client_id, client_secret, redirect_uri
+require "credentials.php";  //client_id, client_secret, redirect_uri
 
 // API details
 $urlAuthorize = "https://appcenter.intuit.com/connect/oauth2";
