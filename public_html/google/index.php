@@ -23,7 +23,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 {
 	if ($_GET['state'] == $_SESSION['oauth2state'])
 	{
-		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri, 'POST');
+		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
