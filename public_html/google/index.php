@@ -59,7 +59,7 @@ elseif (isset($_SESSION[$cookie]))
 		if($_REQUEST['operation'] == 'cookie')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			print head($title, "Cookie");
+			print head($title, "Connected");
 			print '<pre>';
 			print_r($token);
 			print '</pre>';
