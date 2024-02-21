@@ -19,7 +19,7 @@ $title = "Quickbooks API Test";
 $connect = "Connect to Quickbooks";
 $cookie = "movingwifi-Quickbooks";
 
-if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
+if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['realmId']))
 {
 	if ($_GET['state'] == $_SESSION['oauth2state'])
 	{
@@ -29,6 +29,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 			$token = $response['response'];
 			print head($title, "Connected");
 			$token->access_token_expiry = time() + $token->expires_in;
+			$token->realmId = $_GET['realmId'];
 			$_SESSION[$cookie] = serialize($token);
 			print footer("Revoke", "");
 		}
