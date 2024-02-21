@@ -1,5 +1,5 @@
 <?php
-// a simple Google API example using PHP
+// a simple Quickbooks API example using PHP
 error_reporting(-1);
 session_start();
 //set Timezone
@@ -9,15 +9,15 @@ require "../functions.php";
 require "credentials.php";  //api_key, client_id, client_secret, redirect_uri
 
 // API details
-$urlAuthorize = 'https://accounts.google.com/o/oauth2/v2/auth';
-$urlAccessToken = 'https://oauth2.googleapis.com/token';
-$urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
-$scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.events.public.readonly','https://www.googleapis.com/auth/calendar.events.owned.readonly','https://www.googleapis.com/auth/calendar.events.readonly'];
+$urlAuthorize = "https://appcenter.intuit.com/connect/oauth2";
+$urlAccessToken = "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer";
+$sandbox_base = "https://sandbox-quickbooks.api.intuit.com";
+$scopes = ['com.intuit.quickbooks.accounting'];
 
 // service-specific strings
-$title = "Google Calendar API Test";
-$connect = "Connect to Google";
-$cookie = "movingwifi-gCal";
+$title = "Quickbooks API Test";
+$connect = "Connect to Quickbooks";
+$cookie = "movingwifi-Quickbooks";
 
 if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 {
