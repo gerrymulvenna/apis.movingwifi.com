@@ -185,7 +185,7 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [])
 
     // Set the header, response, error and http code.
 	$data = [];
-    $data['response'] = json_decode(substr($response, $header_size));
+    $data['response'] = json_decode($response);
     $data['error'] = $error;
     $data['code'] = $http_code;
 	return $data;
