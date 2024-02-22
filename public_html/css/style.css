@@ -18,6 +18,11 @@
 	float: right;
 }
 
+.headline {
+  text-align: center;
+  display: inline;
+}
+
 
 .alignleft {
   text-align: left;
