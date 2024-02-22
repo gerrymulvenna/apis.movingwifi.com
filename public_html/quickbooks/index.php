@@ -27,7 +27,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
-			print head($title, "Connected");
+			print head($title, "Connected - click to continue");
 			$token->access_token_expiry = time() + $token->expires_in;
 			$token->realmId = $_GET['realmId'];
 			$_SESSION[$cookie] = serialize($token);
@@ -112,7 +112,7 @@ elseif (isset($_SESSION[$cookie]))
 			unset($_SESSION['oauth2state']); 
 			unset($_SESSION[$cookie]);
 		}
-		print footer("Revoke", "");
+		print footer("Revoke", $token->access_token);
 	}
 }
 // If we don't have an authorization code then get one
