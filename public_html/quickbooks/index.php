@@ -91,6 +91,7 @@ elseif (isset($_SESSION[$cookie]))
 				print head($title, "Error");
 				print '<pre>';
 				print_r($url);
+				print "\n";
 				print_r($data);
 				print '</pre>';
 				print footer("Revoke", "");
@@ -113,7 +114,7 @@ elseif (isset($_SESSION[$cookie]))
 			unset($_SESSION['oauth2state']); 
 			unset($_SESSION[$cookie]);
 		}
-		print footer("Revoke", $token->access_token);
+		print footer("Revoke", "");
 	}
 }
 // If we don't have an authorization code then get one
