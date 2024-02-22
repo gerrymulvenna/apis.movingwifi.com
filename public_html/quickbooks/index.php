@@ -82,13 +82,14 @@ elseif (isset($_SESSION[$cookie]))
 			{
 				print head($title, "Home");
 				print '<pre>';
+				print_r($url);
 				print_r($data['response']);
 				print '</pre>';
 				print footer("Revoke", "");
 			}
 			else
 			{
-				print head($title, "User");
+				print head($title, "Error");
 				print '<pre>';
 				print_r($data);
 				print '</pre>';

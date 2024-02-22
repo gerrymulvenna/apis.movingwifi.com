@@ -155,7 +155,7 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
  * @param string $access_token Access token 
  * @param array $vars Associative array of variables to send with the request
  */
-function apiRequest($url, $access_token, $method = 'GET',$vars = [])
+function apiRequest($url, $access_token, $method = 'GET', $vars = [])
 {
     // Set up cURL options.
     $ch = curl_init();
