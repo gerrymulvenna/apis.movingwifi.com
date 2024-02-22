@@ -53,15 +53,15 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 	';
 	$html .= '<body>
 	<header class="sticky">
-	<H2>' . $title . '</h2>
-	<label for="drawer-control" class="drawer-toggle persistent"></label> 
-	<input type="checkbox" id="drawer-control" class="drawer persistent">
-	<nav>
-		<label for="drawer-control" class="drawer-close"></label>
-		<a href="/">Home</a> 
-		<a href="/google/">Google</a> 
-		<a href="/quickbooks/">Quickbooks</a>
-	</nav>
+		<H1 class="aligncenter">' . $title . '</h1>
+		<label for="drawer-control" class="drawer-toggle persistent"></label> 
+		<input type="checkbox" id="drawer-control" class="drawer persistent">
+		<nav>
+			<label for="drawer-control" class="drawer-close"></label>
+			<a href="/">Home</a> 
+			<a href="/google/">Google</a> 
+			<a href="/quickbooks/">Quickbooks</a>
+		</nav>
 	</header>
 	<div class="container">';
 	if (!empty($home))
