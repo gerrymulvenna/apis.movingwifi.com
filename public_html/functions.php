@@ -157,18 +157,21 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
  */
 function apiRequest($url, $access_token, $method = 'GET', $vars = [])
 {
+	$headers = array(
+		'Accept' => 'application/json', 
+		'Authorization' => 'Bearer ' . $access_token,
+		'Content-Type' => 'application/json'
+	);
     // Set up cURL options.
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	$eh = fopen('curl.log', 'w+');
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
     curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Accept' => 'application/json', 'Authorization' => 'Bearer ' . $access_token]);
-    // Output the header in the response.
-    curl_setopt($ch, CURLOPT_HEADER, TRUE);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
 	if ($method == 'POST')
 	{
 		curl_setopt($ch, CURLOPT_POST, true);
@@ -178,12 +181,10 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [])
     $response = curl_exec($ch);
     $error = curl_error($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     curl_close($ch);
 
     // Set the header, response, error and http code.
 	$data = [];
-	$data['header'] = substr($response, 0, $header_size);
     $data['response'] = json_decode(substr($response, $header_size));
     $data['error'] = $error;
     $data['code'] = $http_code;
