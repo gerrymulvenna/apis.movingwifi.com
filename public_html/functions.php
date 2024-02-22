@@ -30,11 +30,11 @@ function getRandomPkceCode($length = 64)
  * Returns HTML for <head>  + start of <body> sections
  *
  * @param string $title Title text
- * @param string $home Display this text on home button
+ * @param string $home Display this text on home button, if blank don't include a home button
  * @param string $subtitle Subtitle text
  * @return string
  */
-function head($title, $home = "Home", $subtitle = "simple API interaction")
+function head($title, $home = "", $subtitle = "simple API interaction")
 {
 	$html = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 	<html>
@@ -42,7 +42,7 @@ function head($title, $home = "Home", $subtitle = "simple API interaction")
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>' . $title . 'Connect to Twitter</title>
+	<title>' . $title . '</title>
 	<link rel="stylesheet" href="/css/fonts.css">
 	<link rel="stylesheet" href="/css/mini-default.css">
 	<link rel="stylesheet" href="/css/style.css">
@@ -58,18 +58,31 @@ function head($title, $home = "Home", $subtitle = "simple API interaction")
 	$html .= '<body>
 	<header class="sticky">
 	<H2>' . $title . '</h2>
-	</header>
-	<div class="container">
-	<div class="card large">
-	<a id="home" class="button primary" href="./">' . $home . '</a>
-	<p>' . $subtitle . '</p>
+	<div>
+		<label for="drawer-control" class="drawer-toggle"></label> 
+		<input type="checkbox" id="drawer-control" class="drawer">
+		<nav>
+			<label for="drawer-control" class="drawer-close"></label>
+			<a href="/">Home</a> 
+			<a href="/google/">Google</a> 
+			<a href="/quickbooks/">Quickbooks</a>
+		</nav>
 	</div>
-	';
+	</header>
+	<div class="container">';
+	if (!empty($home))
+	{
+		echo '
+		<div class="card large">
+			<a id="home" class="button primary" href="./">' . $home . '</a>
+			<p>' . $subtitle . '</p>
+		</div>';
+	}
 	return $html;
 }
 
 /**
- * Returns HTML for the bottom of the screen including a "revoke" button
+ * Returns HTML for the bottom of the screen including a button, eg labelled Disconnect
  *
  * @param string $button Button text
  * @param string $text Display text
@@ -77,7 +90,11 @@ function head($title, $home = "Home", $subtitle = "simple API interaction")
  */
 function footer($button, $text)
 {
-	$html = '<div class="footer"><div class="card large">' . $text . '<a class="button secondary" href="./?operation=revoke">' . $button . '</a></div></div></footer>';
+	$html = '
+	<div class="footer">
+		<div class="card large">' . $text . '<a class="button secondary" href="./?operation=revoke">' . $button . '</a></div>
+	</div>
+</div>';
 	return $html;
 }
 
