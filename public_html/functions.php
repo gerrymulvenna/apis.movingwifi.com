@@ -47,10 +47,6 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 	<link rel="stylesheet" href="/css/mini-default.css">
 	<link rel="stylesheet" href="/css/style.css">
 	<style>
-		html { text-align: center;}
-		pre { text-align: left;}
-		input[type="submit"] {width: 90%;}
-		textarea {width: 90%;}
 		.card {margin: 0 auto;}
 	</style>
 	</head>
