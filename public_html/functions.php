@@ -59,8 +59,8 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 	<header class="sticky">
 	<H2>' . $title . '</h2>
 	<div>
-		<label for="drawer-control" class="drawer-toggle"></label> 
-		<input type="checkbox" id="drawer-control" class="drawer">
+		<label for="drawer-control" class="drawer-toggle persistent"></label> 
+		<input type="checkbox" id="drawer-control" class="drawer persistent">
 		<nav>
 			<label for="drawer-control" class="drawer-close"></label>
 			<a href="/">Home</a> 
