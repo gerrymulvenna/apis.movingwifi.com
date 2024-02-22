@@ -77,7 +77,7 @@ elseif (isset($_SESSION[$cookie]))
 			$token = unserialize($_SESSION[$cookie]);
 			$url = $sandbox_base . "/v3/company/" . $token->realmId . "/companyinfo/" . $token->realmId;
 
-			$data = apiRequest($url, $token->access_token);
+			$data = apiRequest($url, $token->access_token, 'POST');
 			if ($data['code'] == 200)
 			{
 				print head($title, "Home");
