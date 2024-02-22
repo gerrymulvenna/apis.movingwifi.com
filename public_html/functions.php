@@ -34,7 +34,7 @@ function getRandomPkceCode($length = 64)
  * @param string $subtitle Subtitle text
  * @return string
  */
-function head($title, $home = "Home", $subtitle = "simple Google Calendar API interaction")
+function head($title, $home = "Home", $subtitle = "simple API interaction")
 {
 	$html = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
 	<html>

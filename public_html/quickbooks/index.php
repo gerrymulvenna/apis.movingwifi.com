@@ -27,11 +27,24 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
-			print head($title, "Connected - click to continue");
 			$token->access_token_expiry = time() + $token->expires_in;
 			$token->realmId = $_GET['realmId'];
-			$_SESSION[$cookie] = serialize($token);
-			print footer("Revoke", "");
+			// get user info
+			$url = $sandbox_base . "/v3/company/" . $token->realmId . "/companyinfo/" . $token->realmId;
+			$data = apiRequest($url, $token->access_token);
+			if ($data['code'] == 200)
+			{
+				$token->user = $data['response'];
+				print head($title, "Connected", $token->user->name);
+				$_SESSION[$cookie] = serialize($token);
+				print footer("Revoke", "");
+			}
+			else
+			{
+				print head($title, "Connected", "but failed to retrieve user info");
+				$_SESSION[$cookie] = serialize($token);
+				print footer("Revoke", "");
+			}
 		}
 		else
 		{

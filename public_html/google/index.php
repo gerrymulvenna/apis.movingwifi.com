@@ -27,10 +27,22 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
-			print head($title, "Connected");
 			$token->access_token_expiry = time() + $token->expires_in;
-			$_SESSION[$cookie] = serialize($token);
-			print footer("Revoke", "");
+			// get user info
+			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
+			if ($data['code'] == 200)
+			{
+				$token->user = $data['response'];
+				print head($title, "Connected", $token->user->name);
+				$_SESSION[$cookie] = serialize($token);
+				print footer("Revoke", "");
+			}
+			else
+			{
+				print head($title, "Connected", "but failed to retrieve user info");
+				$_SESSION[$cookie] = serialize($token);
+				print footer("Revoke", "");
+			}
 		}
 		else
 		{
@@ -77,7 +89,7 @@ elseif (isset($_SESSION[$cookie]))
 			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				print head($title, "User");
+				print head($title, "Home");
 				print '<pre>';
 				print_r($data['response']);
 				print '</pre>';
