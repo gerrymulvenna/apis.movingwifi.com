@@ -5,6 +5,20 @@
 	--drawer-close-color: #f8f8f8;
 }
 
+[type="checkbox"].drawer + * {
+	height: auto;
+}
+
+[type="checkbox"].drawer:checked + * {
+	right: 0;
+	left: auto;
+}
+
+.drawer-toggle {
+	float: right;
+}
+
+
 .alignleft {
   text-align: left;
 }
