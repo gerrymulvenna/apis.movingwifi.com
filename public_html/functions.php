@@ -66,7 +66,7 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 	<div class="container">';
 	if (!empty($home))
 	{
-		echo '
+		$html .= '
 		<div class="card large">
 			<a id="home" class="button primary" href="./">' . $home . '</a>
 			<p>' . $subtitle . '</p>
