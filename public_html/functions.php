@@ -117,10 +117,10 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
 	$params = ['grant_type'=>$grant_type,'code'=>$code,'redirect_uri'=>$callback];
     // Set up cURL options.
     $ch = curl_init();
-    curl_setopt($ch, CURLOPT_URL, $url);
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	$eh = fopen('curl.log', 'w+');
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
+    curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
     curl_setopt($ch, CURLOPT_USERPWD, $client_id . ':' . $client_secret);
@@ -159,6 +159,9 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [])
 {
     // Set up cURL options.
     $ch = curl_init();
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	$eh = fopen('curl.log', 'w+');
+	curl_setopt($ch, CURLOPT_STDERR, $eh);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
