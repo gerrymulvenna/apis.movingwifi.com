@@ -75,10 +75,12 @@ elseif (isset($_SESSION[$cookie]))
 		elseif($_REQUEST['operation'] == 'user')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
+			$url = $sandbox_base . "/v3/company/" . $token->realmId . "/companyinfo/" . $token->realmId;
+
+			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				print head($title, "User");
+				print head($title, "Home");
 				print '<pre>';
 				print_r($data['response']);
 				print '</pre>';
