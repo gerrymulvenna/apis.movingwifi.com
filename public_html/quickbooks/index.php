@@ -37,13 +37,13 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 				$token->CompanyInfo = $data['response']->CompanyInfo;
 				print head($title, "Connected", $token->CompanyInfo->CompanyName);
 				$_SESSION[$cookie] = serialize($token);
-				print footer("Revoke", "");
+				print footer("Disconnect", "");
 			}
 			else
 			{
 				print head($title, "Connected", "but failed to retrieve company info");
 				$_SESSION[$cookie] = serialize($token);
-				print footer("Revoke", "");
+				print footer("Disconnect", "");
 			}
 		}
 		else
@@ -78,7 +78,7 @@ elseif (isset($_SESSION[$cookie]))
 			print '<pre>';
 			print_r($token);
 			print '</pre>';
-			print footer("Revoke", "");
+			print footer("Disconnect", "");
 		}
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
@@ -97,7 +97,7 @@ elseif (isset($_SESSION[$cookie]))
 				print '<pre>';
 				print_r($data['response']);
 				print '</pre>';
-				print footer("Revoke", "");
+				print footer("Disconnect", "");
 			}
 			else
 			{
@@ -107,7 +107,7 @@ elseif (isset($_SESSION[$cookie]))
 				print "\n";
 				print_r($data);
 				print '</pre>';
-				print footer("Revoke", "");
+				print footer("Disconnect", "");
 			}
 		}
 	}
@@ -123,11 +123,11 @@ elseif (isset($_SESSION[$cookie]))
 		}
 		else
 		{
-			print head($title, "Revoked");
+			print head($title, "Disconnected");
 			unset($_SESSION['oauth2state']); 
 			unset($_SESSION[$cookie]);
 		}
-		print footer("Revoke", "");
+		print footer("Disconnect", "");
 	}
 }
 // If we don't have an authorization code then get one
