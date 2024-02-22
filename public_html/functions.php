@@ -158,9 +158,9 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
 function apiRequest($url, $access_token, $method = 'GET', $vars = [])
 {
 	$headers = array(
-		'Accept' => 'application/json', 
-		'Authorization' => 'Bearer ' . $access_token,
-		'Content-Type' => 'application/json'
+		'Accept: application/json', 
+		'Authorization: Bearer ' . $access_token,
+		'Content-Type: application/json'
 	);
     // Set up cURL options.
     $ch = curl_init();
