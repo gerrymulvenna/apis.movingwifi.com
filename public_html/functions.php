@@ -165,16 +165,15 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [])
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'Authorization' => 'Bearer ' . $access_token]);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
 	if ($method == 'POST')
 	{
 		curl_setopt($ch, CURLOPT_POST, true);
 		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($vars));
 	}
-	
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/json', 'Accept' => 'application/json', 'Authorization' => 'Bearer ' . $access_token]);
-    // Output the header in the response.
-    curl_setopt($ch, CURLOPT_HEADER, TRUE);
 	
     $response = curl_exec($ch);
     $error = curl_error($ch);
