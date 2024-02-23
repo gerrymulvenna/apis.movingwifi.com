@@ -74,7 +74,7 @@ elseif (isset($_SESSION[$cookie]))
 		if($_REQUEST['operation'] == 'cookie')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			print head($title, "Connected");
+			print head("$title | cookie contents", "Connected");
 			print '<pre>';
 			print_r($token);
 			print '</pre>';
@@ -94,14 +94,14 @@ elseif (isset($_SESSION[$cookie]))
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				print head($title, "Home");
+				print head("$title | invoices", "Home");
 				$table = invoice_summary($data['response']->QueryResponse);
 				print table_html($table);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head($title, "Error - query invoice");
+				print head("$title | invoices", "Error - query invoice");
 				print '<pre>';
 				print_r($data);
 				print '</pre>';

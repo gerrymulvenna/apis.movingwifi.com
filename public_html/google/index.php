@@ -81,7 +81,7 @@ elseif (isset($_SESSION[$cookie]))
 		if($_REQUEST['operation'] == 'cookie')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			print head($title, "Home");
+			print head("$title | cookie contents", "Home");
 			print '<pre>';
 			print_r($token);
 			print '</pre>';
@@ -99,14 +99,14 @@ elseif (isset($_SESSION[$cookie]))
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				print head($title, "Displaying calendarlist - click to continue", $token->user->name);
+				print head("$title | my calendars", "Displaying calendarlist - click to continue", $token->user->name);
 				$table = calendarlist_summary($data['response']);
 				print table_html_calendarlist($table);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head($title, "Error");
+				print head("$title | my calendars", "Error");
 				print '<pre>';
 				print_r($data);
 				print '</pre>';
@@ -141,14 +141,14 @@ elseif (isset($_SESSION[$cookie]))
 				$data = apiRequest($url, $token->access_token);
 				if ($data['code'] == 200)
 				{
-					print head($title, "Displaying events - click to continue", $token->user->name);
+					print head("$title | calendar events", "Displaying events - click to continue", $token->user->name);
 					$table = events_summary($data['response']);
 					print table_html($table);
 					print footer("Disconnect", "");
 				}
 				else
 				{
-					print head($title, "Error");
+					print head("$title | calendar events", "Error");
 					print '<pre>';
 					print "$url\n";
 					print_r($data);
