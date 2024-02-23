@@ -200,7 +200,7 @@ function table_html_calendarlist($data)
 			$label = $headings[$i++];
 			if ($label <> "backgroundColor" && $label <> "foregroundColor")
 			{
-				$html .= "<td data-label=\"$label\">$cell</td>\n";
+				$html .= "<td style=\"color: inherit; background-color: inherit;\" data-label=\"$label\">$cell</td>\n";
 			}
 		}
 		$html .= "</tr>\n";
