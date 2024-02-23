@@ -12,6 +12,8 @@ require "credentials.php";  //api_key, client_id, client_secret, redirect_uri
 $urlAuthorize = 'https://accounts.google.com/o/oauth2/v2/auth';
 $urlAccessToken = 'https://oauth2.googleapis.com/token';
 $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
+$urlCalendarBase = 'https://www.googleapis.com/calendar/v3';
+
 $scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.events.public.readonly','https://www.googleapis.com/auth/calendar.events.owned.readonly','https://www.googleapis.com/auth/calendar.events.readonly'];
 
 // service-specific strings
@@ -83,10 +85,11 @@ elseif (isset($_SESSION[$cookie]))
 			print head($title, "Disconnected");
 			unset($_SESSION[$cookie]);
 		}
-		elseif($_REQUEST['operation'] == 'user')
+		elseif($_REQUEST['operation'] == 'calendarList')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
+			$url = "$urlCalendarBase/users/me/calendarList";
+			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
 				print head($title, "Home", $token->user->name);
@@ -113,7 +116,7 @@ elseif (isset($_SESSION[$cookie]))
 		{
 			print head($title, "Home", $token->user->name);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print generic_button("user", "Get user details",['operation'=>'user'], "tertiary", "GET", "./");
+			print generic_button("user", "Get my list of calendars",['operation'=>'calendarList'], "tertiary", "GET", "./");
 		}
 		else
 		{
