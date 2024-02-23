@@ -232,11 +232,11 @@ function table_html_calendarlist($data)
 		foreach ($row as $cell)
 		{
 			$label = $headings[$i++];
-			if ($label <> "backgroundColor" && $label <> "foregroundColor" && $label <> "Id")
+			if ($label <> "backgroundColor" && $label <> "foregroundColor" && $label <> "id")
 			{
 				$html .= "<td style=\"color: inherit; background-color: inherit;\" data-label=\"$label\">$cell</td>\n";
 			}
-			elseif ($label == "Id")
+			elseif ($label == "id")
 			{
 				// insert a link to display events from the calendar
 				$html .= "<td style=\"color: inherit; background-color: inherit;\" data-label=\"$label\"><a href=\"./?operation=events&calendarId=$cell\">$cell</a></td>\n";
