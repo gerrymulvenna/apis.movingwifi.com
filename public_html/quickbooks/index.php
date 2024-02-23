@@ -35,7 +35,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 			if ($data['code'] == 200)
 			{
 				$token->CompanyInfo = $data['response']->CompanyInfo;
-				print head($title, "Connected", $token->CompanyInfo->CompanyName);
+				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
 				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
@@ -95,6 +95,9 @@ elseif (isset($_SESSION[$cookie]))
 			if ($data['code'] == 200)
 			{
 				print head($title, "Home");
+				print '<pre>';
+				print_r($data);
+				print '</pre>';
 				$table = invoice_summary($data->QueryResponse);
 				print table_html($table);
 				print footer("Disconnect", "");
@@ -115,7 +118,7 @@ elseif (isset($_SESSION[$cookie]))
 		$token = unserialize($_SESSION[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
-			print head($title, "Connected", $token->CompanyInfo->CompanyName);
+			print head($title, "Home", $token->CompanyInfo->CompanyName);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 		}
