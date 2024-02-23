@@ -151,7 +151,7 @@ function invoice_summary($response)
 	$table[$i] = ['Id','TxnDate','DocNumber','TotalAmt','Balance','TotalTax','Customer','Currency'];
 	foreach ($response->Invoice as $invoice)
 	{
-		$table[++$i] = [$invoice->Id, $invoice->TxnDate,$invoice->DocNumber,$invoice->TotalAmt,$invoice->Balance,$invoice->TotalTax,$invoice->CustomerRef->name,$invoice->CurrencyRef->value];
+		$table[++$i] = [$invoice->Id, $invoice->TxnDate,$invoice->DocNumber,$invoice->TotalAmt,$invoice->Balance,$invoice->TxnTaxDetail->TotalTax,$invoice->CustomerRef->name,$invoice->CurrencyRef->value];
 	}
 	return $table;
 }
