@@ -24,7 +24,7 @@ $scopes =  ['openid','email','profile',
 			'https://www.googleapis.com/auth/calendar.events.readonly'];
 
 // service-specific strings
-$title = "Google Calendar API Test";
+$title = "Google Calendar API example";
 $connect = "Connect to Google";
 $cookie = "movingwifi-gCal";
 
