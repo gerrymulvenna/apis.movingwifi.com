@@ -95,10 +95,7 @@ elseif (isset($_SESSION[$cookie]))
 			if ($data['code'] == 200)
 			{
 				print head($title, "Home");
-				print '<pre>';
-				print_r($data);
-				print '</pre>';
-				$table = invoice_summary($data->QueryResponse);
+				$table = invoice_summary($data['response']->QueryResponse);
 				print table_html($table);
 				print footer("Disconnect", "");
 			}
