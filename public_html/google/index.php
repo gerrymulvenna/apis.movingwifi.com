@@ -99,7 +99,7 @@ elseif (isset($_SESSION[$cookie]))
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				print head("$title | my calendars", "Displaying calendarlist - click to continue", $token->user->name);
+				print head("$title | my calendars", "Home", $token->user->name);
 				$table = calendarlist_summary($data['response']);
 				print table_html_calendarlist($table);
 				print footer("Disconnect", "");
@@ -141,7 +141,7 @@ elseif (isset($_SESSION[$cookie]))
 				$data = apiRequest($url, $token->access_token);
 				if ($data['code'] == 200)
 				{
-					print head("$title | calendar events", "Displaying events - click to continue", $token->user->name);
+					print head("$title | calendar events", "Home", $token->user->name);
 					$table = events_summary($data['response']);
 					print table_html($table);
 					print footer("Disconnect", "");
@@ -158,7 +158,7 @@ elseif (isset($_SESSION[$cookie]))
 			}
 			else
 			{
-				print head($title, "No calendarId suppplied - click to continue");
+				print head($title, "Missing calendar id - click to continue");
 				print footer("Disconnect", "");
 			}
 		}
