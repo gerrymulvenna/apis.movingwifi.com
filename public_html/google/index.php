@@ -228,29 +228,39 @@ function events_summary($response)
 		$table[$i][] =(property_exists($event, 'summary')) ? $event->summary : "";
 		$table[$i][] =(property_exists($event, 'location')) ? $event->location : "";
 		$table[$i][] =(property_exists($event, 'id')) ? $event->id : "";
-		if (property_exists($event->start, 'dateTime'))
+		if (property_exists($event,'start'))
 		{
-			$table[$i][] = $event->start->dateTime;
-		}
-		elseif(property_exists($event->start, 'date'))
-		{
-			$table[$i][] = $event->start->date;
-		}
-		else
-		{
-			$table[$i][] = "";
-		}
-		if (property_exists($event->end, 'dateTime'))
-		{
-			$table[$i][] = $event->end->dateTime;
-		}
-		elseif(property_exists($event->end, 'date'))
-		{
-			$table[$i][] = $event->end->date;
+			if (property_exists($event->start, 'dateTime'))
+			{
+				$table[$i][] = $event->start->dateTime;
+			}
+			elseif(property_exists($event->start, 'date'))
+			{
+				$table[$i][] = $event->start->date;
+			}
+			else
+			{
+				$table[$i][] = "";
+			}
 		}
 		else
 		{
 			$table[$i][] = "";
+		}
+		if (property_exists($event,'end'))
+		{
+			if (property_exists($event->end, 'dateTime'))
+			{
+				$table[$i][] = $event->end->dateTime;
+			}
+			elseif(property_exists($event->end, 'date'))
+			{
+				$table[$i][] = $event->end->date;
+			}
+			else
+			{
+				$table[$i][] = "";
+			}
 		}
 		$table[$i][] =(property_exists($event, 'created')) ? $event->created : "";
 		$table[$i][] =(property_exists($event, 'updated')) ? $event->updated : "";
