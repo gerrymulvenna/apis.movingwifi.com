@@ -258,7 +258,7 @@ function table_html_calendarlist($data)
 			elseif ($label == "id")
 			{
 				// insert a link to display events from the calendar
-				$query = http_build_query(['operation'=>'events','calendarId'=>$cell,'orderBy'=>'startTime','timeMin'=>date('c')]);
+				$query = http_build_query(['operation'=>'events','calendarId'=>$cell,'orderBy'=>'updated','timeMin'=>date('c')]);
 				$html .= "<td style=\"background-color: inherit;\" data-label=\"$label\"><a class=\"button\" href=\"./?$query\">$cell</a></td>\n";
 			}
 		
