@@ -33,13 +33,13 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 			if ($data['code'] == 200)
 			{
 				$token->user = $data['response'];
-				print head($title, "Connected", $token->user->name);
+				print head($title, "Connected - click to continue", $token->user->name);
 				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head($title, "Connected", "but failed to retrieve user info");
+				print head($title, "Connected - click to continue", "but failed to retrieve user info");
 				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
@@ -72,7 +72,7 @@ elseif (isset($_SESSION[$cookie]))
 		if($_REQUEST['operation'] == 'cookie')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			print head($title, "Connected");
+			print head($title, "Home");
 			print '<pre>';
 			print_r($token);
 			print '</pre>';
@@ -89,7 +89,7 @@ elseif (isset($_SESSION[$cookie]))
 			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				print head($title, "Home");
+				print head($title, "Home", $token->user->name);
 				print '<pre>';
 				print_r($data['response']);
 				print '</pre>';
@@ -97,7 +97,7 @@ elseif (isset($_SESSION[$cookie]))
 			}
 			else
 			{
-				print head($title, "User");
+				print head($title, "Error");
 				print '<pre>';
 				print_r($data);
 				print '</pre>';
@@ -111,7 +111,7 @@ elseif (isset($_SESSION[$cookie]))
 		$token = unserialize($_SESSION[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
-			print head($title, "Connected", $token->user->name);
+			print head($title, "Home", $token->user->name);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("user", "Get user details",['operation'=>'user'], "tertiary", "GET", "./");
 		}
