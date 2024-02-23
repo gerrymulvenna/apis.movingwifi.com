@@ -175,6 +175,7 @@ function table_html($data)
 		$html .= "</tr>\n";
 	}
 	$html .= "</tbody></table>\n";
+	return $html;
 }
 	
 ?>
