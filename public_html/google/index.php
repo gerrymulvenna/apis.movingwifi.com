@@ -99,7 +99,7 @@ elseif (isset($_SESSION[$cookie]))
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				print head($title, "Home", $token->user->name);
+				print head($title, "Displaying calendarlist - click to continue", $token->user->name);
 				$table = calendarlist_summary($data['response']);
 				print table_html($table);
 				print footer("Disconnect", "");
