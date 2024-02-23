@@ -123,15 +123,15 @@ elseif (isset($_SESSION[$cookie]))
 				// get the events filter parameters, if any
 				if (isset($_REQUEST['timeMin']))
 				{
-					array_push($vars, 'timeMin'=>$_REQUEST['timeMin']);
+					$vars['timeMin'] = $_REQUEST['timeMin'];
 				}
 				if (isset($_REQUEST['timeMax']))
 				{
-					array_push($vars, 'timeMax'=>$_REQUEST['timeMax']);
+					$vars['timeMax'] = $_REQUEST['timeMax'];
 				}
 				if (isset($_REQUEST['orderBy']))
 				{
-					array_push($vars, 'orderBy'=>$_REQUEST['orderBy']);
+					$vars['orderBy'] = $_REQUEST['orderBy']);
 				}
 				if (count($vars))
 				{
