@@ -151,7 +151,15 @@ function invoice_summary($response)
 	$table[$i] = ['Id','TxnDate','DocNumber','TotalAmt','Balance','TotalTax','Customer','Currency'];
 	foreach ($response->Invoice as $invoice)
 	{
-		$table[++$i] = [$invoice->Id, $invoice->TxnDate,$invoice->DocNumber,$invoice->TotalAmt,$invoice->Balance,$invoice->TxnTaxDetail->TotalTax,$invoice->CustomerRef->name,$invoice->CurrencyRef->value];
+		$i++;
+		$table[$i][] =(property_exists($invoice, 'Id')) ? $invoice->Id : "";
+		$table[$i][] =(property_exists($invoice, 'TxnDate')) ? $invoice->TxnDate : "";
+		$table[$i][] =(property_exists($invoice, 'DocNumber')) ? $invoice->DocNumber : "";
+		$table[$i][] =(property_exists($invoice, 'TotalAmt')) ? $invoice->TotalAmt : "";
+		$table[$i][] =(property_exists($invoice, 'Balance')) ? $invoice->Balance : "";
+		$table[$i][] =(property_exists($invoice->TxnTaxDetail, 'TotalTax')) ? $invoice->TxnTaxDetail->TotalTax : "";
+		$table[$i][] =(property_exists($invoice->CustomerRef, 'name')) ? $invoice->CustomerRef->name : "";
+		$table[$i][] =(property_exists($invoice->CurrencyRef, 'value')) ? $invoice->CurrencyRef->value : "";
 	}
 	return $table;
 }
