@@ -25,7 +25,8 @@ header {
 }
 
 .headline {
-	padding: calc(var(--universal-padding) / 2) var(--universal-padding);
+	position: relative;
+	top: 10;
 	text-align: center;
 	display: inline;
 }
