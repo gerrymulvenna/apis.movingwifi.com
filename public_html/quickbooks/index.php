@@ -85,26 +85,24 @@ elseif (isset($_SESSION[$cookie]))
 			print head($title, "Disconnected");
 			unset($_SESSION[$cookie]);
 		}
-		elseif($_REQUEST['operation'] == 'user')
+		elseif($_REQUEST['operation'] == 'invoices')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			$url = $sandbox_base . "/v3/company/" . $token->realmId . "/companyinfo/" . $token->realmId;
+			$query = http_build_query(['query'=>"SELECT * from Invoice order by txndate desc"]);
+			$url = "$sandbox_base/v3/company/" . $token->realmId . "/query?$query&minorversion=70";
 
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
 				print head($title, "Home");
-				print '<pre>';
-				print_r($data['response']);
-				print '</pre>';
+				$table = invoice_summary($data->QueryResponse);
+				print table_html($table);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head($title, "Error");
+				print head($title, "Error - query invoice");
 				print '<pre>';
-				print_r($url);
-				print "\n";
 				print_r($data);
 				print '</pre>';
 				print footer("Disconnect", "");
@@ -119,7 +117,7 @@ elseif (isset($_SESSION[$cookie]))
 		{
 			print head($title, "Connected", $token->CompanyInfo->CompanyName);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print generic_button("user", "Get user details",['operation'=>'user'], "tertiary", "GET", "./");
+			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 		}
 		else
 		{
@@ -145,4 +143,38 @@ elseif (!isset($_GET['code'])) {
 														'scope'=>implode(' ', $scopes)
 														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
 }
+
+function invoice_summary($response)
+{
+	$i = 0;
+	// field names in first row
+	$table[$i] = ['Id','TxnDate','DocNumber','TotalAmt','Balance','TotalTax','Customer','Currency'];
+	foreach ($response->Invoice as $invoice)
+	{
+		$table[++$i] = [$invoice->Id, $invoice->TxnDate,$invoice->DocNumber,$invoice->TotalAmt,$invoice->Balance,$invoice->TotalTax,$invoice->CustomerRef->name,$invoice->CurrencyRef->value];
+	}
+	return $table;
+}
+
+function table_html($data)
+{
+	$html = . "<table><thead><tr>\n";
+	foreach ($data[0] as $fieldname)
+	{
+		$html .= "<th>$fieldname</th>\n";
+	}
+	$html .= "</tr></thead><tbody>\n";
+	
+	foreach ($data as $row)
+	{
+		$html .= "<tr>\n";
+		foreach ($row as $cell)
+		{
+			$html .= "<td>$cell</td>\n";
+		}
+		$html .= "</tr>\n";
+	}
+	$html .= "</tbody></table>\n";
+}
+	
 ?>
