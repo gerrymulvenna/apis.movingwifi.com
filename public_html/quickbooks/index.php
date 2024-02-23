@@ -158,7 +158,7 @@ function invoice_summary($response)
 
 function table_html($data)
 {
-	$html = . "<table><thead><tr>\n";
+	$html = "<table><thead><tr>\n";
 	foreach ($data[0] as $fieldname)
 	{
 		$html .= "<th>$fieldname</th>\n";
