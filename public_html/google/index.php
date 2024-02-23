@@ -269,11 +269,11 @@ function table_html_calendarlist($data)
 		foreach ($row as $cell)
 		{
 			$label = $headings[$i++];
-			if ($label <> "backgroundColor" && $label <> "foregroundColor" && $label <> "id")
+			if ($label <> "backgroundColor" && $label <> "foregroundColor" && $label <> "id - click to see events")
 			{
 				$html .= "<td style=\"color: inherit; background-color: inherit;\" data-label=\"$label\">$cell</td>\n";
 			}
-			elseif ($label == "id")
+			elseif ($label == "id - click to see events")
 			{
 				// insert a link to display events from the calendar
 				$query = http_build_query(['operation'=>'events','calendarId'=>$cell,'orderBy'=>'updated','timeMin'=>date('c')]);
