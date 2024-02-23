@@ -137,7 +137,7 @@ elseif (isset($_SESSION[$cookie]))
 				{
 					$query = "?" . http_build_query($vars);
 				}
-				$url = "$urlCalendarBase/calendars/" . $_REQUEST['calendarId'] . "/events$query";
+				$url = "$urlCalendarBase/calendars/" . urlencode($_REQUEST['calendarId']) . "/events$query";
 				$data = apiRequest($url, $token->access_token);
 				if ($data['code'] == 200)
 				{
