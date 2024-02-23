@@ -173,7 +173,7 @@ function table_html_calendarlist($data)
 {
 	$html = "<table class=\"tight\"><thead><tr>\n";
 	$headings = array_shift($data);
-	for ($i = 0; $i < array_count($headings); $i++)
+	for ($i = 0; $i < count($headings); $i++)
 	{
 		
 		if ($headings[$i] == "backgroundColor")			
