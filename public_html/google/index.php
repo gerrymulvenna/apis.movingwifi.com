@@ -194,7 +194,7 @@ function table_html_calendarlist($data)
 	foreach ($data as $row)
 	{
 		$i = 0;
-		$html .= "<tr style=\"color: ". $row[$foreindex] . "; backgroundcolor: " . $row[$backindex] . "; \">\n";
+		$html .= "<tr style=\"color: ". $row[$foreindex] . "; background-color: " . $row[$backindex] . "; \">\n";
 		foreach ($row as $cell)
 		{
 			$label = $headings[$i++];
