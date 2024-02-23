@@ -115,7 +115,7 @@ elseif (isset($_SESSION[$cookie]))
 		}
 		elseif($_REQUEST['operation'] == 'events')
 		{
-			if ($_REQUEST['calendarId']))
+			if ($_REQUEST['calendarId'])
 			{
 				
 				$token = unserialize($_SESSION[$cookie]);
