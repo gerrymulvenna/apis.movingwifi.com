@@ -143,7 +143,10 @@ elseif (isset($_SESSION[$cookie]))
 				{
 					print head($title, "Displaying events - click to continue", $token->user->name);
 					$table = events_summary($data['response']);
-					print table_html($table);
+					print '<pre>';
+					print_r($table);
+					print '</pre>';
+//					print table_html($table);
 					print footer("Disconnect", "");
 				}
 				else
