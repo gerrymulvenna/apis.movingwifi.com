@@ -186,7 +186,7 @@ function table_html_calendarlist($data)
 		}
 		else
 		{
-			$html .= "<th data-label=\"$fieldname\">$fieldname</th>\n";
+			$html .= '<th data-label="' .$headings[$i] . '">' . $headings[$i] . '</th>' . "\n";
 		}
 	}
 	$html .= "</tr></thead><tbody>\n";
