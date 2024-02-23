@@ -59,7 +59,7 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 			<input type="checkbox" id="drawer-control" class="drawer persistent">
 			<nav>
 				<label for="drawer-control" class="drawer-close"></label>
-				<a href="/">Home</a> 
+				<a href="/">Start page</a> 
 				<a href="/google/">Google Calendar</a> 
 				<a href="/quickbooks/">Quickbooks</a>
 			</nav>
