@@ -101,7 +101,7 @@ elseif (isset($_SESSION[$cookie]))
 			{
 				print head($title, "Displaying calendarlist - click to continue", $token->user->name);
 				$table = calendarlist_summary($data['response']);
-				print table_html($table);
+				print table_html_calendarlist($table);
 				print footer("Disconnect", "");
 			}
 			else
@@ -165,6 +165,48 @@ function calendarlist_summary($response)
 		$table[$i][] =(property_exists($calendar, 'foregroundColor')) ? $calendar->foregroundColor : "";
 	}
 	return $table;
+}
+
+// specialised function (for calendarlist) to return a HTML table for a two-dimensional array, where row 0 contains the fieldnames
+// values for backgroundColor and foregroundColor are used to color each row appropriately
+function table_html_calendarlist($data)
+{
+	$html = "<table class=\"tight\"><thead><tr>\n";
+	$headings = array_shift($data);
+	for ($i = 0; $i < array_count($headings); $i++)
+	{
+		
+		if ($headings[$i] == "backgroundColor")			
+		{
+			$backindex = $i;
+		}
+		elseif($headings[$i] =="foregroundColor")
+		{
+			$foreindex = $i;
+		}
+		else
+		{
+			$html .= "<th data-label=\"$fieldname\">$fieldname</th>\n";
+		}
+	}
+	$html .= "</tr></thead><tbody>\n";
+	
+	foreach ($data as $row)
+	{
+		$i = 0;
+		$html .= "<tr style=\"color: ". $row[$foreindex] . "; backgroundcolor: " . $row[$backindex] . "; \">\n";
+		foreach ($row as $cell)
+		{
+			$label = $headings[$i++];
+			if ($label <> "backgroundColor" && $label <> "foregroundColor")
+			{
+				$html .= "<td data-label=\"$label\">$cell</td>\n";
+			}
+		}
+		$html .= "</tr>\n";
+	}
+	$html .= "</tbody></table>\n";
+	return $html;
 }
 
 ?>

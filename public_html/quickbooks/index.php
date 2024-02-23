@@ -162,6 +162,5 @@ function invoice_summary($response)
 		$table[$i][] =(property_exists($invoice->CurrencyRef, 'value')) ? $invoice->CurrencyRef->value : "";
 	}
 	return $table;
-}
-	
+}	
 ?>

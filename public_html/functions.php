@@ -205,6 +205,7 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [])
 }
 
 
+// generic function to return a HTML table for a two-dimensional array, where row 0 contains the fieldnames
 function table_html($data)
 {
 	$html = "<table class=\"tight\"><thead><tr>\n";
