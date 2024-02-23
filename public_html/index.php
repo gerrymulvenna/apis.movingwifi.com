@@ -17,7 +17,7 @@ print head("some simple API interactions");
 	<table><thead class="tertiary"><tr><th>API</th><th>Example use</th></tr>
 	<tbody>
 		<tr>
-			<td><a href="/google" class="primary button">Google Calendar</a></td><td>Display your list of calendars<br>Display a list of future events from a calendar</td>
+			<td><a href="/google" class="primary button">Google Calendar</a></td><td>Display your list of calendars and display a list of future events from a calendar</td>
 		</tr>
 		<tr>
 			<td><a href="/quickbooks" class="primary button">Quickbooks</a></td><td>Display a summary table of invoices</td>
