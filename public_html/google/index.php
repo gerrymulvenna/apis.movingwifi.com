@@ -100,9 +100,8 @@ elseif (isset($_SESSION[$cookie]))
 			if ($data['code'] == 200)
 			{
 				print head($title, "Home", $token->user->name);
-				print '<pre>';
-				print_r($data['response']);
-				print '</pre>';
+				$table = calendarlist_summary($data['response']);
+				print table_html($table);
 				print footer("Disconnect", "");
 			}
 			else
@@ -149,4 +148,23 @@ elseif (!isset($_GET['code'])) {
 														'scope'=>implode(' ', $scopes)
 														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
 }
+
+function calendarlist_summary($response)
+{
+	$i = 0;
+	// field names in first row
+	$table[$i] = ['summary','description','id','etag','backgroundColor','foregroundColor'];
+	foreach ($response->items as $calendar)
+	{
+		$i++;
+		$table[$i][] =(property_exists($calendar, 'summary')) ? $calendar->summary : "";
+		$table[$i][] =(property_exists($calendar, 'description')) ? $calendar->description : "";
+		$table[$i][] =(property_exists($calendar, 'id')) ? $calendar->id : "";
+		$table[$i][] =(property_exists($calendar, 'etag')) ? $calendar->etag : "";
+		$table[$i][] =(property_exists($calendar, 'backgroundColor')) ? $calendar->backgroundColor : "";
+		$table[$i][] =(property_exists($calendar, 'foregroundColor')) ? $calendar->foregroundColor : "";
+	}
+	return $table;
+}
+
 ?>
