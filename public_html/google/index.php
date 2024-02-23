@@ -115,11 +115,29 @@ elseif (isset($_SESSION[$cookie]))
 		}
 		elseif($_REQUEST['operation'] == 'events')
 		{
-			if ($_REQUEST['calendarId'])
+			if (isset($_REQUEST['calendarId']))
 			{
-				
+				$vars = [];
+				$query = "";
 				$token = unserialize($_SESSION[$cookie]);
-				$url = "$urlCalendarBase/calendars/" . $_REQUEST['calendarId'] . "/events";
+				// get the events filter parameters, if any
+				if (isset($_REQUEST['timeMin']))
+				{
+					array_push($vars, 'timeMin'=>$_REQUEST['timeMin']);
+				}
+				if (isset($_REQUEST['timeMax']))
+				{
+					array_push($vars, 'timeMax'=>$_REQUEST['timeMax']);
+				}
+				if (isset($_REQUEST['orderBy']))
+				{
+					array_push($vars, 'orderBy'=>$_REQUEST['orderBy']);
+				}
+				if (count($vars))
+				{
+					$query = "?" . http_build_query($vars);
+				}
+				$url = "$urlCalendarBase/calendars/" . $_REQUEST['calendarId'] . "/events$query";
 				$data = apiRequest($url, $token->access_token);
 				if ($data['code'] == 200)
 				{
