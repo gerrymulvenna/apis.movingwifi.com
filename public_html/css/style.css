@@ -12,6 +12,12 @@
 [type="checkbox"].drawer:checked + * {
 	right: 0;
 	left: auto;
+	width: 240px;
+	text-align: left;
+}
+
+header {
+	text-align: center;
 }
 
 .drawer-toggle {
