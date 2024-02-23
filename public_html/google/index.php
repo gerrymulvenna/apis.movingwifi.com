@@ -154,6 +154,7 @@ elseif (isset($_SESSION[$cookie]))
 				{
 					print head($title, "Error");
 					print '<pre>';
+					print "$url\n";
 					print_r($data);
 					print '</pre>';
 					print footer("Disconnect", "");
