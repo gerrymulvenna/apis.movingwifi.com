@@ -131,7 +131,7 @@ elseif (isset($_SESSION[$cookie]))
 				}
 				if (isset($_REQUEST['orderBy']))
 				{
-					$vars['orderBy'] = $_REQUEST['orderBy']);
+					$vars['orderBy'] = $_REQUEST['orderBy'];
 				}
 				if (count($vars))
 				{
