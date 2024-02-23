@@ -20,6 +20,12 @@ header {
 	text-align: center;
 }
 
+table.tight th, table.tight td {
+	padding-top: 0;
+	padding-bottom: 0;
+}
+
+
 .card {
 	text-align: center;
 	margin: 0 auto;

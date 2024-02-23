@@ -166,19 +166,22 @@ function invoice_summary($response)
 
 function table_html($data)
 {
-	$html = "<table><thead><tr>\n";
-	foreach (array_shift($data) as $fieldname)
+	$html = "<table class=\"tight\"><thead><tr>\n";
+	$headings = array_shift($data);
+	foreach ($headings as $fieldname)
 	{
-		$html .= "<th>$fieldname</th>\n";
+		$html .= "<th data-label=\"$fieldname\">$fieldname</th>\n";
 	}
 	$html .= "</tr></thead><tbody>\n";
 	
 	foreach ($data as $row)
 	{
+		$i = 0;
 		$html .= "<tr>\n";
 		foreach ($row as $cell)
 		{
-			$html .= "<td>$cell</td>\n";
+			$label = $headings[$i++];
+			$html .= "<td data-label=\"$label\">$cell</td>\n";
 		}
 		$html .= "</tr>\n";
 	}
