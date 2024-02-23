@@ -14,7 +14,14 @@ $urlAccessToken = 'https://oauth2.googleapis.com/token';
 $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
 $urlCalendarBase = 'https://www.googleapis.com/calendar/v3';
 
-$scopes = ['openid','email','profile','https://www.googleapis.com/auth/calendar.events.public.readonly','https://www.googleapis.com/auth/calendar.events.owned.readonly','https://www.googleapis.com/auth/calendar.events.readonly'];
+$scopes =  ['openid','email','profile',
+			'https://www.googleapis.com/auth/calendar.readonly',
+			'https://www.googleapis.com/auth/calendar.calendarlist.readonly',
+			'https://www.googleapis.com/auth/calendar.calendars.readonly',
+			'https://www.googleapis.com/auth/calendar.settings.readonly',
+			'https://www.googleapis.com/auth/calendar.events.public.readonly',
+			'https://www.googleapis.com/auth/calendar.events.owned.readonly',
+			'https://www.googleapis.com/auth/calendar.events.readonly'];
 
 // service-specific strings
 $title = "Google Calendar API Test";
