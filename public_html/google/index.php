@@ -142,12 +142,8 @@ elseif (isset($_SESSION[$cookie]))
 				if ($data['code'] == 200)
 				{
 					print head($title, "Displaying events - click to continue", $token->user->name);
-					print '<pre>';
-					print "$url\n";
-					print_r($data['response']);
-					print '</pre>';
-//					$table = events_summary($data['response']);
-//					print table_html($table);
+					$table = events_summary($data['response']);
+					print table_html($table);
 					print footer("Disconnect", "");
 				}
 				else
@@ -207,7 +203,7 @@ function calendarlist_summary($response)
 {
 	$i = 0;
 	// field names in first row
-	$table[$i] = ['summary','description','id','etag','backgroundColor','foregroundColor'];
+	$table[$i] = ['summary','description','id - click to see events','etag','backgroundColor','foregroundColor'];
 	foreach ($response->items as $calendar)
 	{
 		$i++;
@@ -220,6 +216,27 @@ function calendarlist_summary($response)
 	}
 	return $table;
 }
+
+function events_summary($response)
+{
+	$i = 0;
+	// field names in first row
+	$table[$i] = ['summary','location','id','start','end','created','updated','status'];
+	foreach ($response->items as $event)
+	{
+		$i++;
+		$table[$i][] =(property_exists($event, 'summary')) ? $event->summary : "";
+		$table[$i][] =(property_exists($event, 'location')) ? $event->location : "";
+		$table[$i][] =(property_exists($event, 'id')) ? $event->id : "";
+		$table[$i][] =(property_exists($event, 'start')) ? $event->start : "";
+		$table[$i][] =(property_exists($event, 'end')) ? $event->end : "";
+		$table[$i][] =(property_exists($event, 'created')) ? $event->created : "";
+		$table[$i][] =(property_exists($event, 'updated')) ? $event->updated : "";
+		$table[$i][] =(property_exists($event, 'status')) ? $event->status : "";
+	}
+	return $table;
+}
+
 
 // specialised function (for calendarlist) to return a HTML table for a two-dimensional array, where row 0 contains the fieldnames
 // values for backgroundColor and foregroundColor are used to color each row appropriately
