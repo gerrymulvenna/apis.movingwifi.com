@@ -14,13 +14,13 @@ print head("some simple API interactions");
 	minimalist and self-contained, in order to best demonstrate the flow from Authentication to API call and response handling. Each example
 	(accessed by the menu top right) implements the initial authenticated connection and present one or two examples of using the API.</p>
 	
-	<table><thead><tr><th>API</th><th>Example use</th></tr>
+	<table><thead class="tertiary"><tr><th>API</th><th>Example use</th></tr>
 	<tbody>
 		<tr>
-			<td><a href="/google" class="button">Google Calendar</a></td><td>Display your list of calendars<br>Display a list of future events from a calendar</td>
+			<td><a href="/google" class="primary button">Google Calendar</a></td><td>Display your list of calendars<br>Display a list of future events from a calendar</td>
 		</tr>
 		<tr>
-			<td><a href="/quickbooks" class="button">Quickbooks</a></td><td>Display a summary table of invoices</td>
+			<td><a href="/quickbooks" class="primary button">Quickbooks</a></td><td>Display a summary table of invoices</td>
 		</tr>
 	</tbody>
 	</table>
