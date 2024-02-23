@@ -113,6 +113,40 @@ elseif (isset($_SESSION[$cookie]))
 				print footer("Disconnect", "");
 			}
 		}
+		elseif($_REQUEST['operation'] == 'events')
+		{
+			if ($_REQUEST['calendarId']))
+			{
+				
+				$token = unserialize($_SESSION[$cookie]);
+				$url = "$urlCalendarBase/calendars/" . $_REQUEST['calendarId'] . "/events";
+				$data = apiRequest($url, $token->access_token);
+				if ($data['code'] == 200)
+				{
+					print head($title, "Displaying events - click to continue", $token->user->name);
+					print '<pre>';
+					print_r($data['response']);
+					print '</pre>';
+//					$table = events_summary($data['response']);
+//					print table_html($table);
+					print footer("Disconnect", "");
+				}
+				else
+				{
+					print head($title, "Error");
+					print '<pre>';
+					print_r($data);
+					print '</pre>';
+					print footer("Disconnect", "");
+				}
+			}
+			else
+			{
+				print head($title, "No calendarId suppplied - click to continue");
+				print footer("Disconnect", "");
+			}
+		}
+		
 	}
 	else
 	{
@@ -126,7 +160,7 @@ elseif (isset($_SESSION[$cookie]))
 		}
 		else
 		{
-			print head($title, "Disconnectd");
+			print head($title, "Disconnected");
 			unset($_SESSION['oauth2state']); 
 			unset($_SESSION[$cookie]);
 		}
@@ -198,10 +232,16 @@ function table_html_calendarlist($data)
 		foreach ($row as $cell)
 		{
 			$label = $headings[$i++];
-			if ($label <> "backgroundColor" && $label <> "foregroundColor")
+			if ($label <> "backgroundColor" && $label <> "foregroundColor" && $label <> "Id")
 			{
 				$html .= "<td style=\"color: inherit; background-color: inherit;\" data-label=\"$label\">$cell</td>\n";
 			}
+			elseif ($label == "Id")
+			{
+				// insert a link to display events from the calendar
+				$html .= "<td style=\"color: inherit; background-color: inherit;\" data-label=\"$label\"><a href=\"./?operation=events&calendarId=$cell\">$cell</a></td>\n";
+			}
+		
 		}
 		$html .= "</tr>\n";
 	}
