@@ -125,6 +125,7 @@ elseif (isset($_SESSION[$cookie]))
 				{
 					print head($title, "Displaying events - click to continue", $token->user->name);
 					print '<pre>';
+					print "$url\n";
 					print_r($data['response']);
 					print '</pre>';
 //					$table = events_summary($data['response']);
@@ -239,7 +240,8 @@ function table_html_calendarlist($data)
 			elseif ($label == "id")
 			{
 				// insert a link to display events from the calendar
-				$html .= "<td style=\"color: inherit; background-color: inherit;\" data-label=\"$label\"><a href=\"./?operation=events&calendarId=$cell\">$cell</a></td>\n";
+				$query = http_build_query(['operation'=>'events','calendarId'=>$cell]);
+				$html .= "<td style=\"background-color: inherit;\" data-label=\"$label\"><a class=\"button\" href=\"./?$query\">$cell</a></td>\n";
 			}
 		
 		}
