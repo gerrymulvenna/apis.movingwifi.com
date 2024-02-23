@@ -17,10 +17,10 @@ print head("some simple API interactions");
 	<table><thead><tr><th>API</th><th>Example use</th></tr>
 	<tbody>
 		<tr>
-			<td>Google Calendar</td><td>Display your list of calendars<br>Display a list of future events from a calendar</td>
+			<td><a href="/google" class="button">Google Calendar</a></td><td>Display your list of calendars<br>Display a list of future events from a calendar</td>
 		</tr>
 		<tr>
-			<td>Quickbooks</td><td>Display a summary table of invoices</td>
+			<td><a href="/quickbooks" class="button">Quickbooks</a></td><td>Display a summary table of invoices</td>
 		</tr>
 	</tbody>
 	</table>
