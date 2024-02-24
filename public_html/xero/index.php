@@ -30,20 +30,18 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 		{
 			$token = $response['response'];
 			$token->access_token_expiry = time() + $token->expires_in;
-			$token->realmId = $_GET['realmId'];
-			// get company info
-			$url = $sandbox_base . "/v3/company/" . $token->realmId . "/companyinfo/" . $token->realmId;
-			$data = apiRequest($url, $token->access_token);
-			if ($data['code'] == 200)
+			// get tenants
+			$tenants = apiRequest($urlConnections, $token->access_token);
+			if ($tenants['code'] == 200)
 			{
-				$token->CompanyInfo = $data['response']->CompanyInfo;
-				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
+				$token->tenants = $tenants['response'];
+				print head($title, "Connected - click to continue");
 				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head($title, "Connected", "but failed to retrieve company info");
+				print head($title, "Connected", "but failed to retrieve tenants info");
 				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
