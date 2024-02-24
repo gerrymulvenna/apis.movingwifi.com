@@ -62,7 +62,7 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 				<a href="/">Start page</a> 
 				<a href="/google/">Google Calendar</a> 
 				<a href="/quickbooks/">Quickbooks</a>
-				<a href="https://github.com/gerrymulvenna/apis.movingwifi.com">View code on Github</a>
+				<a href="https://github.com/gerrymulvenna/apis.movingwifi.com">View code on GitHub</a>
 			</nav>
 		</div>
 	</header>

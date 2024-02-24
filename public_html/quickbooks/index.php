@@ -6,7 +6,8 @@ session_start();
 date_default_timezone_set('Europe/London');
 
 require "../functions.php";
-require "credentials.php";  //client_id, client_secret, redirect_uri
+// you will need to create the credentials.php and define your unique credentials for this service
+require "credentials.php";  //$client_id, $client_secret, $redirect_uri
 
 // API details
 $urlAuthorize = "https://appcenter.intuit.com/connect/oauth2";
