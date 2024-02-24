@@ -14,7 +14,7 @@ $urlAuthorize = "https://login.xero.com/identity/connect/authorize";
 $urlAccessToken = "https://identity.xero.com/connect/token";
 $urlConnections = "https://api.xero.com/connections";
 $api_base = "https://api.xero.com/api.xro/2.0/";
-$scopes = ['com.intuit.quickbooks.accounting'];
+$scopes = ["offline_access", "accounting.transactions", "accounting.contacts", "openid", "profile", "email"];
 
 // service-specific strings
 $title = "Xero";
