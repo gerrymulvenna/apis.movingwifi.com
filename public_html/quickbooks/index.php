@@ -15,7 +15,7 @@ $sandbox_base = "https://sandbox-quickbooks.api.intuit.com";
 $scopes = ['com.intuit.quickbooks.accounting'];
 
 // service-specific strings
-$title = "Quickbooks API Test";
+$title = "Quickbooks";
 $connect = "Connect to Quickbooks";
 $cookie = "movingwifi-Quickbooks";
 
