@@ -131,6 +131,7 @@ elseif (isset($_SESSION[$cookie]))
 				print '<pre>';
 				print_r($data['response']);
 				print '</pre>';
+				print footer("Disconnect", "");
 			}
 			else
 			{
@@ -140,7 +141,6 @@ elseif (isset($_SESSION[$cookie]))
 				print '</pre>';
 				print footer("Disconnect", "");
 			}
-			print footer("Revoke access", $text);
 		}
 	}
 	else
