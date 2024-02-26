@@ -108,6 +108,16 @@ elseif (isset($_SESSION[$cookie]))
 				print footer("Disconnect", "");
 			}
 		}
+		elseif ($_REQUEST['operation'] == 'tenant')
+		{
+			$token = unserialize($_SESSION[$cookie]);
+			$tenantId = $_REQUEST['tenantId']);
+			$tenantName = $_REQUEST['tenantName']);
+			print head("$title | $tenantName","Home");
+			print generic_button('contacts','Display Contacts', ['operation'=>'contacts','tenantId'=>$tenantId]);
+			print footer("Disconnect", "");
+		}
+
 	}
 	else
 	{
@@ -121,7 +131,6 @@ elseif (isset($_SESSION[$cookie]))
 				print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName]);
 			}
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print footer("Disconnect", "");
 		}
 		else
 		{
