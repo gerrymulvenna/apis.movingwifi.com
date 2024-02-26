@@ -115,11 +115,13 @@ elseif (isset($_SESSION[$cookie]))
 		$token = unserialize($_SESSION[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
+			print head("$title | tenants", "Home");
 			foreach ($token->tenants as $tenant)
 			{
 				print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName]);
 			}
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+			print footer("Disconnect", "");
 		}
 		else
 		{
