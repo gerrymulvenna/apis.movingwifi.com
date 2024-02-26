@@ -111,8 +111,8 @@ elseif (isset($_SESSION[$cookie]))
 		elseif ($_REQUEST['operation'] == 'tenant')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			$tenantId = $_REQUEST['tenantId']);
-			$tenantName = $_REQUEST['tenantName']);
+			$tenantId = $_REQUEST['tenantId'];
+			$tenantName = $_REQUEST['tenantName'];
 			print head("$title | $tenantName","Home");
 			print generic_button('contacts','Display Contacts', ['operation'=>'contacts','tenantId'=>$tenantId]);
 			print footer("Disconnect", "");
