@@ -172,10 +172,10 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
  */
 function apiRequest($url, $access_token, $method = 'GET', $vars = [], $headers = [])
 {
-	$headers = array_merge($headers, array(
-		'Accept: application/json', 
-		'Authorization: Bearer ' . $access_token,
-		'Content-Type: application/json'
+	// add required headers
+	array_push($headers, 'Accept: application/json');
+	array_push($headers, 'Authorization: Bearer ' . $access_token);
+	array_push($headers, 'Content-Type: application/json');
 	));
     // Set up cURL options.
     $ch = curl_init();

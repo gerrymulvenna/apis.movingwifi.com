@@ -135,7 +135,6 @@ elseif (isset($_SESSION[$cookie]))
 			}
 			else
 			{
-				print head("$title | contacts", "Error - click to continue");
 				print '<pre>';
 				print_r($data);
 				print '</pre>';
