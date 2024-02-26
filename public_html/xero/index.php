@@ -118,7 +118,29 @@ elseif (isset($_SESSION[$cookie]))
 			print generic_button('contacts','Display Contacts', ['operation'=>'contacts','tenantId'=>$tenantId]);
 			print footer("Disconnect", "");
 		}
-
+		elseif ($_REQUEST['operation'] == 'contacts')
+		{
+			$url = $api_base . "contacts";
+			$token = unserialize($_SESSION[$cookie]);
+			$tenantId = $_REQUEST['tenantId'];
+			print head("$title | Contacts","Home");
+			$data = apiRequest($url, $token->access_token, $tenantId, {'summaryOnly'=>'true'});  # call the API
+			if ($data['code'] == 200)
+			{
+				print '<pre>';
+				print_r($data['response');
+				print '</pre>';
+			}
+			else
+			{
+				print head("$title | contacts", "Error - click to continue");
+				print '<pre>';
+				print_r($data);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+			print footer("Revoke access", $text);
+		}
 	}
 	else
 	{
