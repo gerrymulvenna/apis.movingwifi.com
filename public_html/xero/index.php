@@ -125,7 +125,7 @@ elseif (isset($_SESSION[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Contacts","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $token->access_token, 'GET', ['summaryOnly'=>'true'], ['xero-tenant-id'=>$tenantId]);  
+			$data = apiRequest($url, $token->access_token, 'GET', ['summaryOnly'=>'true'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				print '<pre>';
