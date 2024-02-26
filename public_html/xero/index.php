@@ -129,7 +129,7 @@ elseif (isset($_SESSION[$cookie]))
 			if ($data['code'] == 200)
 			{
 				print '<pre>';
-				print_r($data['response');
+				print_r($data['response']);
 				print '</pre>';
 			}
 			else
