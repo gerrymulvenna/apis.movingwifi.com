@@ -176,7 +176,7 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [], $headers =
 	array_push($headers, 'Accept: application/json');
 	array_push($headers, 'Authorization: Bearer ' . $access_token);
 	array_push($headers, 'Content-Type: application/json');
-	));
+
     // Set up cURL options.
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
