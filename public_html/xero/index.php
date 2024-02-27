@@ -74,7 +74,7 @@ elseif (isset($_SESSION[$cookie]))
 		if($_REQUEST['operation'] == 'cookie')
 		{
 			$token = unserialize($_SESSION[$cookie]);
-			print head("$title | cookie contents", "Connected");
+			print head("$title | cookie contents", "Home");
 			print '<pre>';
 			print_r($token);
 			print '</pre>';
