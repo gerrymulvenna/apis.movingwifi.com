@@ -103,7 +103,7 @@ elseif (isset($_SESSION[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Customers","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsCustomer=="1"'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsCustomer=="True"'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
@@ -125,7 +125,7 @@ elseif (isset($_SESSION[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Suppliers","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsSupplier=="1"'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsSupplier=="True"'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
