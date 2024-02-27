@@ -26,7 +26,7 @@ print head("Some simple API interactions");
 					<td data-label="API"><a href="/quickbooks" class="primary button">Quickbooks</a></td><td data-label="Example use">Display a summary table of invoices</td>
 				</tr>
 				<tr>
-					<td data-label="API"><a href="/xero" class="primary button">Xero</a></td><td data-label="Example use">List the Xero "tenants and display a summary table of contacts</td>
+					<td data-label="API"><a href="/xero" class="primary button">Xero</a></td><td data-label="Example use">List the Xero "tenants" and display a summary table of contacts</td>
 				</tr>
 			</tbody>
 		</table>
