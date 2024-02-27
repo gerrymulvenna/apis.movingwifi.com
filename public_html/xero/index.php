@@ -85,29 +85,6 @@ elseif (isset($_SESSION[$cookie]))
 			print head($title, "Disconnected");
 			unset($_SESSION[$cookie]);
 		}
-		elseif($_REQUEST['operation'] == 'invoices')
-		{
-			$token = unserialize($_SESSION[$cookie]);
-			$query = http_build_query(['query'=>"SELECT * from Invoice order by txndate desc"]);
-			$url = "$sandbox_base/v3/company/" . $token->realmId . "/query?$query&minorversion=70";
-
-			$data = apiRequest($url, $token->access_token);
-			if ($data['code'] == 200)
-			{
-				print head("$title | invoices", "Home");
-				$table = invoice_summary($data['response']->QueryResponse);
-				print table_html($table);
-				print footer("Disconnect", "");
-			}
-			else
-			{
-				print head("$title | invoices", "Error - query invoice");
-				print '<pre>';
-				print_r($data);
-				print '</pre>';
-				print footer("Disconnect", "");
-			}
-		}
 		elseif ($_REQUEST['operation'] == 'tenant')
 		{
 			$token = unserialize($_SESSION[$cookie]);
@@ -125,7 +102,7 @@ elseif (isset($_SESSION[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Contacts","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $token->access_token, 'GET', ['summaryOnly'=>'true'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $token->access_token, 'GET', ['summaryOnly'=>'true','order'=>'Name'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
