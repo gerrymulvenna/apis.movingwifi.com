@@ -182,6 +182,19 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [], $headers =
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	$eh = fopen('curl.log', 'w+');
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
+	if (method == 'GET' && count($vars)>0)
+	{
+		$query = http_build_query($vars);
+		if (strpos($url, '?'))
+		{
+			$url .= '&' . $query;
+		}
+		else
+		{
+			$url .= '?' . $query;
+		}
+	}
+		
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
