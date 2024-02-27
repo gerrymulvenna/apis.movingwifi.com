@@ -118,7 +118,6 @@ elseif (isset($_SESSION[$cookie]))
 				print footer("Disconnect", "");
 			}
 		}
-	}
 		elseif ($_REQUEST['operation'] == 'suppliers')
 		{
 			$url = $api_base . "contacts";
