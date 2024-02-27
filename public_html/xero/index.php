@@ -128,9 +128,8 @@ elseif (isset($_SESSION[$cookie]))
 			$data = apiRequest($url, $token->access_token, 'GET', ['summaryOnly'=>'true'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
-				print '<pre>';
-				print_r($data['response']);
-				print '</pre>';
+				$table = contacts_summary($data['response']);
+				print table_html($table);
 				print footer("Disconnect", "");
 			}
 			else
@@ -199,4 +198,23 @@ function invoice_summary($response)
 	}
 	return $table;
 }	
+
+
+function contacts_summary($response)
+{
+	$i = 0;
+	// field names in first row
+	$table[$i] = ['ContactID','Name','IsSupplier','IsCustomer','DefaultCurrency'];
+	foreach ($response->Contacts as $contact)
+	{
+		$i++;
+		$table[$i][] =(property_exists($contact, 'ContactID')) ? $contact->ContactID : "";
+		$table[$i][] =(property_exists($contact, 'Name')) ? $contact->Name : "";
+		$table[$i][] =(property_exists($contact, 'IsSupplier')) ? $contact->IsSupplier : "";
+		$table[$i][] =(property_exists($contact, 'IsCustomer')) ? $contact->IsCustomer : "";
+		$table[$i][] =(property_exists($contact, 'DefaultCurrency')) ? $contact->DefaultCurrency : "";
+	}
+	return $table;
+}	
+
 ?>
