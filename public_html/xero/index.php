@@ -91,18 +91,42 @@ elseif (isset($_SESSION[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			$tenantName = $_REQUEST['tenantName'];
 			print head("$title | $tenantName","Home");
-			print generic_button('contacts','Display Contacts', ['operation'=>'contacts','tenantId'=>$tenantId]);
+			print generic_button('customers','Display Customers', ['operation'=>'customers','tenantId'=>$tenantId]);
+			print generic_button('suppliers','Display Suppliers', ['operation'=>'suppliers','tenantId'=>$tenantId]);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
 			print footer("Disconnect", "");
 		}
-		elseif ($_REQUEST['operation'] == 'contacts')
+		elseif ($_REQUEST['operation'] == 'customers')
 		{
 			$url = $api_base . "contacts";
 			$token = unserialize($_SESSION[$cookie]);
 			$tenantId = $_REQUEST['tenantId'];
-			print head("$title | Contacts","Home");
+			print head("$title | Customers","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsCustomer'], ["xero-tenant-id: $tenantId"]);  
+			if ($data['code'] == 200)
+			{
+				$table = contacts_summary($data['response']);
+				print table_html($table);
+				print footer("Disconnect", "");
+			}
+			else
+			{
+				print '<pre>';
+				print_r($data);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+		}
+	}
+		elseif ($_REQUEST['operation'] == 'suppliers')
+		{
+			$url = $api_base . "contacts";
+			$token = unserialize($_SESSION[$cookie]);
+			$tenantId = $_REQUEST['tenantId'];
+			print head("$title | Suppliers","Home");
+			# call the API - the xero API needs xero-tenant-id in the header
+			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsSuppliers'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
