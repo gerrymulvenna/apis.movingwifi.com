@@ -114,8 +114,8 @@ elseif (isset($_SESSION[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			$tenantName = $_REQUEST['tenantName'];
 			print head("$title | $tenantName","Home");
-			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
 			print generic_button('contacts','Display Contacts', ['operation'=>'contacts','tenantId'=>$tenantId]);
+			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
 			print footer("Disconnect", "");
 		}
 		elseif ($_REQUEST['operation'] == 'contacts')
@@ -149,11 +149,11 @@ elseif (isset($_SESSION[$cookie]))
 		if ($now <  $token->access_token_expiry)
 		{
 			print head("$title | tenants", "Home");
-			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
 			foreach ($token->tenants as $tenant)
 			{
-				print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName]);
+				print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
 			}
+			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
 		}
 		else
 		{
