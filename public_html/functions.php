@@ -182,7 +182,7 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [], $headers =
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	$eh = fopen('curl.log', 'w+');
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
-	if (method == 'GET' && count($vars)>0)
+	if ($method == 'GET' && count($vars)>0)
 	{
 		$query = http_build_query($vars);
 		if (strpos($url, '?'))
