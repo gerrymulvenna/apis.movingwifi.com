@@ -64,7 +64,5 @@ print head("Some simple API interactions");
 		</div>
 	</div>
 </div>
-					
 </body>
-			</div>>
 </html>	
