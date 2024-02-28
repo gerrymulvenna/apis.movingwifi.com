@@ -10,24 +10,17 @@ require "../functions.php";
 require "credentials.php";  //$client_id, $client_secret, $redirect_uri
 
 // API details
-$urlAuthorize = 'https://accounts.google.com/o/oauth2/v2/auth';
-$urlAccessToken = 'https://oauth2.googleapis.com/token';
+$urlAuthorize = 'https://twitter.com/i/oauth2/authorize';
+$urlAccessToken = 'https://api.twitter.com/2/oauth2/token';
 $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
-$urlCalendarBase = 'https://www.googleapis.com/calendar/v3';
+$api_base = 'https://api.twitter.com';
 
-$scopes =  ['openid','email','profile',
-			'https://www.googleapis.com/auth/calendar.readonly',
-			'https://www.googleapis.com/auth/calendar.calendarlist.readonly',
-			'https://www.googleapis.com/auth/calendar.calendars.readonly',
-			'https://www.googleapis.com/auth/calendar.settings.readonly',
-			'https://www.googleapis.com/auth/calendar.events.public.readonly',
-			'https://www.googleapis.com/auth/calendar.events.owned.readonly',
-			'https://www.googleapis.com/auth/calendar.events.readonly'];
+$scopes =  ['tweet.read','tweet.write','users.read offline.access'];
 
 // service-specific strings
-$title = "Google Calendar";
-$connect = "Connect to Google";
-$cookie = "movingwifi-gCal";
+$title = "Twitter";
+$connect = "Connect to Twitter";
+$cookie = "movingwifi-twitter";
 
 if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 {
