@@ -127,9 +127,19 @@ function generic_button($id, $text, $vars, $class = "tertiary", $method = "GET",
  * @param string $client_secret password value
  * @param string $callback the return_uri address
  */
-function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, $callback)
+function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, $callback, $extra_params = [])
 {
-	$params = ['grant_type'=>$grant_type,'code'=>$code,'redirect_uri'=>$callback];
+	//build the default parameters
+	$params = [];
+	$params['grant_type'] = $grant_type;
+	$params['code'] = $code;
+	$params['redirect_uri'] = $callback;
+	
+	// add any extra params
+	foreach($extra_params as $key => $value)
+	{
+		$params[$key] = $value;
+	}
     // Set up cURL options.
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_VERBOSE, true);

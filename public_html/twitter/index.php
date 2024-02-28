@@ -22,11 +22,12 @@ $title = "Twitter";
 $connect = "Connect to Twitter";
 $cookie = "movingwifi-twitter";
 
-if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
+if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_SESSION['challenge']))
 {
 	if ($_GET['state'] == $_SESSION['oauth2state'])
 	{
-		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
+		$verifier = $_SESSION['challenge'];
+		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri, ['code_verifier'=>$verifier]);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
@@ -182,17 +183,21 @@ elseif (isset($_SESSION[$cookie]))
 // If we don't have an authorization code then get one
 elseif (!isset($_GET['code'])) {
 	$state = getRandomState();
+	$pkce = getRandomPkceCode(25);
 
     // store state in the session.
     $_SESSION['oauth2state'] = $state;
+	$_SESSION['challenge'] = $pkce;
 
     // display Connect to button
 	print head($title);
 	print generic_button("connect", $connect,['client_id'=>$client_id,
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
-														'scope'=>implode(' ', $scopes)
-														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
+														'scope'=>implode(' ', $scopes),
+														'state'=>$state,
+														'code_challenge'=>$pkce,
+														'code_challenge_method'=>'plain'], "tertiary", "GET", $urlAuthorize);
 }
 
 function calendarlist_summary($response)
