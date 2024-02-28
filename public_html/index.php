@@ -31,7 +31,7 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-6 col-lg-3">
-			<div class="card">
+			<div class="card alignleft">
 				<div class="section">
 					<a href="/quickbooks" class="primary button">Quickbooks</a>
 				</div>
@@ -41,7 +41,7 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-6 col-lg-3">
-			<div class="card">
+			<div class="card alignleft">
 				<div class="section">
 					<a href="/xero" class="primary button">Xero</a>
 				</div>
@@ -51,9 +51,12 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 	</div>
-
-	<p class="alignleft">Gerry Mulvenna</p>
-	<a href="https://github.com/gerrymulvenna/apis.movingwifi.com" class="button tertiary">View the code on GitHub</a>
+	<div class="row">
+		<footer>
+			<p class="alignleft">Gerry Mulvenna</p>
+			<a href="https://github.com/gerrymulvenna/apis.movingwifi.com" class="button tertiary">View the code on GitHub</a>
+		</footer>
+	</div>
 </div>
 </body>
 </html>
