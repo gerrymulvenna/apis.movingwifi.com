@@ -78,6 +78,8 @@ elseif (isset($_SESSION[$cookie]))
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
 			print_r($token);
+			print "\n";
+			print_r(session_get_cookie_params());
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
