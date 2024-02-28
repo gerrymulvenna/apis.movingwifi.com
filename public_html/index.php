@@ -21,7 +21,7 @@ print head("Some simple API interactions");
 	</div>
 	<div class="row">
 		<div class="col-sm-12 col-md-6 col-lg-3">
-			<div class="card">
+			<div class="card alignleft">
 				<div class="section">
 					<a href="/google" class="primary button">Google Calendar</a>
 				</div>
