@@ -45,6 +45,17 @@ print head("Some simple API interactions");
 		<div class="col-sm-12 col-md-6 col-lg-3">
 			<div class="card alignleft fluid">
 				<div class="section">
+					<a href="/twitter" class="primary button">Twitter</a>
+				</div>
+				<div class="section")
+					<p>The "free" Twitter API can now only post a tweet and read your user profile.</p>
+					<p><a href="https://developer.twitter.com/en/docs/platform-overview">The Twitter Developer Platform</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 col-md-6 col-lg-3">
+			<div class="card alignleft fluid">
+				<div class="section">
 					<a href="/xero" class="primary button">Xero</a>
 				</div>
 				<div class="section")
