@@ -10,12 +10,10 @@ print head("Some simple API interactions");
 
 ?>
 	<div class="row">
-		<div class="col-sm-12 col-md-6 col-lg-3">
+		<div class="col-sm-12">
 			<p class="alignleft">This is a showcase project to present some simple examples of API interactions, where the code (written in PHP) is kept deliberately 
 			minimalist and self-contained, in order to best demonstrate the flow from establishing the Oauth 2.0 connection to issuing an API call 
 			and handling the response data.</p>
-		</div>
-		<div class="col-sm-12 col-md-6 col-lg-3">
 			<p class="alignleft">Getting that initial back and forth correct and your first API call working invariably requires more head-scratching and debugging
 			than anticipated. Each example (accessed by the menu top right) implements the initial authenticated connection and presents one or two 
 			examples of using the API, hopefully to make the learning curve a bit easier at the start.</p>
