@@ -33,10 +33,11 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_SESSION[
 			$token = $response['response'];
 			$token->access_token_expiry = time() + $token->expires_in;
 			// get user info
-			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
-			if ($data['code'] == 200)
+			$url = $api_base . "/2/users/me";
+			$user_data = apiRequest($url, $token->access_token,'GET',['user.fields'=>'created_at,profile_image_url']);
+			if ($user_data['code'] == 200)
 			{
-				$token->user = $data['response'];
+				$token->user = $user_data['response']->data;
 				print head($title, "Connected - click to continue", $token->user->name);
 				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
