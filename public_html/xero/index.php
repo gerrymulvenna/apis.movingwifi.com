@@ -1,7 +1,7 @@
 <?php
 // a simple Xero API example using PHP
 error_reporting(-1);
-session_start();
+session_start(['cookie_lifetime' => 182 * 86400]);  // cookies persist for 6 months
 //set Timezone
 date_default_timezone_set('Europe/London');
 
