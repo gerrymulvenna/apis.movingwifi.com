@@ -53,12 +53,13 @@ print head("Some simple API interactions");
 	</div>
 	<div class="row">
 		<div class="col-sm-12 col-md-6 col-lg-3">
+			<h3>Get the code</h3>
 			<div class="card alignleft fluid">
 				<div class="section">
-					<a href="https://github.com/gerrymulvenna/apis.movingwifi.com" class="button tertiary">GitHub</a>
+					<a href="https://github.com/gerrymulvenna/apis.movingwifi.com" class="button tertiary">View the code on GitHub</a>
 				</div>
 				<div class="section">
-					<p class="alignleft">Get the code on GitHub<br>Gerry Mulvenna</p>
+					<p class="alignleft">Gerry Mulvenna<br>Feb-Mar 2024</p>
 				</div>
 			</div>
 		</div>
