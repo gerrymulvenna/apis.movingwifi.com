@@ -31,9 +31,6 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-6 col-lg-3">
-	
-					<td data-label="API"><a href="/google" class="primary button">Google Calendar</a></td><td data-label="Example use">Display your list of calendars and display a list of future events from a calendar</td>
-				</tr>
 			<div class="card">
 				<div class="section">
 					<a href="/quickbooks" class="primary button">Quickbooks</a>
