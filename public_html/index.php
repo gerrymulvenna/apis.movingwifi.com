@@ -41,9 +41,7 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-6 col-lg-3">
-			<div class="card alignleft">		<div class="col-sm-12 col-md-6 col-lg-3">
 			<div class="card alignleft">
-
 				<div class="section">
 					<a href="/xero" class="primary button">Xero</a>
 				</div>
