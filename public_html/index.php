@@ -27,6 +27,7 @@ print head("Some simple API interactions");
 				</div>
 				<div class="section")
 					<p>Display your list of calendars and display a list of future events from a calendar.</p>
+					<p><a href="https://developers.google.com/calendar/api/guides/overview">The Google Calendar API Overview</a></p>
 				</div>
 			</div>
 		</div>
@@ -37,6 +38,7 @@ print head("Some simple API interactions");
 				</div>
 				<div class="section")
 					<p>Display a summary table of invoices.</p>
+					<p><a href="https://developer.intuit.com/app/developer/qbo/docs/develop">Quickbooks API Resources</a></p>
 				</div>
 			</div>
 		</div>
@@ -47,6 +49,7 @@ print head("Some simple API interactions");
 				</div>
 				<div class="section")
 					<p>List the Xero "tenants" and display customers and suppliers.</p>
+					<p><a href="https://developer.xero.com/documentation/api/accounting/overview">The Xero Accounting API Overview</a></p>
 				</div>
 			</div>
 		</div>
