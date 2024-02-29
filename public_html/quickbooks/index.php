@@ -38,6 +38,9 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 				$token->CompanyInfo = $data['response']->CompanyInfo;
 				setcookie($cookie, serialize($token), strtotime( '+6 months' ));  
 				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
+				print '<pre>';
+				print_r($_COOKIE);
+				print '</pre>';
 				print footer("Disconnect", "");
 			}
 			else
