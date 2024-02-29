@@ -9,5 +9,7 @@ setcookie('gerry','mulvenna',time()+3600, "/");
 
 print "<pre>\n";
 print_r($_COOKIE);
+print "\n";
+print_r($_SESSION);
 print "</pre>\n";
 ?>
