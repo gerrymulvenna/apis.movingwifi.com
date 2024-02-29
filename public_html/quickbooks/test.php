@@ -33,7 +33,7 @@ if (isset($_COOKIE[$cookie]))
 else
 {
 	setcookie($cookie, 1, time()+3600, "/");
-	print head($title,"Home"));
+	print head($title,"Home");
 	print generic_button("revoke","Revoke",['operation'=>'revoke'],"tertiary",'GET','./test.php');
 	print "</div></body></html>\n";
 }
