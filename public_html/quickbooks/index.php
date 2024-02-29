@@ -138,6 +138,9 @@ elseif (!isset($_GET['code'])) {
 
     // display Connect to button
 	print head($title);
+	print '<pre>';
+	print_r($_COOKIE);
+	print '</pre>';
 	print generic_button("connect", $connect,['client_id'=>$client_id,
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
