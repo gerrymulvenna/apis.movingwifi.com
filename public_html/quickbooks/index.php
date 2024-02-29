@@ -1,7 +1,7 @@
 <?php
 // a simple Quickbooks API example using PHP
 error_reporting(-1);
-session_start(['cookie_lifetime' => 182 * 86400]);  // cookies persist for 6 months
+session_start();  //use session cookie for state 
 //set Timezone
 date_default_timezone_set('Europe/London');
 
@@ -37,13 +37,13 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 			{
 				$token->CompanyInfo = $data['response']->CompanyInfo;
 				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
-				$_SESSION[$cookie] = serialize($token);
+				setcookie($cookie, serialize($token), strtotime( '+6 months' ));  
 				print footer("Disconnect", "");
 			}
 			else
 			{
 				print head($title, "Connected", "but failed to retrieve company info");
-				$_SESSION[$cookie] = serialize($token);
+				setcookie($cookie, serialize($token), strtotime( '+6 months' ));  
 				print footer("Disconnect", "");
 			}
 		}
@@ -68,29 +68,27 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 }
 
 // If we have a cookie, get the connection details
-elseif (isset($_SESSION[$cookie]))
+elseif (isset($_COOKIE[$cookie]))
 {
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$token = unserialize($_SESSION[$cookie]);
+			$token = unserialize($_COOKIE[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
 			print_r($token);
-			print "\n";
-			print_r(session_get_cookie_params());
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
 			print head($title, "Disconnected");
-			unset($_SESSION[$cookie]);
+			unset($_COOKIE[$cookie]);
 		}
 		elseif($_REQUEST['operation'] == 'invoices')
 		{
-			$token = unserialize($_SESSION[$cookie]);
+			$token = unserialize($_COOKIE[$cookie]);
 			$query = http_build_query(['query'=>"SELECT * from Invoice order by txndate desc"]);
 			$url = "$sandbox_base/v3/company/" . $token->realmId . "/query?$query&minorversion=70";
 
@@ -115,7 +113,7 @@ elseif (isset($_SESSION[$cookie]))
 	else
 	{
 		$now = time();
-		$token = unserialize($_SESSION[$cookie]);
+		$token = unserialize($_COOKIE[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
 			print head($title, "Home", $token->CompanyInfo->CompanyName);
@@ -126,7 +124,7 @@ elseif (isset($_SESSION[$cookie]))
 		{
 			print head($title, "Disconnected");
 			unset($_SESSION['oauth2state']); 
-			unset($_SESSION[$cookie]);
+			unset($_COOKIE[$cookie]);
 		}
 		print footer("Disconnect", "");
 	}
