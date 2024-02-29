@@ -10,6 +10,6 @@ setcookie('gerry',serialize($_COOKIE),time()+3600, "/");
 print "<pre>\n";
 print_r($_COOKIE);
 print "\n";
-print_r($_SESSION);
+print strtotime('+6 months');
 print "</pre>\n";
 ?>
