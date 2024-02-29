@@ -114,7 +114,7 @@ function generic_button($id, $text, $vars, $class = "tertiary", $method = "GET",
 	{
 		$html .= '<input type="hidden" id="' . $key . '" name="' . $key . '" value="' . $value . '">';
 	}
-	$html .= '<input type="submit" name="' .$id . ' class="' . $class . '"></form></div>';
+	$html .= '<input type="submit" value="' . $text . '" class="' . $class . '"></form></div>';
 	return $html;
 }
 	
