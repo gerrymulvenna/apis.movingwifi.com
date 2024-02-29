@@ -39,6 +39,9 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 				if (setcookie($cookie, serialize($token), strtotime( '+7 days' )))
 				{
 					print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
+					print '<pre>';
+					phpinfo();
+					print '</pre>';
 					print footer("Disconnect", "");
 				}
 				else
@@ -46,6 +49,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 					print head($title, "Problem - creating cookie", $token->CompanyInfo->CompanyName);
 					print '<pre>';
 					print_r($_COOKIE);
+					phpinfo();
 					print '</pre>';
 					print footer("Disconnect", "");
 				}
