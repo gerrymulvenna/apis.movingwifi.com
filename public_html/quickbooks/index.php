@@ -36,12 +36,9 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 			if ($data['code'] == 200)
 			{
 				$token->CompanyInfo = $data['response']->CompanyInfo;
-				if (setcookie($cookie, serialize($token), strtotime( '+7 days' )))
+				if (setcookie($cookie, serialize($token), time() + 3600, "/"))
 				{
 					print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
-					print '<pre>';
-					phpinfo();
-					print '</pre>';
 					print footer("Disconnect", "");
 				}
 				else
