@@ -116,12 +116,14 @@ elseif (isset($_COOKIE[$cookie]))
 		$token = unserialize($_COOKIE[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
+			setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 			print head($title, "Home", $token->CompanyInfo->CompanyName);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 		}
 		else
 		{
+			setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 			print head($title, "Disconnected");
 			unset($_SESSION['oauth2state']); 
 			unset($_COOKIE[$cookie]);
