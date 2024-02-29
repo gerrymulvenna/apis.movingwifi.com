@@ -36,13 +36,13 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 			if ($data['code'] == 200)
 			{
 				$token->CompanyInfo = $data['response']->CompanyInfo;
-				setcookie($cookie, serialize($token), strtotime('+6 months'), "/"))
+				setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				setcookie($cookie, serialize($token), strtotime('+6 months'), "/"))
+				setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 				print head($title, "Connected", "but failed to retrieve company info");
 				print footer("Disconnect", "");
 			}
