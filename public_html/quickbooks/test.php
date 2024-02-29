@@ -5,7 +5,7 @@ session_start();  //use session cookie for state
 //set Timezone
 date_default_timezone_set('Europe/London');
 
-setcookie('gerry','mulvenna',time()+3600, "/");
+setcookie('gerry',serialize($_COOKIE),time()+3600, "/");
 
 print "<pre>\n";
 print_r($_COOKIE);
