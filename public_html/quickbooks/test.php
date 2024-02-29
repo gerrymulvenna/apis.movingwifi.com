@@ -36,11 +36,5 @@ else
 	print head($title,"Home"));
 	print generic_button("revoke","Revoke",['operation'=>'revoke'],"tertiary",'GET','./test.php');
 	print "</div></body></html>\n";
-	
-
-setcookie($cookie,serialize($_COOKIE),time()+3600, "/");
-print head("Test PHP script","Home");
-print "<pre>\n";
-print_r($_COOKIE);
-print "</pre>\n";
+}
 ?>
