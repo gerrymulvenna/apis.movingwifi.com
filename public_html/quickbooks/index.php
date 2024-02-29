@@ -18,7 +18,7 @@ $scopes = ['com.intuit.quickbooks.accounting'];
 // service-specific strings
 $title = "Quickbooks";
 $connect = "Connect to Quickbooks";
-$cookie = "movingwifi-Quickbooks";
+$cookie = "movingwifi_Quickbooks";
 
 if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['realmId']))
 {
