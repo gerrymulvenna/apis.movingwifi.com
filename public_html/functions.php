@@ -36,8 +36,7 @@ function getRandomPkceCode($length = 64)
  */
 function head($title, $home = "", $subtitle = "simple API interaction")
 {
-	$html = '<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.0 Transitional//EN">
-	<html>
+	$html = '<html>
 	<head>
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
