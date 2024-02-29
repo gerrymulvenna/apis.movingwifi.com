@@ -88,10 +88,12 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 function footer($button, $text)
 {
 	$html = '
-	<div class="footer">
-		<div class="card large">' . $text . '<a class="button secondary" href="./?operation=revoke">' . $button . '</a></div>
+		<div class="footer">
+			<div class="card large">' . $text . '<a class="button secondary" href="./?operation=revoke">' . $button . '</a></div>
+		</div>
 	</div>
-</div>';
+	</body>
+</html>';
 	return $html;
 }
 
