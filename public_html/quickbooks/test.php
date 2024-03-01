@@ -57,7 +57,7 @@ else
 	}
 	else
 	{
-		print head($title, "Error retrieving shows", ""));
+		print head($title, "Error retrieving shows", "");
 		print "</div></body></html>\n";
 	}
 }
