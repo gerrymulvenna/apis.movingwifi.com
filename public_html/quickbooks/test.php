@@ -15,7 +15,6 @@ $url = "https://charts.indylive.radio/showjson.php";
 if (isset($_SESSION[$cookie]))
 {
 	$cvalue = $_SESSION[$cookie];
-	session_write_close();
 	setcookie($cookie, $cvalue, time()+3600, '/');
 }
 
