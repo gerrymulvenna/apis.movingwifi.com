@@ -1,7 +1,7 @@
 <?php
 // test PHP script
 error_reporting(-1);
-session_start();  //use session cookie for state 
+//session_start();  //use session cookie for state 
 //set Timezone
 date_default_timezone_set('Europe/London');
 
@@ -67,22 +67,21 @@ else
 
 
 /**
- * sends an API call using GET method and without authentication
+ * sends an API call using GET method without authentication
  *
  * @param string $url destination address
- * @param array $vars Associative array of variables to send with the request
  */
 function apiTest($url)
 {
 	// add required headers
-//	$headers= array('Content-Type: application/json');
+	$headers= array('Content-Type: application/json');
 
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-//	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     $error = curl_error($ch);
