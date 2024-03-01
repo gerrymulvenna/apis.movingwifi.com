@@ -9,6 +9,7 @@ if (isset($_COOKIE[$cookie]))
 }
 elseif (isset($_SESSION[$cookie]))
 {
+	$_SESSION['setcookie'] = date("c");
 	setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/');
 }
 
