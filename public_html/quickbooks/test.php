@@ -50,7 +50,7 @@ else
 	$data = apiTest($url);
 	if ($data['code'] == 200)
 	{
-		$shows = $data['response'];
+		$shows = $data['response'][0];
 		setcookie($cookie, serialize($shows), strtotime('+6 months'), "/");
 		print head($title, "Connected - click to continue", count(shows));
 		print "<pre>\n";
