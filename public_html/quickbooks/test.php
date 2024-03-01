@@ -10,53 +10,21 @@ $title = "Test PHP script";
 $cookie = "movingwifi_test";
 $url = "https://charts.indylive.radio/showjson.php";
 
-if (isset($_COOKIE[$cookie]))
+$data = apiTest($url);
+if ($data['code'] == 200)
 {
-	if (isset($_REQUEST['operation']))
-	{
-		if ($_REQUEST['operation'] == 'revoke')
-		{
-			setcookie($cookie, "", time()-3600, "/");
-			print head($title . " REVOKED", "");
-			print generic_button("home","Home",[],"primary",'GET','./test.php');
-			print generic_button("restart","Restart",[],"tertiary",'GET','./test.php');
-			print "</div></body></html>\n";
-		}
-		elseif ($_REQUEST['operation'] == 'increment')
-		{
-			$num = $_COOKIE[$cookie];
-			setcookie($cookie, $num + 1, time()+3600, "/");
-			print head($title . " INCREMENTED", "");
-			print generic_button("home","Home",[],"primary",'GET','./test.php');
-			print generic_button("increment","Increment",['operation'=>'increment'],"tertiary",'GET','./test.php');
-			print generic_button("revoke","Revoke",['operation'=>'revoke'],"tertiary",'GET','./test.php');
-			print "</div></body></html>\n";
-		}
-	}
-	else
-	{
-		print head($title, "");
-		print "</div></body></html>\n";
-	}
+	$shows = $data['response'][0];
+	setcookie($cookie, serialize($shows), strtotime('+6 months'), "/");
+	print head($title, "Connected - click to continue", count(shows));
+	print "<pre>\n";
+	print_r ($shows);
+	print "</pre>\n";
+	print "</div></body></html>\n";
 }
 else
 {
-	$data = apiTest($url);
-	if ($data['code'] == 200)
-	{
-		$shows = $data['response'][0];
-		setcookie($cookie, serialize($shows), strtotime('+6 months'), "/");
-		print head($title, "Connected - click to continue", count(shows));
-		print "<pre>\n";
-		print_r ($shows);
-		print "</pre>\n";
-		print "</div></body></html>\n";
-	}
-	else
-	{
-		print head($title, "Error retrieving shows", "");
-		print "</div></body></html>\n";
-	}
+	print head($title, "Error retrieving shows", "");
+	print "</div></body></html>\n";
 }
 
 
