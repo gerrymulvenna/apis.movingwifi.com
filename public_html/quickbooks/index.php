@@ -1,4 +1,7 @@
 <?php
+error_reporting(-1);
+//set Timezone
+date_default_timezone_set('Europe/London');
 session_start();  //use session cookie for state 
 $cookie = "movingwifi-Quickbooks";
 // copy any persistent cookie to the session
@@ -19,11 +22,10 @@ elseif (isset($_SESSION[$cookie]))
 		$_SESSION['setcookie-false'] = date("c");
 	}	
 }
+print "<html><head></head><body>exit</body></html>\n";
+exit(0);
 
 // a simple Quickbooks API example using PHP
-error_reporting(-1);
-//set Timezone
-date_default_timezone_set('Europe/London');
 
 require "../functions.php";
 // you will need to create the credentials.php and define your unique credentials for this service
