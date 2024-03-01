@@ -16,7 +16,6 @@ if (isset($_SESSION[$cookie]))
 {
 	$cvalue = $_SESSION[$cookie];
 	session_write_close();
-	$session_closed = 1;
 	setcookie($cookie, $cvalue, time()+3600, '/');
 }
 
@@ -24,10 +23,7 @@ $data = apiTest($url);
 if ($data['code'] == 200)
 {
 	$shows = $data['response'];
-	if (!$session_closed)
-	{
-		$_SESSION[$cookie] = serialize($shows);
-	}
+	$_SESSION[$cookie] = serialize($shows);
 	print head($title, "Connected - click to continue", count($shows));
 	print "<pre>\n";
 	print_r ($shows);
