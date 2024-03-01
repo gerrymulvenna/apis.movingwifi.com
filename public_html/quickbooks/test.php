@@ -72,7 +72,7 @@ else
  * @param string $url destination address
  * @param array $vars Associative array of variables to send with the request
  */
-function apiTest($url, $method = 'GET', $vars = [], $headers = [])
+function apiTest($url)
 {
 	// add required headers
 	array_push($headers, 'Accept: application/json');
@@ -80,30 +80,11 @@ function apiTest($url, $method = 'GET', $vars = [], $headers = [])
 
     // Set up cURL options.
     $ch = curl_init();
-	if ($method == 'GET' && count($vars)>0)
-	{
-		$query = http_build_query($vars);
-		if (strpos($url, '?'))
-		{
-			$url .= '&' . $query;
-		}
-		else
-		{
-			$url .= '?' . $query;
-		}
-	}
-		
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
-	if ($method == 'POST')
-	{
-		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($vars));
-	}
-	
     $response = curl_exec($ch);
     $error = curl_error($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
