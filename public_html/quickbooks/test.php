@@ -1,12 +1,12 @@
 <?php
 // test PHP script
 error_reporting(-1);
+ini_set('session.use_cookies',0);
+ini_set('session.use_only_cookies',0);
 session_start();
 
 //set Timezone
 date_default_timezone_set('Europe/London');
-ini_set('session.use_cookies',0);
-ini_set('session.use_only_cookies',0);
 require "../functions.php";
 
 $title = "Test PHP script";
