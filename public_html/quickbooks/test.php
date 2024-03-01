@@ -75,8 +75,7 @@ else
 function apiTest($url)
 {
 	// add required headers
-	array_push($headers, 'Accept: application/json');
-	array_push($headers, 'Content-Type: application/json');
+	$headers= ['Accept: application/json','Content-Type: application/json']);
 
     // Set up cURL options.
     $ch = curl_init();
