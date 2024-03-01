@@ -12,13 +12,12 @@ $title = "Test PHP script";
 $cookie = "movingwifi_test";
 $url = "https://charts.indylive.radio/showjson.php";
 
-ob_start();
+setcookie($cookie, "empty", strtotime('+6 months'), "/");
+
 $data = apiTest($url);
 if ($data['code'] == 200)
 {
 	$shows = $data['response'];
-	setcookie($cookie, serialize($shows), strtotime('+6 months'), "/");
-	ob_end_flush();
 	print head($title, "Connected - click to continue", count($shows));
 	print "<pre>\n";
 	print_r ($shows);
