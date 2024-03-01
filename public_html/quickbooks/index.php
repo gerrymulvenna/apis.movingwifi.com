@@ -9,8 +9,15 @@ if (isset($_COOKIE[$cookie]))
 }
 elseif (isset($_SESSION[$cookie]))
 {
-	$_SESSION['setcookie'] = date("c");
-	setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/');
+	$_SESSION['setcookie-before'] = date("c");
+	if (setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/'))
+	{
+		$_SESSION['setcookie-true'] = date("c");
+	}
+	else
+	{
+		$_SESSION['setcookie-false'] = date("c");
+	}	
 }
 
 // a simple Quickbooks API example using PHP
