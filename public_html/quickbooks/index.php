@@ -18,7 +18,7 @@ $scopes = ['com.intuit.quickbooks.accounting'];
 // service-specific strings
 $title = "Quickbooks";
 $connect = "Connect to Quickbooks";
-$cookie = "movingwifi_Quickbooks";
+$cookie = "movingwifi-Quickbooks";
 
 if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['realmId']))
 {
@@ -36,14 +36,14 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 			if ($data['code'] == 200)
 			{
 				$token->CompanyInfo = $data['response']->CompanyInfo;
-				setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
+				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 				print head($title, "Connected", "but failed to retrieve company info");
+				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 		}
@@ -68,27 +68,29 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 }
 
 // If we have a cookie, get the connection details
-elseif (isset($_COOKIE[$cookie]))
+elseif (isset($_SESSION[$cookie]))
 {
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$token = unserialize($_COOKIE[$cookie]);
+			$token = unserialize($_SESSION[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
 			print_r($token);
+			print "\n";
+			print_r(session_get_cookie_params());
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
 			print head($title, "Disconnected");
-			unset($_COOKIE[$cookie]);
+			unset($_SESSION[$cookie]);
 		}
 		elseif($_REQUEST['operation'] == 'invoices')
 		{
-			$token = unserialize($_COOKIE[$cookie]);
+			$token = unserialize($_SESSION[$cookie]);
 			$query = http_build_query(['query'=>"SELECT * from Invoice order by txndate desc"]);
 			$url = "$sandbox_base/v3/company/" . $token->realmId . "/query?$query&minorversion=70";
 
@@ -113,20 +115,18 @@ elseif (isset($_COOKIE[$cookie]))
 	else
 	{
 		$now = time();
-		$token = unserialize($_COOKIE[$cookie]);
+		$token = unserialize($_SESSION[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
-			setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 			print head($title, "Home", $token->CompanyInfo->CompanyName);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 		}
 		else
 		{
-			setcookie($cookie, serialize($token), strtotime('+6 months'), "/");
 			print head($title, "Disconnected");
 			unset($_SESSION['oauth2state']); 
-			unset($_COOKIE[$cookie]);
+			unset($_SESSION[$cookie]);
 		}
 		print footer("Disconnect", "");
 	}
@@ -140,9 +140,6 @@ elseif (!isset($_GET['code'])) {
 
     // display Connect to button
 	print head($title);
-	print '<pre>';
-	print_r($_COOKIE);
-	print '</pre>';
 	print generic_button("connect", $connect,['client_id'=>$client_id,
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
