@@ -1,8 +1,8 @@
 <?php
 // test PHP script
 error_reporting(-1);
-ini_set('session.use_cookies',0);
-ini_set('session.use_only_cookies',0);
+phpinfo();
+exit();
 session_start();
 
 //set Timezone
