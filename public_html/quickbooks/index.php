@@ -20,6 +20,12 @@ $title = "Quickbooks";
 $connect = "Connect to Quickbooks";
 $cookie = "movingwifi-Quickbooks";
 
+// copy any persistent cookie to the session
+if (isset($_COOKIE[$cookie]))
+{
+	$_SESSION[$cookie] = $_COOKIE[$cookie];
+}
+
 if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['realmId']))
 {
 	if ($_GET['state'] == $_SESSION['oauth2state'])
@@ -67,9 +73,10 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 	}
 }
 
-// If we have a cookie, get the connection details
+// If we have a session cookie, save it as a persistent cookie and then process any operation or show authenticated options
 elseif (isset($_SESSION[$cookie]))
 {
+	setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/');
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
