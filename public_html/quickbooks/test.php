@@ -5,8 +5,8 @@ session_start();
 
 //set Timezone
 date_default_timezone_set('Europe/London');
-phpinfo();
-exit();
+ini_set('session.use_cookies',0);
+ini_set('session.use_only_cookies',0);
 require "../functions.php";
 
 $title = "Test PHP script";
