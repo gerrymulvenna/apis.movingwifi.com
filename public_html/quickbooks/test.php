@@ -1,6 +1,8 @@
 <?php
 // test PHP script
 error_reporting(-1);
+error_log("test.log");
+log_errors(1);
 //set Timezone
 date_default_timezone_set('Europe/London');
 
@@ -50,7 +52,7 @@ function apiTest($url)
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
     curl_close($ch);
 
-    // Set the header, response, error and http code.
+    // Set the response, error and http code.
 	$data = [];
     $data['response'] = json_decode($response);
     $data['error'] = $error;
