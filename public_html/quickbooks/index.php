@@ -86,7 +86,7 @@ elseif (isset($_SESSION[$cookie]))
 			print '<pre>';
 			print_r($token);
 			print "\n";
-			print_r(session_get_cookie_params());
+			print_r($_COOKIE[$cookie]);
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
