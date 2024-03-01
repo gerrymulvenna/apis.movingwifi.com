@@ -11,13 +11,16 @@ require "../functions.php";
 $title = "Test PHP script";
 $cookie = "movingwifi_test";
 $url = "https://charts.indylive.radio/showjson.php";
-
-setcookie($cookie, "empty", strtotime('+6 months'), "/");
+if (isset($_SESSION[$cookie]))
+{
+	setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/');
+}
 
 $data = apiTest($url);
 if ($data['code'] == 200)
 {
 	$shows = $data['response'];
+	$_SESSION[$cookie] = serialize($shows);
 	print head($title, "Connected - click to continue", count($shows));
 	print "<pre>\n";
 	print_r ($shows);
@@ -26,7 +29,6 @@ if ($data['code'] == 200)
 }
 else
 {
-	ob_end_flush();
 	print head($title, "Error retrieving shows", "");
 	print "</div></body></html>\n";
 }
