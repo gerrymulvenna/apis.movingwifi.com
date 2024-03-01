@@ -5,7 +5,8 @@ session_start();
 
 //set Timezone
 date_default_timezone_set('Europe/London');
-
+phpinfo();
+exit();
 require "../functions.php";
 
 $title = "Test PHP script";
