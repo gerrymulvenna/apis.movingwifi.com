@@ -16,12 +16,19 @@ $data = apiTest($url);
 if ($data['code'] == 200)
 {
 	$shows = $data['response'];
-//	setcookie($cookie, serialize($shows), strtotime('+6 months'), "/");
-	print head($title, "Connected - click to continue", count($shows));
-	print "<pre>\n";
-	print_r ($shows);
-	print "</pre>\n";
-	print "</div></body></html>\n";
+	if (setcookie($cookie, serialize($shows), strtotime('+6 months'), "/"))
+	{
+		print head($title, "Connected - click to continue", count($shows));
+		print "<pre>\n";
+		print_r ($shows);
+		print "</pre>\n";
+		print "</div></body></html>\n";
+	}
+	else
+	{
+		print head($title, "Cookie problem", "");
+		print "</div></body></html>\n";
+	}
 }
 else
 {
