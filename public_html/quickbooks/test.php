@@ -12,26 +12,22 @@ $title = "Test PHP script";
 $cookie = "movingwifi_test";
 $url = "https://charts.indylive.radio/showjson.php";
 
+ob_start();
 $data = apiTest($url);
 if ($data['code'] == 200)
 {
 	$shows = $data['response'];
-	if (setcookie($cookie, serialize($shows), strtotime('+6 months'), "/"))
-	{
-		print head($title, "Connected - click to continue", count($shows));
-		print "<pre>\n";
-		print_r ($shows);
-		print "</pre>\n";
-		print "</div></body></html>\n";
-	}
-	else
-	{
-		print head($title, "Cookie problem", "");
-		print "</div></body></html>\n";
-	}
+	setcookie($cookie, serialize($shows), strtotime('+6 months'), "/");
+	ob_end_flush();
+	print head($title, "Connected - click to continue", count($shows));
+	print "<pre>\n";
+	print_r ($shows);
+	print "</pre>\n";
+	print "</div></body></html>\n";
 }
 else
 {
+	ob_end_flush();
 	print head($title, "Error retrieving shows", "");
 	print "</div></body></html>\n";
 }
