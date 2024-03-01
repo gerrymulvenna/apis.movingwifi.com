@@ -1,7 +1,6 @@
 <?php
 // test PHP script
 error_reporting(-1);
-//session_start();  //use session cookie for state 
 //set Timezone
 date_default_timezone_set('Europe/London');
 
@@ -36,12 +35,7 @@ if (isset($_COOKIE[$cookie]))
 	}
 	else
 	{
-		$num = $_COOKIE[$cookie];
-		setcookie($cookie, $num ,time()+3600, "/");
-		print head($title.sprintf(" %04d", $num), "");
-		print generic_button("home","Home",[],"primary",'GET','./test.php');
-		print generic_button("increment","Increment",['operation'=>'increment'],"tertiary",'GET','./test.php');
-		print generic_button("revoke","Revoke",['operation'=>'revoke'],"tertiary",'GET','./test.php');
+		print head($title, "");
 		print "</div></body></html>\n";
 	}
 }
