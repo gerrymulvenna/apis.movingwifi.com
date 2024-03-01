@@ -1,7 +1,19 @@
 <?php
+session_start();  //use session cookie for state 
+$cookie = "movingwifi-Quickbooks";
+// copy any persistent cookie to the session
+if (isset($_COOKIE[$cookie]))
+{
+	$_SESSION['cookie_saved'] = date("c");
+	$_SESSION[$cookie] = $_COOKIE[$cookie];
+}
+elseif (isset($_SESSION[$cookie]))
+{
+	setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/');
+}
+
 // a simple Quickbooks API example using PHP
 error_reporting(-1);
-session_start();  //use session cookie for state 
 //set Timezone
 date_default_timezone_set('Europe/London');
 
@@ -78,7 +90,6 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 // If we have a session cookie, save it as a persistent cookie and then process any operation or show authenticated options
 elseif (isset($_SESSION[$cookie]))
 {
-	setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/');
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
