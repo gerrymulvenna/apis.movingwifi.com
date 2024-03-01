@@ -23,6 +23,7 @@ $cookie = "movingwifi-Quickbooks";
 // copy any persistent cookie to the session
 if (isset($_COOKIE[$cookie]))
 {
+	$_SESSION['cookie_saved'] = date("c");
 	$_SESSION[$cookie] = $_COOKIE[$cookie];
 }
 
@@ -84,7 +85,7 @@ elseif (isset($_SESSION[$cookie]))
 			$token = unserialize($_SESSION[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
-			print_r($token);
+			print_r($_SESSION);
 			print "\n";
 			print_r($_COOKIE);
 			print '</pre>';
