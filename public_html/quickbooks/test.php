@@ -75,14 +75,14 @@ else
 function apiTest($url)
 {
 	// add required headers
-	$headers= array('Content-Type: application/json');
+//	$headers= array('Content-Type: application/json');
 
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+//	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);
     $response = curl_exec($ch);
     $error = curl_error($ch);
