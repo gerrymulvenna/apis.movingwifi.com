@@ -11,10 +11,7 @@ require "../functions.php";
 $title = "Test PHP script";
 $cookie = "movingwifi_test";
 $url = "https://charts.indylive.radio/showjson.php";
-if (isset($_SESSION[$cookie]))
-{
-	setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/');
-}
+setcookie($cookie, "no session", time()+3600, '/');
 
 $data = apiTest($url);
 if ($data['code'] == 200)
