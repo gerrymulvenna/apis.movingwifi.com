@@ -1,8 +1,7 @@
 <?php
 // test PHP script
 error_reporting(-1);
-phpinfo();
-exit();
+ini_set('output_buffering','On');
 session_start();
 
 //set Timezone
@@ -12,6 +11,8 @@ require "../functions.php";
 $title = "Test PHP script";
 $cookie = "movingwifi_test";
 $url = "https://charts.indylive.radio/showjson.php";
+
+ob_start();
 if (isset($_SESSION[$cookie]))
 {
 	$cvalue = $_SESSION[$cookie];
@@ -23,6 +24,7 @@ if ($data['code'] == 200)
 {
 	$shows = $data['response'];
 	$_SESSION[$cookie] = serialize($shows);
+	ob_end_flush();
 	print head($title, "Connected - click to continue", count($shows));
 	print "<pre>\n";
 	print_r ($shows);
@@ -31,6 +33,7 @@ if ($data['code'] == 200)
 }
 else
 {
+	ob_end_flush();
 	print head($title, "Error retrieving shows", "");
 	print "</div></body></html>\n";
 }
