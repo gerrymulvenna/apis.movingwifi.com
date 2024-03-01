@@ -2,7 +2,8 @@
 // test PHP script
 error_reporting(-1);
 error_log("test.log");
-log_errors(1);
+ini_set('log_errors',1);
+
 //set Timezone
 date_default_timezone_set('Europe/London');
 
