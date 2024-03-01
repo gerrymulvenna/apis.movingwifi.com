@@ -1,31 +1,13 @@
 <?php
+// a simple Quickbooks API example using PHP
 error_reporting(-1);
 //set Timezone
 date_default_timezone_set('Europe/London');
-session_start();  //use session cookie for state 
-$cookie = "movingwifi-Quickbooks";
-// copy any persistent cookie to the session
-if (isset($_COOKIE[$cookie]))
-{
-	$_SESSION['cookie_saved'] = date("c");
-	$_SESSION[$cookie] = $_COOKIE[$cookie];
-}
-elseif (isset($_SESSION[$cookie]))
-{
-	$_SESSION['setcookie-before'] = date("c");
-	if (setcookie($cookie, $_SESSION[$cookie], strtotime('+6 months'), '/'))
-	{
-		$_SESSION['setcookie-true'] = date("c");
-	}
-	else
-	{
-		$_SESSION['setcookie-false'] = date("c");
-	}	
-}
-print "<html><head></head><body>exit</body></html>\n";
-exit(0);
+ini_set('session.use_cookies',0);
+ini_set('session.use_only_cookies',0);
 
-// a simple Quickbooks API example using PHP
+session_start();  //use session cookie for state 
+
 
 require "../functions.php";
 // you will need to create the credentials.php and define your unique credentials for this service
@@ -41,13 +23,6 @@ $scopes = ['com.intuit.quickbooks.accounting'];
 $title = "Quickbooks";
 $connect = "Connect to Quickbooks";
 $cookie = "movingwifi-Quickbooks";
-
-// copy any persistent cookie to the session
-if (isset($_COOKIE[$cookie]))
-{
-	$_SESSION['cookie_saved'] = date("c");
-	$_SESSION[$cookie] = $_COOKIE[$cookie];
-}
 
 if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['realmId']))
 {
