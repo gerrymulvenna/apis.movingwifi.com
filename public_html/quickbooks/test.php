@@ -47,7 +47,7 @@ if (isset($_COOKIE[$cookie]))
 }
 else
 {
-	$data = apiTest($url);
+//	$data = apiTest($url);
 	if ($data['code'] == 200)
 	{
 		$shows = $data['response'];
