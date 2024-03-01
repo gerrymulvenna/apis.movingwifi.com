@@ -47,7 +47,7 @@ if (isset($_COOKIE[$cookie]))
 }
 else
 {
-//	$data = apiTest($url);
+	$data = apiTest($url);
 	if ($data['code'] == 200)
 	{
 		$shows = $data['response'];
@@ -80,9 +80,6 @@ function apiTest($url, $method = 'GET', $vars = [], $headers = [])
 
     // Set up cURL options.
     $ch = curl_init();
-	curl_setopt($ch, CURLOPT_VERBOSE, true);
-	$eh = fopen('curl.log', 'w+');
-	curl_setopt($ch, CURLOPT_STDERR, $eh);
 	if ($method == 'GET' && count($vars)>0)
 	{
 		$query = http_build_query($vars);
