@@ -34,6 +34,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
+			unset($_SESSION['oauth2state']);
 			$token = $response['response'];
 			$token->access_token_expiry = time() + $token->expires_in;
 			$token->realmId = $_GET['realmId'];
