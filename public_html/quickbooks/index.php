@@ -3,8 +3,6 @@
 error_reporting(-1);
 //set Timezone
 date_default_timezone_set('Europe/London');
-ini_set('session.use_cookies',0);
-ini_set('session.use_only_cookies',0);
 
 session_start();  //use session cookie for state 
 
