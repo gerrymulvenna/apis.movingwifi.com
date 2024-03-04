@@ -146,7 +146,7 @@ elseif (!isset($_GET['code'])) {
 	print '<pre>';
 	print_r($_REQUEST);
 	print "\n";
-	print_$($_COOKIE);
+	print_r($_COOKIE);
 	print '</pre>';
 
 }
