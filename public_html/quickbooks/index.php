@@ -144,7 +144,7 @@ elseif (!isset($_GET['code'])) {
 														'scope'=>implode(' ', $scopes)
 														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
 	print '<pre>';
-	print_r($_REQUEST);
+	print_r($_GET);
 	print "\n";
 	print_r($_COOKIE);
 	print '</pre>';
