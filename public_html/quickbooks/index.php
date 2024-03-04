@@ -4,9 +4,6 @@ error_reporting(-1);
 //set Timezone
 date_default_timezone_set('Europe/London');
 
-session_start();  //use session cookie for state 
-
-
 require "../functions.php";
 // you will need to create the credentials.php and define your unique credentials for this service
 require "credentials.php";  //$client_id, $client_secret, $redirect_uri
@@ -22,14 +19,14 @@ $title = "Quickbooks";
 $connect = "Connect to Quickbooks";
 $cookie = "movingwifi-Quickbooks";
 
-if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['realmId']))
+if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['realmId']))
 {
-	if ($_GET['state'] == $_SESSION['oauth2state'])
+	if ($_GET['state'] == $_COOKIE['oauth2state'])
 	{
 		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
-			unset($_SESSION['oauth2state']);
+			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 			$token = $response['response'];
 			$token->access_token_expiry = time() + $token->expires_in;
 			$token->realmId = $_GET['realmId'];
@@ -39,14 +36,14 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 			if ($data['code'] == 200)
 			{
 				$token->CompanyInfo = $data['response']->CompanyInfo;
+				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
-				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 			else
 			{
+				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 				print head($title, "Connected", "but failed to retrieve company info");
-				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 		}
@@ -60,7 +57,7 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 	}
 	else
 	{
-		unset($_SESSION['oauth2state']); 
+		setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 
 		print head($title, "Error - invalid state");
 		print '<pre>';
@@ -71,29 +68,27 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']) && isset($_GET['rea
 }
 
 // If we have a session cookie, save it as a persistent cookie and then process any operation or show authenticated options
-elseif (isset($_SESSION[$cookie]))
+elseif (isset($_COOKIE[$cookie]))
 {
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$token = unserialize($_SESSION[$cookie]);
+			$token = unserialize($_COOKIE[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
-			print_r($_SESSION);
-			print "\n";
 			print_r($_COOKIE);
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
+			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
-			unset($_SESSION[$cookie]);
 		}
 		elseif($_REQUEST['operation'] == 'invoices')
 		{
-			$token = unserialize($_SESSION[$cookie]);
+			$token = unserialize($_COOKIE[$cookie]);
 			$query = http_build_query(['query'=>"SELECT * from Invoice order by txndate desc"]);
 			$url = "$sandbox_base/v3/company/" . $token->realmId . "/query?$query&minorversion=70";
 
@@ -118,7 +113,7 @@ elseif (isset($_SESSION[$cookie]))
 	else
 	{
 		$now = time();
-		$token = unserialize($_SESSION[$cookie]);
+		$token = unserialize($_COOKIE[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
 			print head($title, "Home", $token->CompanyInfo->CompanyName);
@@ -127,9 +122,9 @@ elseif (isset($_SESSION[$cookie]))
 		}
 		else
 		{
+			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
+			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
-			unset($_SESSION['oauth2state']); 
-			unset($_SESSION[$cookie]);
 		}
 		print footer("Disconnect", "");
 	}
@@ -139,7 +134,7 @@ elseif (!isset($_GET['code'])) {
 	$state = getRandomState();
 
     // store state in the session.
-    $_SESSION['oauth2state'] = $state;
+	setcookie('oauth2state', $state, time() + 3600, '/');
 
     // display Connect to button
 	print head($title);
