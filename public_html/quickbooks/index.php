@@ -143,6 +143,12 @@ elseif (!isset($_GET['code'])) {
 														'redirect_uri'=>$redirect_uri,
 														'scope'=>implode(' ', $scopes)
 														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
+	print '<pre>';
+	print_r($_REQUEST);
+	print "\n";
+	print_$($_COOKIE);
+	print '</pre>';
+
 }
 
 function invoice_summary($response)
