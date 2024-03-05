@@ -30,14 +30,19 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 			$token = $response['response'];
 			$token->access_token_expiry = time() + $token->expires_in;
 			$token->realmId = $_GET['realmId'];
+			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 			// get company info
 			$url = $sandbox_base . "/v3/company/" . $token->realmId . "/companyinfo/" . $token->realmId;
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				$token->CompanyInfo = $data['response']->CompanyInfo;
-				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
-				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
+//				$token->CompanyInfo = $data['response']->CompanyInfo;
+				print head($title, "Connected - click to continue", $data['response']->CompanyInfo);
+				print '<pre>';
+				print_r($_GET);
+				print "\n";
+				print_r($_COOKIE);
+				print '</pre>';
 				print footer("Disconnect", "");
 			}
 			else
@@ -61,7 +66,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 
 		print head($title, "Error - invalid state");
 		print '<pre>';
-		print_r($_REQUEST);
+		print_r($_GET);
 		print_r($_SESSION);
 		print '</pre>';
 	}
