@@ -19,6 +19,12 @@ $title = "Quickbooks";
 $connect = "Connect to Quickbooks";
 $cookie = "movingwifi-Quickbooks";
 
+// keep track on states in an array
+if (isset($_COOKIE['states']))
+{
+	$states = unserialize($_COOKIE['states']);
+}
+
 if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['realmId']))
 {
 	if ($_GET['state'] == $_COOKIE['oauth2state'])
@@ -132,8 +138,10 @@ elseif (isset($_COOKIE[$cookie]))
 // If we don't have an authorization code then get one
 elseif (!isset($_GET['code'])) {
 	$state = getRandomState();
+	$states[] = $state;
 
     // store state in the session.
+	setcookie('states', serialize($states), time() + 3600, '/');
 	setcookie('oauth2state', $state, time() + 3600, '/');
 
     // display Connect to button
