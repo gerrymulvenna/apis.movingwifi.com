@@ -121,7 +121,7 @@ elseif (isset($_COOKIE[$cookie]))
 		$token = unserialize($_COOKIE[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
-			print head($title, "Home", $token->CompanyInfo->CompanyName);
+			print head($title, "Home", "");
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 		}
