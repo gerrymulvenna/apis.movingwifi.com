@@ -37,7 +37,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 			if ($data['code'] == 200)
 			{
 //				$token->CompanyInfo = $data['response']->CompanyInfo;
-				print head($title, "Connected - click to continue", $data['response']->CompanyInfo);
+				print head($title, "Connected - click to continue", "");
 				print '<pre>';
 				print_r($_GET);
 				print "\n";
