@@ -171,7 +171,7 @@ elseif (isset($_COOKIE[$cookie]))
 		else
 		{
 			print head("$title | tenants", "Home");
-			foreach ($token->tenants as $tenant)
+			foreach ($cdata['tenants'] as $tenant)
 			{
 				print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
 			}
