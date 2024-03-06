@@ -88,25 +88,6 @@ elseif (isset($_COOKIE[$cookie]))
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
 		}
-		elseif($_REQUEST['operation'] == 'refresh')
-		{
-			$cdata = unserialize($_COOKIE[$cookie]);
-			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['token']->refresh_token, $client_id, $client_secret);
-			if ($response['code'] == 200)
-			{
-				$token = $response['response'];
-				$cdata['access_token_expiry'] = time() + $token->expires_in;
-				$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
-				$cdata['token'] = $token;
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Refreshed - click to continue", $cdata['CompanyName']);
-			}
-			else
-			{
-				print head($title, "Refresh failed - click to continue", $cdata['CompanyName']);
-			}
-			print footer("Disconnect", "");
-		}
 		elseif($_REQUEST['operation'] == 'invoices')
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
@@ -171,7 +152,6 @@ elseif (isset($_COOKIE[$cookie]))
 				print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 				print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 				print generic_button("company", "Display company info",['operation'=>'company'], "tertiary", "GET", "./");
-				print generic_button("refresh", "Request refresh",['operation'=>'refresh'], "tertiary", "GET", "./");
 			}
 			else
 			{
@@ -186,7 +166,6 @@ elseif (isset($_COOKIE[$cookie]))
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 			print generic_button("company", "Display company info",['operation'=>'company'], "tertiary", "GET", "./");
-			print generic_button("refresh", "Request refresh",['operation'=>'refresh'], "tertiary", "GET", "./");
 		}
 		print footer("Disconnect", "");
 	}
