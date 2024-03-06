@@ -27,23 +27,24 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
-			$token->access_token_expiry = time() + $token->expires_in;
-			$token->realmId = $_GET['realmId'];
+			$cdata['access_token_expiry'] = time() + $token->expires_in;
+			$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
+			$cdata['realmId'] = $_GET['realmId'];
+			$cdata['token'] = $token;
 			// get company info
-			$url = $sandbox_base . "/v3/company/" . $token->realmId . "/companyinfo/" . $token->realmId;
+			$url = $sandbox_base . "/v3/company/" . $cdata['realmId'] . "/companyinfo/" . $cdata['realmId'];
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				$token->CompanyInfo = $data['response']->CompanyInfo;
+				$cdata['CompanyInfo'] = $data['response']->CompanyInfo;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
-//				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
-				print head($title, "Connected - click to continue", "");
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+				print head($title, "Connected - click to continue", $cdata['CompanyInfo']->CompanyName);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected", "but failed to retrieve company info");
 				print footer("Disconnect", "");
 			}
@@ -75,10 +76,10 @@ elseif (isset($_COOKIE[$cookie]))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$token = unserialize($_COOKIE[$cookie]);
+			$cdata = unserialize($_COOKIE[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
-			print_r($token);
+			print_r($cdata);
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
@@ -89,11 +90,11 @@ elseif (isset($_COOKIE[$cookie]))
 		}
 		elseif($_REQUEST['operation'] == 'invoices')
 		{
-			$token = unserialize($_COOKIE[$cookie]);
+			$cdata = unserialize($_COOKIE[$cookie]);
 			$query = http_build_query(['query'=>"SELECT * from Invoice order by txndate desc"]);
-			$url = "$sandbox_base/v3/company/" . $token->realmId . "/query?$query&minorversion=70";
+			$url = "$sandbox_base/v3/company/" . $cdata['realmId'] . "/query?$query&minorversion=70";
 
-			$data = apiRequest($url, $token->access_token);
+			$data = apiRequest($url, $cdata['token']->access_token);
 			if ($data['code'] == 200)
 			{
 				print head("$title | invoices", "Home");
@@ -114,8 +115,8 @@ elseif (isset($_COOKIE[$cookie]))
 	else
 	{
 		$now = time();
-		$token = unserialize($_COOKIE[$cookie]);
-		if ($now <  $token->access_token_expiry)
+		$cdata = unserialize($_COOKIE[$cookie]);
+		if ($now <  $cdata['access_token_expiry'])
 		{
 			print head($title, "Home", "");
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
@@ -151,12 +152,6 @@ elseif (!isset($_GET['code']))
 														'redirect_uri'=>$redirect_uri,
 														'scope'=>implode(' ', $scopes)
 														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
-	print '<pre>';
-	print_r($_GET);
-	print "\n";
-	print_r($_COOKIE);
-	print '</pre>';
-
 }
 
 function invoice_summary($response)
