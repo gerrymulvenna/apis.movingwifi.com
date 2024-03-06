@@ -143,9 +143,9 @@ function basicAuthRequest($url, $grant_type, $code, $client_id, $client_secret, 
 	}
     // Set up cURL options.
     $ch = curl_init();
-//	curl_setopt($ch, CURLOPT_VERBOSE, true);
-//	$eh = fopen('curl.log', 'w+');
-//	curl_setopt($ch, CURLOPT_STDERR, $eh);
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	$eh = fopen('curl.log', 'w+');
+	curl_setopt($ch, CURLOPT_STDERR, $eh);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);
@@ -190,9 +190,9 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [], $headers =
 
     // Set up cURL options.
     $ch = curl_init();
-//	curl_setopt($ch, CURLOPT_VERBOSE, true);
-//	$eh = fopen('curl.log', 'w+');
-//	curl_setopt($ch, CURLOPT_STDERR, $eh);
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	$eh = fopen('curl.log', 'w+');
+	curl_setopt($ch, CURLOPT_STDERR, $eh);
 	if ($method == 'GET' && count($vars)>0)
 	{
 		$query = http_build_query($vars);
