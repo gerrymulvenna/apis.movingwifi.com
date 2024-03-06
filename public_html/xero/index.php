@@ -1,7 +1,6 @@
 <?php
 // a simple Xero API example using PHP
 error_reporting(-1);
-session_start();  // cookies persist for 6 months
 //set Timezone
 date_default_timezone_set('Europe/London');
 
@@ -21,28 +20,30 @@ $title = "Xero";
 $connect = "Connect to Xero";
 $cookie = "movingwifi-Xero";
 
-if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
+if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 {
-	if ($_GET['state'] == $_SESSION['oauth2state'])
+	if ($_GET['state'] == $_COOKIE['oauth2state'])
 	{
 		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
-			$token->access_token_expiry = time() + $token->expires_in;
+			$cdata['access_token_expiry'] = time() + $token->expires_in;
+			$cdata['refresh_token_expiry'] = strtotime('+60 days');
+			$cdata['token'] = $token;
 			// get tenants
 			$tenants = apiRequest($urlConnections, $token->access_token);
 			if ($tenants['code'] == 200)
 			{
-				$token->tenants = $tenants['response'];
+				$cdata['tenants'] = $tenants['response'];
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue");
-				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 			else
 			{
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected", "but failed to retrieve tenants info");
-				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 		}
@@ -56,40 +57,36 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 	}
 	else
 	{
-		unset($_SESSION['oauth2state']); 
-
+		setcookie('oauth2state', "", time() - 3600, '/');
 		print head($title, "Error - invalid state");
 		print '<pre>';
-		print_r($_REQUEST);
-		print_r($_SESSION);
+		print_r($_GET);
+		print_r($_COOKIE);
 		print '</pre>';
 	}
 }
 
 // If we have a cookie, get the connection details
-elseif (isset($_SESSION[$cookie]))
+elseif (isset($_COOKIE[$cookie]))
 {
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$token = unserialize($_SESSION[$cookie]);
+			$cdata = unserialize($_COOKIE[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
-			print_r($token);
-			print "\n";
-			print_r($_COOKIE);
+			print_r($cdata);
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
+			setcookie($cookie, "", time()-3600, '/');
 			print head($title, "Disconnected");
-			unset($_SESSION[$cookie]);
 		}
 		elseif ($_REQUEST['operation'] == 'tenant')
 		{
-			$token = unserialize($_SESSION[$cookie]);
 			$tenantId = $_REQUEST['tenantId'];
 			$tenantName = $_REQUEST['tenantName'];
 			print head("$title | $tenantName","Home");
@@ -101,11 +98,11 @@ elseif (isset($_SESSION[$cookie]))
 		elseif ($_REQUEST['operation'] == 'customers')
 		{
 			$url = $api_base . "contacts";
-			$token = unserialize($_SESSION[$cookie]);
+			$cdata = unserialize($_COOKIE[$cookie]);
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Customers","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsCustomer=true'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $cdata['token']->access_token, 'GET', ['order'=>'Name','where'=>'IsCustomer=true'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
@@ -123,11 +120,11 @@ elseif (isset($_SESSION[$cookie]))
 		elseif ($_REQUEST['operation'] == 'suppliers')
 		{
 			$url = $api_base . "contacts";
-			$token = unserialize($_SESSION[$cookie]);
+			$cdata = unserialize($_COOKIE[$cookie]);
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Suppliers","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $token->access_token, 'GET', ['order'=>'Name','where'=>'IsSupplier=true'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $cdata['token']->access_token, 'GET', ['order'=>'Name','where'=>'IsSupplier=true'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
@@ -146,8 +143,8 @@ elseif (isset($_SESSION[$cookie]))
 	else
 	{
 		$now = time();
-		$token = unserialize($_SESSION[$cookie]);
-		if ($now <  $token->access_token_expiry)
+		$cdata = unserialize($_COOKIE[$cookie]);
+		if ($now > $cdata['access_token_expiry'])
 		{
 			print head("$title | tenants", "Home");
 			foreach ($token->tenants as $tenant)
