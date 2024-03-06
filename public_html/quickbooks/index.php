@@ -36,11 +36,11 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-//				$cdata['CompanyInfo'] = $data['response']->CompanyInfo;
+				$cdata['CompanyInfo'] = $data['response']->CompanyInfo;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-//				print head($title, "Connected - click to continue", $cdata['CompanyInfo']->CompanyName);
-				print head($title, "Connected - click to continue", "");
+				print head($title, "Connected - click to continue", $cdata['CompanyInfo']->CompanyName);
+//				print head($title, "Connected - click to continue", "");
 				print footer("Disconnect", "");
 			}
 			else
