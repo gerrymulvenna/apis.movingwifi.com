@@ -40,7 +40,6 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue", $cdata['CompanyName']);
-//				print head($title, "Connected - click to continue", "");
 				print footer("Disconnect", "");
 			}
 			else
@@ -78,7 +77,7 @@ elseif (isset($_COOKIE[$cookie]))
 		if($_REQUEST['operation'] == 'cookie')
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
-			print head("$title | cookie contents", "Home");
+			print head("$title | cookie contents", "Home", $cdata['CompanyName']);
 			print '<pre>';
 			print_r($cdata);
 			print '</pre>';
@@ -98,14 +97,36 @@ elseif (isset($_COOKIE[$cookie]))
 			$data = apiRequest($url, $cdata['token']->access_token);
 			if ($data['code'] == 200)
 			{
-				print head("$title | invoices", "Home");
+				print head("$title | invoices", "Home", $cdata['CompanyName']);
 				$table = invoice_summary($data['response']->QueryResponse);
 				print table_html($table);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head("$title | invoices", "Error - query invoice");
+				print head("$title | invoices", "Error - query invoice", $cdata['CompanyName']);
+				print '<pre>';
+				print_r($data);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+		}
+		elseif($_REQUEST['operation'] == 'company')
+		{
+			$cdata = unserialize($_COOKIE[$cookie]);
+			$url = $sandbox_base . "/v3/company/" . $cdata['realmId'] . "/companyinfo/" . $cdata['realmId'];
+			$data = apiRequest($url, $cdata['token']->access_token);
+			if ($data['code'] == 200)
+			{
+				print head("$title | company", "Home", $cdata['CompanyName']);
+				print '<pre>';
+				print_r($data['response']);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+			else
+			{
+				print head("$title | company", "Error - query invoice", $cdata['CompanyName']);
 				print '<pre>';
 				print_r($data);
 				print '</pre>';
@@ -119,15 +140,16 @@ elseif (isset($_COOKIE[$cookie]))
 		$cdata = unserialize($_COOKIE[$cookie]);
 		if ($now <  $cdata['access_token_expiry'])
 		{
-			print head($title, "Home", "");
+			print head($title, "Home", $cdata['CompanyName']);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
+			print generic_button("company", "Display company info",['operation'=>'company'], "tertiary", "GET", "./");
 		}
 		else
 		{
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-			print head($title, "Disconnected");
+			print head($title, "Disconnected", $cdata['CompanyName']);
 		}
 		print footer("Disconnect", "");
 	}
@@ -153,12 +175,6 @@ elseif (!isset($_GET['code']))
 														'redirect_uri'=>$redirect_uri,
 														'scope'=>implode(' ', $scopes)
 														,'state'=>$state], "tertiary", "GET", $urlAuthorize);
-	print '<pre>';
-	print_r($_GET);
-	print "\n";
-	print_r($_COOKIE);
-	print '</pre>';
-
 }
 
 function invoice_summary($response)
