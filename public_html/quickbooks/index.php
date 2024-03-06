@@ -138,18 +138,34 @@ elseif (isset($_COOKIE[$cookie]))
 	{
 		$now = time();
 		$cdata = unserialize($_COOKIE[$cookie]);
-		if ($now <  $cdata['access_token_expiry'])
+		if ($now > $cdata['access_token_expiry'])
+		{
+			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['token']->refresh_token, $client_id, $client_secret);
+			if ($response['code'] == 200)
+			{
+				$token = $response['response'];
+				$cdata['access_token_expiry'] = time() + $token->expires_in;
+				$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
+				$cdata['token'] = $token;
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+				print head($title, "Refreshed", $cdata['CompanyName']);
+				print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+				print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
+				print generic_button("company", "Display company info",['operation'=>'company'], "tertiary", "GET", "./");
+			}
+			else
+			{
+				setcookie($cookie,"", time() - 3600, "/");  //delete cookie
+				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+				print head($title, "Refresh failed - click to continue", $cdata['CompanyName']);
+			}
+		}
+		else
 		{
 			print head($title, "Home", $cdata['CompanyName']);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
 			print generic_button("company", "Display company info",['operation'=>'company'], "tertiary", "GET", "./");
-		}
-		else
-		{
-			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-			print head($title, "Disconnected", $cdata['CompanyName']);
 		}
 		print footer("Disconnect", "");
 	}
