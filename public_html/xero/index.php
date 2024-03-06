@@ -151,11 +151,11 @@ elseif (isset($_COOKIE[$cookie]))
 			{
 				$token = $response['response'];
 				$cdata['access_token_expiry'] = time() + $token->expires_in;
-				$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
+				$cdata['refresh_token_expiry'] = strtotime('+60 days');
 				$cdata['token'] = $token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head("$title | tenants", "Refreshed");
-				foreach ($token->tenants as $tenant)
+				foreach ($cdata['tenants'] as $tenant)
 				{
 					print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
 				}
