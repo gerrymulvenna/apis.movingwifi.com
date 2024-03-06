@@ -78,7 +78,7 @@ elseif (isset($_COOKIE[$cookie]))
 			$token = unserialize($_COOKIE[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
-			print_r($token;
+			print_r($token);
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
