@@ -146,6 +146,30 @@ elseif (isset($_COOKIE[$cookie]))
 		$cdata = unserialize($_COOKIE[$cookie]);
 		if ($now > $cdata['access_token_expiry'])
 		{
+			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['token']->refresh_token, $client_id, $client_secret);
+			if ($response['code'] == 200)
+			{
+				$token = $response['response'];
+				$cdata['access_token_expiry'] = time() + $token->expires_in;
+				$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
+				$cdata['token'] = $token;
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+				print head("$title | tenants", "Refreshed");
+				foreach ($token->tenants as $tenant)
+				{
+					print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
+				}
+				print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
+			}
+			else
+			{
+				setcookie($cookie,"", time() - 3600, "/");  //delete cookie
+				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+				print head($title, "Refresh failed - click to continue");
+			}
+		}
+		else
+		{
 			print head("$title | tenants", "Home");
 			foreach ($token->tenants as $tenant)
 			{
@@ -153,21 +177,22 @@ elseif (isset($_COOKIE[$cookie]))
 			}
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
 		}
-		else
-		{
-			print head($title, "Disconnected - click to refresh");
-			unset($_SESSION['oauth2state']); 
-			unset($_SESSION[$cookie]);
-		}
 		print footer("Disconnect", "");
 	}
 }
 // If we don't have an authorization code then get one
 elseif (!isset($_GET['code'])) {
-	$state = getRandomState();
+	if (isset($_COOKIE['oauth2state']))
+	{
+		$state = $_COOKIE['oauth2state'];
+	}
+	else
+	{
+		$state = getRandomState();
+	}
 
     // store state in the session.
-    $_SESSION['oauth2state'] = $state;
+	setcookie('oauth2state', $state, time() + 600, '/');
 
     // display Connect to button
 	print head($title);
