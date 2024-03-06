@@ -34,15 +34,10 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 			$data = apiRequest($url, $token->access_token);
 			if ($data['code'] == 200)
 			{
-//				$token->CompanyInfo = $data['response']->CompanyInfo;
+				$token->CompanyInfo = $data['response']->CompanyInfo;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
-				print head($title, "Connected - click to continue", "");
-				print '<pre>';
-				print_r($_GET);
-				print "\n";
-				print_r($_COOKIE);
-				print '</pre>';
+				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
 				print footer("Disconnect", "");
 			}
 			else
