@@ -37,7 +37,8 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 				$token->CompanyInfo = $data['response']->CompanyInfo;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
-				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
+//				print head($title, "Connected - click to continue", $token->CompanyInfo->CompanyName);
+				print head($title, "Connected - click to continue", "");
 				print footer("Disconnect", "");
 			}
 			else
@@ -77,7 +78,7 @@ elseif (isset($_COOKIE[$cookie]))
 			$token = unserialize($_COOKIE[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
-			print_r(unserialize($_COOKIE[$cookie]));
+			print_r($token;
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
