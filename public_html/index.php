@@ -37,7 +37,7 @@ print head("Some simple API interactions");
 					<a href="/quickbooks" class="primary button">Quickbooks</a>
 				</div>
 				<div class="section")
-					<p>Display a summary table of invoices.</p>
+					<p>Display a summary table of invoices and display company info.</p>
 					<p><a href="https://developer.intuit.com/app/developer/qbo/docs/develop">Quickbooks API Resources</a></p>
 				</div>
 			</div>
