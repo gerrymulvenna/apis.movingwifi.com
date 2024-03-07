@@ -1,7 +1,6 @@
 <?php
 // a simple Google API example using PHP
 error_reporting(-1);
-session_start();  // cookies persist for 6 months
 //set Timezone
 date_default_timezone_set('Europe/London');
 
@@ -29,28 +28,31 @@ $title = "Google Calendar";
 $connect = "Connect to Google";
 $cookie = "movingwifi-gCal";
 
-if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
+if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 {
-	if ($_GET['state'] == $_SESSION['oauth2state'])
+	if ($_GET['state'] == $_COOKIE['oauth2state'])
 	{
 		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
-			$token->access_token_expiry = time() + $token->expires_in;
+			$cdata['access_token_expiry'] = time() + $token->expires_in;
+			$cdata['token'] = $token;
 			// get user info
 			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
 			if ($data['code'] == 200)
 			{
-				$token->user = $data['response'];
-				print head($title, "Connected - click to continue", $token->user->name);
-				$_SESSION[$cookie] = serialize($token);
+				$cdata['user'] = $data['response'];
+				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+				print head($title, "Connected - click to continue", $cdata['user']->name);
 				print footer("Disconnect", "");
 			}
 			else
 			{
+				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue", "but failed to retrieve user info");
-				$_SESSION[$cookie] = serialize($token);
 				print footer("Disconnect", "");
 			}
 		}
@@ -64,52 +66,50 @@ if (isset($_GET['state']) && isset($_SESSION['oauth2state']))
 	}
 	else
 	{
-		unset($_SESSION['oauth2state']); 
+		setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 
 		print head($title, "Error - invalid state");
 		print '<pre>';
-		print_r($_REQUEST);
-		print_r($_SESSION);
+		print_r($_GET);
+		print_r($_COOKIE);
 		print '</pre>';
 	}
 }
 
 // If we have a cookie, get the connection details
-elseif (isset($_SESSION[$cookie]))
+elseif (isset($_COOKIE[$cookie]))
 {
 	if (isset($_REQUEST['operation']))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$token = unserialize($_SESSION[$cookie]);
+			$cdata = unserialize($_COOKIE[$cookie]);
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
-			print_r($token);
-			print "\n";
-			print_r(session_get_cookie_params());
+			print_r($cdata);
 			print '</pre>';
 			print footer("Disconnect", "");
 		}
 		elseif($_REQUEST['operation'] == 'revoke')
 		{
+			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
-			unset($_SESSION[$cookie]);
 		}
 		elseif($_REQUEST['operation'] == 'calendarList')
 		{
-			$token = unserialize($_SESSION[$cookie]);
+			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = "$urlCalendarBase/users/me/calendarList";
-			$data = apiRequest($url, $token->access_token);
+			$data = apiRequest($url, $cdata['token']->access_token);
 			if ($data['code'] == 200)
 			{
-				print head("$title | my calendars", "Home", $token->user->name);
+				print head("$title | my calendars", "Home", $cdata['user']->name);
 				$table = calendarlist_summary($data['response']);
 				print table_html_calendarlist($table);
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head("$title | my calendars", "Error");
+				print head("$title | my calendars", "Error", $cdata['user']->name);
 				print '<pre>';
 				print_r($data);
 				print '</pre>';
@@ -122,7 +122,7 @@ elseif (isset($_SESSION[$cookie]))
 			{
 				$vars = [];
 				$query = "";
-				$token = unserialize($_SESSION[$cookie]);
+				$cdata = unserialize($_COOKIE[$cookie]);
 				// get the events filter parameters, if any
 				if (isset($_REQUEST['timeMin']))
 				{
@@ -141,17 +141,17 @@ elseif (isset($_SESSION[$cookie]))
 					$query = "?" . http_build_query($vars);
 				}
 				$url = "$urlCalendarBase/calendars/" . urlencode($_REQUEST['calendarId']) . "/events$query";
-				$data = apiRequest($url, $token->access_token);
+				$data = apiRequest($url, $cdata['token']->access_token);
 				if ($data['code'] == 200)
 				{
-					print head("$title | calendar events", "Home", $token->user->name);
+					print head("$title | calendar events", "Home", $cdata['user']->name);
 					$table = events_summary($data['response']);
 					print table_html($table);
 					print footer("Disconnect", "");
 				}
 				else
 				{
-					print head("$title | calendar events", "Error");
+					print head("$title | calendar events", "Error", $cdata['user']->name);
 					print '<pre>';
 					print "$url\n";
 					print_r($data);
@@ -170,28 +170,34 @@ elseif (isset($_SESSION[$cookie]))
 	else
 	{
 		$now = time();
-		$token = unserialize($_SESSION[$cookie]);
+		$cdata = unserialize($_COOKIE[$cookie]);
 		if ($now <  $token->access_token_expiry)
 		{
-			print head($title, "Home", $token->user->name);
+			print head($title, "Home", $cdata['user']->name);
 			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			print generic_button("user", "Get my list of calendars",['operation'=>'calendarList'], "tertiary", "GET", "./");
 		}
 		else
 		{
-			print head($title, "Disconnected");
-			unset($_SESSION['oauth2state']); 
-			unset($_SESSION[$cookie]);
+			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+			print head($title, "Disconnected - click to continue", $cdata['user']->name);
 		}
 		print footer("Disconnect", "");
 	}
 }
 // If we don't have an authorization code then get one
 elseif (!isset($_GET['code'])) {
-	$state = getRandomState();
+	if (isset($_COOKIE['oauth2state']))
+	{
+		$state = $_COOKIE['oauth2state'];
+	}
+	else
+	{
+		$state = getRandomState();
+	}
 
-    // store state in the session.
-    $_SESSION['oauth2state'] = $state;
+    // store state in cookie
+	setcookie('oauth2state', $state, time() + 600, '/');
 
     // display Connect to button
 	print head($title);
