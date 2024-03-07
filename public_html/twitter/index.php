@@ -104,7 +104,7 @@ elseif (isset($_COOKIE[$cookie]))
 				$cdata['access_token_expiry'] = time() + $token->expires_in;
 				$cdata['token'] = $token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Home", $cdata['user']->name);
+				print head($title, "Refreshed", $cdata['user']->name);
 				print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 			}
 			else
