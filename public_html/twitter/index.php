@@ -31,7 +31,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 		{
 			$token = $response['response'];
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
-			$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
+//			$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
 			$cdata['token'] = $token;
 			// get user info
 			$url = $api_base . "/2/users/me";
