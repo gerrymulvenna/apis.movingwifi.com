@@ -98,9 +98,10 @@ elseif (isset($_COOKIE[$cookie]))
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . "/2/tweets";
 			$response = apiRequest($url, $cdata['token']->access_token,'POST',['text'=>$_REQUEST['data']]);
-			if ($response['code'] == 200)
+			// note response code of 201 for successfully created tweet
+			if ($response['code'] == 201)
 			{
-				print head($title, "Post Tweet - response", $cdata['user']->name);
+				print head("$title | Tweet success", "Home", $cdata['user']->name);
 				print '<pre>';
 				print_r($response['response']);
 				print '</pre>';
@@ -108,7 +109,7 @@ elseif (isset($_COOKIE[$cookie]))
 			}
 			else
 			{
-				print head($title, "Post Tweet - error", $cdata['user']->name);
+				print head("$title | Tweet unsuccessful", "Home", $cdata['user']->name);
 				print '<pre>';
 				print_r($response);
 				print '</pre>';
