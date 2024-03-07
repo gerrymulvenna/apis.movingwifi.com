@@ -15,7 +15,7 @@ $urlAccessToken = 'https://oauth2.googleapis.com/token';
 $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
 $urlCalendarBase = 'https://www.googleapis.com/calendar/v3';
 
-$scopes =  ['openid','email','profile','offline_access',
+$scopes =  ['openid','email','profile',
 			'https://www.googleapis.com/auth/calendar.readonly',
 			'https://www.googleapis.com/auth/calendar.calendarlist.readonly',
 			'https://www.googleapis.com/auth/calendar.calendars.readonly',
