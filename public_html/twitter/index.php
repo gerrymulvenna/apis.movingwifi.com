@@ -97,7 +97,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . "/2/tweets";
-			$response = apiRequest($url, $cdata['token']->access_token,'POST',['text'=>$_REQUEST['data']]);
+			$response = apiRequest($url, $cdata['token']->access_token,'POST',['text'=>$_REQUEST['text']]);
 			// note response code of 201 for successfully created tweet
 			if ($response['code'] == 201)
 			{
@@ -132,7 +132,7 @@ elseif (isset($_COOKIE[$cookie]))
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Refreshed", $cdata['user']->name);
 				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-				print post_button("Post Tweet",['operation'=>'tweet']);
+				print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
 			}
 			else
 			{
@@ -146,7 +146,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			print head($title, "Home", $cdata['user']->name);
 			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print post_button("Post Tweet",['operation'=>'tweet']);
+			print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
 		}
 		print footer("Disconnect", "");
 	}
