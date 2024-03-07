@@ -28,9 +28,11 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
+			// we're just gonna keep what we need, otherwise the cookie gets too big
+			$cdata['access_token'] = $token->access_token;
+			$cdata['refresh_token'] = $token->refresh_token;
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
 			$cdata['refresh_token_expiry'] = strtotime('+60 days');
-			$cdata['token'] = $token;
 			// get tenants
 			$tenants = apiRequest($urlConnections, $token->access_token);
 			if ($tenants['code'] == 200)
@@ -102,7 +104,7 @@ elseif (isset($_COOKIE[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Customers","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $cdata['token']->access_token, 'GET', ['order'=>'Name','where'=>'IsCustomer=true'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $cdata['access_token'], 'GET', ['order'=>'Name','where'=>'IsCustomer=true'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
@@ -124,7 +126,7 @@ elseif (isset($_COOKIE[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			print head("$title | Suppliers","Home");
 			# call the API - the xero API needs xero-tenant-id in the header
-			$data = apiRequest($url, $cdata['token']->access_token, 'GET', ['order'=>'Name','where'=>'IsSupplier=true'], ["xero-tenant-id: $tenantId"]);  
+			$data = apiRequest($url, $cdata['access_token'], 'GET', ['order'=>'Name','where'=>'IsSupplier=true'], ["xero-tenant-id: $tenantId"]);  
 			if ($data['code'] == 200)
 			{
 				$table = contacts_summary($data['response']);
@@ -146,13 +148,14 @@ elseif (isset($_COOKIE[$cookie]))
 		$cdata = unserialize($_COOKIE[$cookie]);
 		if ($now > $cdata['access_token_expiry'])
 		{
-			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['token']->refresh_token, $client_id, $client_secret);
+			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['refresh_token'], $client_id, $client_secret);
 			if ($response['code'] == 200)
 			{
 				$token = $response['response'];
 				$cdata['access_token_expiry'] = time() + $token->expires_in;
 				$cdata['refresh_token_expiry'] = strtotime('+60 days');
-				$cdata['token'] = $token;
+				$cdata['access_token'] = $token->access_token;
+				$cdata['refresh_token'] = $token->refresh_token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head("$title | tenants", "Refreshed");
 				foreach ($cdata['tenants'] as $tenant)
