@@ -93,6 +93,19 @@ elseif (isset($_COOKIE[$cookie]))
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
 		}
+		elseif($_REQUEST['operation'] == 'tweet')
+		{
+			$cdata = unserialize($_COOKIE[$cookie]);
+			$response = apiRequest($url, $token->access_token,'POST',['text'=>$_REQUEST['data']]);
+			if ($response['code'] == 200)
+			{
+				print head($title, "Post Tweet - response", $cdata['user']->name);
+				print '<pre>';
+				print_r($response['response']);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+		}
 	}
 	else
 	{
