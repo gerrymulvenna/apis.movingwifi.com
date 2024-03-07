@@ -44,6 +44,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 			}
 			else
 			{
+				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected", "but failed to retrieve company info");
 				print footer("Disconnect", "");
@@ -64,7 +65,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 		print head($title, "Error - invalid state");
 		print '<pre>';
 		print_r($_GET);
-		print_r($_SESSION);
+		print_r($_COOKIE);
 		print '</pre>';
 	}
 }
@@ -181,7 +182,7 @@ elseif (!isset($_GET['code']))
 	{
 		$state = getRandomState();
 	}
-    // store state in the session.
+    // store state in cookie
 	setcookie('oauth2state', $state, time() + 600, '/');
 
     // display Connect to button
