@@ -15,7 +15,7 @@ $urlAccessToken = 'https://oauth2.googleapis.com/token';
 $urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
 $urlCalendarBase = 'https://www.googleapis.com/calendar/v3';
 
-$scopes =  ['openid','email','profile',
+$scopes =  ['openid','email','profile','offline_access',
 			'https://www.googleapis.com/auth/calendar.readonly',
 			'https://www.googleapis.com/auth/calendar.calendarlist.readonly',
 			'https://www.googleapis.com/auth/calendar.calendars.readonly',
@@ -196,7 +196,6 @@ elseif (!isset($_GET['code'])) {
     // display Connect to button
 	print head($title);
 	print generic_button("connect", $connect,['client_id'=>$client_id,
-												'access_type'=>'offline',
 												'response_type'=>'code',
 												'redirect_uri'=>$redirect_uri,
 												'scope'=>implode(' ', $scopes),
