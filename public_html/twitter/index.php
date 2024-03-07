@@ -106,6 +106,14 @@ elseif (isset($_COOKIE[$cookie]))
 				print '</pre>';
 				print footer("Disconnect", "");
 			}
+			else
+			{
+				print head($title, "Post Tweet - error", $cdata['user']->name);
+				print '<pre>';
+				print_r($response);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
 		}
 	}
 	else

@@ -138,7 +138,7 @@ function post_button($button, $vars=[], $name="data", $rows=6, $cols=30, $placeh
 		$html .= "<input type=\"hidden\" id=\"$key\" name=\"$key\" value=\"$value\">\n";
 	}
 	$html .= "<input type=\"submit\" value=\"$button\" class=\"$class\">\n";
-	$html .= "<br><textarea name=\"$name\" rows=\"$rows\" cols=\"$cols\">$data</textarea></form></div>\n";
+	$html .= "<br><textarea placeholder=\"$placeholder\" name=\"$name\" rows=\"$rows\" cols=\"$cols\">$data</textarea></form></div>\n";
 	return $html;
 }
 
