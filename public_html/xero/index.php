@@ -90,9 +90,9 @@ elseif (isset($_COOKIE[$cookie]))
 			$tenantId = $_REQUEST['tenantId'];
 			$tenantName = $_REQUEST['tenantName'];
 			print head("$title | $tenantName","Home");
-			print generic_button('customers','Display Customers', ['operation'=>'customers','tenantId'=>$tenantId]);
-			print generic_button('suppliers','Display Suppliers', ['operation'=>'suppliers','tenantId'=>$tenantId]);
-			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
+			print generic_button('Display Customers', ['operation'=>'customers','tenantId'=>$tenantId]);
+			print generic_button('Display Suppliers', ['operation'=>'suppliers','tenantId'=>$tenantId]);
+			print generic_button("Display cookie",['operation'=>'cookie']);
 			print footer("Disconnect", "");
 		}
 		elseif ($_REQUEST['operation'] == 'customers')
@@ -157,9 +157,9 @@ elseif (isset($_COOKIE[$cookie]))
 				print head("$title | tenants", "Refreshed");
 				foreach ($cdata['tenants'] as $tenant)
 				{
-					print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
+					print generic_button($tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
 				}
-				print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
+				print generic_button("Display cookie",['operation'=>'cookie']);
 			}
 			else
 			{
@@ -173,9 +173,9 @@ elseif (isset($_COOKIE[$cookie]))
 			print head("$title | tenants", "Home");
 			foreach ($cdata['tenants'] as $tenant)
 			{
-				print generic_button("tenant",$tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
+				print generic_button($tenant->tenantName, ['operation'=>'tenant','tenantId'=>$tenant->tenantId, 'tenantName'=>$tenant->tenantName], 'primary');
 			}
-			print generic_button("cookie", "Display cookie",['operation'=>'cookie']);
+			print generic_button("Display cookie",['operation'=>'cookie']);
 		}
 		print footer("Disconnect", "");
 	}
@@ -196,7 +196,7 @@ elseif (!isset($_GET['code'])) {
 
     // display Connect to button
 	print head($title);
-	print generic_button("connect", $connect,['client_id'=>$client_id,
+	print generic_button($connect,['client_id'=>$client_id,
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
 														'scope'=>implode(' ', $scopes)

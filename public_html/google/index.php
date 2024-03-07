@@ -175,8 +175,8 @@ elseif (isset($_COOKIE[$cookie]))
 		if ($now <  $cdata['access_token_expiry'])
 		{
 			print head($title, "Home", $cdata['user']->name);
-			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print generic_button("user", "Get my list of calendars",['operation'=>'calendarList'], "tertiary", "GET", "./");
+			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+			print generic_button("Get my list of calendars",['operation'=>'calendarList'], "tertiary", "GET", "./");
 		}
 		else
 		{
@@ -202,7 +202,7 @@ elseif (!isset($_GET['code'])) {
 
     // display Connect to button
 	print head($title);
-	print generic_button("connect", $connect,['client_id'=>$client_id,
+	print generic_button($connect,['client_id'=>$client_id,
 												'response_type'=>'code',
 												'redirect_uri'=>$redirect_uri,
 												'scope'=>implode(' ', $scopes),

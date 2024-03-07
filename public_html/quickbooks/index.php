@@ -150,9 +150,9 @@ elseif (isset($_COOKIE[$cookie]))
 				$cdata['token'] = $token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Refreshed", $cdata['CompanyName']);
-				print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-				print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
-				print generic_button("company", "Display company info",['operation'=>'company'], "tertiary", "GET", "./");
+				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+				print generic_button("Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
+				print generic_button("Display company info",['operation'=>'company'], "tertiary", "GET", "./");
 			}
 			else
 			{
@@ -164,9 +164,9 @@ elseif (isset($_COOKIE[$cookie]))
 		else
 		{
 			print head($title, "Home", $cdata['CompanyName']);
-			print generic_button("cookie", "Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print generic_button("invoices", "Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
-			print generic_button("company", "Display company info",['operation'=>'company'], "tertiary", "GET", "./");
+			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+			print generic_button("Display invoices",['operation'=>'invoices'], "tertiary", "GET", "./");
+			print generic_button("Display company info",['operation'=>'company'], "tertiary", "GET", "./");
 		}
 		print footer("Disconnect", "");
 	}
@@ -187,7 +187,7 @@ elseif (!isset($_GET['code']))
 
     // display Connect to button
 	print head($title);
-	print generic_button("connect", $connect,['client_id'=>$client_id,
+	print generic_button($connect,['client_id'=>$client_id,
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
 														'scope'=>implode(' ', $scopes)
