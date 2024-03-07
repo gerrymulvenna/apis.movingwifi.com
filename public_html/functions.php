@@ -130,7 +130,7 @@ function generic_button($text, $vars, $class = "tertiary", $method = "GET", $act
  * @param string $class minicss class for the card
  * @param string $action script to send the form to
 */
-function post_button($button, $vars=[], $name="data", $rows=6, $cols=30, $placeholder="", $data="", $class = "tertiary", $action = "./")
+function post_button($button, $vars=[], $name="data", $rows=6, $cols=48, $placeholder="", $data="", $class = "tertiary", $action = "./")
 {
 	$html = "<div class=\"card large\"><form method=\"POST\" action=\"$action\">\n";
 	foreach ($vars as $key => $value)
