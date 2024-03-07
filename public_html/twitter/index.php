@@ -96,6 +96,7 @@ elseif (isset($_COOKIE[$cookie]))
 		elseif($_REQUEST['operation'] == 'tweet')
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
+			$url = $api_base . "/2/tweets";
 			$response = apiRequest($url, $token->access_token,'POST',['text'=>$_REQUEST['data']]);
 			if ($response['code'] == 200)
 			{
