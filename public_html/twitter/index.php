@@ -35,7 +35,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			$cdata['token'] = $token;
 			// get user info
 			$url = $api_base . "/2/users/me";
-			$user_data = apiRequest($url, $token->access_token,'GET',['user.fields'=>'created_at,profile_image_url']);
+			$user_data = apiRequest($url, $token->access_token,'GET',['user.fields'=>'created_at,profile_image_url,description,location,entities,url,public_metrics']);
 			if ($user_data['code'] == 200)
 			{
 				$cdata['user'] = $user_data['response']->data;
