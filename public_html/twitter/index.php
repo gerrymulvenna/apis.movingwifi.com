@@ -39,6 +39,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			{
 				$cdata['user'] = $user_data['response']->data;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue", $cdata['user']->name);
 				print footer("Disconnect", "");
@@ -46,6 +47,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			else
 			{
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue", "but failed to retrieve user info");
 				print footer("Disconnect", "");
@@ -62,6 +64,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 	else
 	{
 		setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+		setcookie('challenge',"", time() - 3600, "/");  //delete cookie
 
 		print head($title, "Error - invalid state");
 		print '<pre>';
@@ -111,6 +114,7 @@ elseif (isset($_COOKIE[$cookie]))
 			{
 				setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
 				print head($title, "Refresh failed - click to continue");
 			}	
 		}
