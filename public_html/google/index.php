@@ -38,7 +38,8 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 		{
 			$token = $response['response'];
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
-			$cdata['token'] = $token;
+			// we'll just keep what we need to minimise the size of the cookie
+			$cdata['access_token'] = $token->access_token;
 			// get user info
 			$data = apiRequest($urlResourceOwnerDetails, $token->access_token);
 			if ($data['code'] == 200)
@@ -100,7 +101,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = "$urlCalendarBase/users/me/calendarList";
-			$data = apiRequest($url, $cdata['token']->access_token);
+			$data = apiRequest($url, $cdata['access_token']);
 			if ($data['code'] == 200)
 			{
 				print head("$title | my calendars", "Home", $cdata['user']->name);
@@ -142,7 +143,7 @@ elseif (isset($_COOKIE[$cookie]))
 					$query = "?" . http_build_query($vars);
 				}
 				$url = "$urlCalendarBase/calendars/" . urlencode($_REQUEST['calendarId']) . "/events$query";
-				$data = apiRequest($url, $cdata['token']->access_token);
+				$data = apiRequest($url, $cdata['access_token']);
 				if ($data['code'] == 200)
 				{
 					print head("$title | calendar events", "Home", $cdata['user']->name);
