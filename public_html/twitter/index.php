@@ -123,6 +123,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			print head($title, "Home", $cdata['user']->name);
 			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+			print post_button("Post Tweet",['operation'=>'tweet']);
 		}
 		print footer("Disconnect", "");
 	}
