@@ -121,17 +121,24 @@ function generic_button($text, $vars, $class = "tertiary", $method = "GET", $act
  * return HTML for an API button for POST request, 
  *
  * @param string $button button text
- * @param string $data (sample json data string), $vars (hashref with key/value pairs)
+ * @param array $vars key/value pairs to include as hidden fields
+ * @param string $name name of the form's text variable 
+ * @param integer $rows no. of rows in the textarea
+ * @param integer $cols no. of columns in the textarea
+ * @param string $placeholder Placeholder text
+ * @param string $data Pre-fill the textarea with a value
+ * @param string $class minicss class for the card
+ * @param string $action script to send the form to
 */
-function post_button($button, $data, $vars, $class = "tertiary", $action = "./")
+function post_button($button, $vars=[], $name="data", $rows=6, $cols=30, $placeholder="", $data="", $class = "tertiary", $action = "./")
 {
-	$html = '<div class="card large"><form method="POST" action="' . $action . '">';
+	$html = "<div class=\"card large\"><form method=\"POST\" action=\"$action\">\n";
 	foreach ($vars as $key => $value)
 	{
-		$html .= '<input type="hidden" id="' . $key . '" name="' . $key . '" value="' . $value . '">';
+		$html .= "<input type=\"hidden\" id=\"$key\" name=\"$key\" value=\"$value\">\n";
 	}
-	$html .= '<input type="submit" value="' . $button . '" class="' . $class . '">';
-	$html .= '<br><textarea name="data" rows="6" cols="30">'.$data.'</textarea></form></div>';
+	$html .= "<input type=\"submit\" value=\"$button\" class=\"$class\">\n";
+	$html .= "<br><textarea name=\"$name\" rows=\"$rows\" cols=\"$cols\">$data</textarea></form></div>\n";
 	return $html;
 }
 
@@ -283,7 +290,7 @@ function apiRequest($url, $access_token, $method = 'GET', $vars = [], $headers =
 	if ($method == 'POST')
 	{
 		curl_setopt($ch, CURLOPT_POST, true);
-		curl_setopt($ch, CURLOPT_POSTFIELDS, http_build_query($vars));
+		curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($vars));
 	}
 	
     $response = curl_exec($ch);

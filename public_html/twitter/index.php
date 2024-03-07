@@ -109,6 +109,7 @@ elseif (isset($_COOKIE[$cookie]))
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Refreshed", $cdata['user']->name);
 				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+				print post_button("Post Tweet",['operation'=>'tweet']);
 			}
 			else
 			{
