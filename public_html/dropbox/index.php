@@ -10,6 +10,7 @@ require "credentials.php";  //$client_id, $client_secret, $redirect_uri
 
 // API details
 $urlAuthorize = 'https://dropbox.com/oauth2/authorize';
+$urlAccessToken = 'https://api.dropbox.com/oauth2/token';
 $api_base = 'https://api.dropboxapi.com';
 
 $scopes =  ['account_info.read', 'files.metadata.read', 'files.content.read', 'profile', 'openid', 'email'];
