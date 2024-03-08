@@ -99,29 +99,6 @@ elseif (isset($_COOKIE[$cookie]))
 				print footer("Disconnect", "");
 			}
 		}
-		elseif($_REQUEST['operation'] == 'user')
-		{
-			// get user info
-			$cdata = unserialize($_COOKIE[$cookie]);
-			$url = $api_base . "/2/openid/userinfo";
-			$response = apiRequest($url, $cdata['token']->access_token);
-			if ($response['code'] == 200)
-			{
-				print head("$title | user info", "Home");
-				print '<pre>';
-				print_r($response['response']);
-				print '</pre>';
-				print footer("Disconnect", "");
-			}
-			else
-			{
-				print head("$title | user info unsuccessful", "Home");
-				print '<pre>';
-				print_r($response);
-				print '</pre>';
-				print footer("Disconnect", "");
-			}
-		}
 	}
 	else
 	{
@@ -138,7 +115,6 @@ elseif (isset($_COOKIE[$cookie]))
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Refreshed");
 				print generic_button("Display cookie",['operation'=>'cookie']);
-				print generic_button("Get user info",['operation'=>'user']);
 				print generic_button("List folders",['operation'=>'folders','path'=>'']);
 			}
 			else
@@ -153,7 +129,6 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			print head($title, "Home");
 			print generic_button("Display cookie",['operation'=>'cookie']);
-			print generic_button("Get user info",['operation'=>'user']);
 			print generic_button("List folders",['operation'=>'folders','path'=>'']);
 		}
 		print footer("Disconnect", "");
