@@ -10,7 +10,6 @@ require "credentials.php";  //$client_id, $client_secret, $redirect_uri
 
 // API details
 $urlAuthorize = 'https://dropbox.com/oauth2/authorize';
-$urlAccessToken = 'https://api.dropboxapi.com/oauth2/token';
 $api_base = 'https://api.dropboxapi.com';
 
 $scopes =  ['account_info.read', 'files.metadata.read', 'files.content.read', 'profile', 'openid', 'email'];
@@ -32,7 +31,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
 			$cdata['token'] = $token;
 			// get user info
-			$url = $api_base . "/2/users/me";
+			$url = $api_base . "/2/openid/userinfo";
 			$user_data = apiRequest($url, $token->access_token,'GET',['user.fields'=>'created_at,profile_image_url,description,location,entities,url,public_metrics']);
 			if ($user_data['code'] == 200)
 			{
@@ -92,15 +91,14 @@ elseif (isset($_COOKIE[$cookie]))
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
 		}
-		elseif($_REQUEST['operation'] == 'tweet')
+		elseif($_REQUEST['operation'] == 'user')
 		{
-			$cdata = unserialize($_COOKIE[$cookie]);
-			$url = $api_base . "/2/tweets";
-			$response = apiRequest($url, $cdata['token']->access_token,'POST',['text'=>$_REQUEST['text']]);
-			// note response code of 201 for successfully created tweet
-			if ($response['code'] == 201)
+			// get user info
+			$url = $api_base . "/2/openid/userinfo";
+			$response = apiRequest($url, $token->access_token);
+			if ($response['code'] == 200)
 			{
-				print head("$title | Tweet success", "Home", $cdata['user']->name);
+				print head("$title | user info", "Home");
 				print '<pre>';
 				print_r($response['response']);
 				print '</pre>';
@@ -108,7 +106,7 @@ elseif (isset($_COOKIE[$cookie]))
 			}
 			else
 			{
-				print head("$title | Tweet unsuccessful", "Home", $cdata['user']->name);
+				print head("$title | user info unsuccessful", "Home");
 				print '<pre>';
 				print_r($response);
 				print '</pre>';
@@ -130,8 +128,8 @@ elseif (isset($_COOKIE[$cookie]))
 				$cdata['token'] = $token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Refreshed", $cdata['user']->name);
-				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-				print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
+				print generic_button("Display cookie",['operation'=>'cookie']);
+				print generic_button("Get user info",['operation'=>'user']);
 			}
 			else
 			{
@@ -143,9 +141,9 @@ elseif (isset($_COOKIE[$cookie]))
 		}
 		else
 		{
-			print head($title, "Home", $cdata['user']->name);
-			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
+			print head($title, "Home");
+			print generic_button("Display cookie",['operation'=>'cookie']);
+			print generic_button("Get user info",['operation'=>'user']);
 		}
 		print footer("Disconnect", "");
 	}
