@@ -186,7 +186,7 @@ elseif (isset($_COOKIE[$cookie]))
 			print head("$title | tenants", "Home");
 			foreach ($cdata['tenants'] as $tenant)
 			{
-				print generic_button($tenant['tenantName'], ['operation'=>'tenant','tenantId'=>$tenant['tenantId'], 'tenantName'=>$tenant['tenantName'], 'primary');
+				print generic_button($tenant['tenantName'], ['operation'=>'tenant','tenantId'=>$tenant['tenantId'], 'tenantName'=>$tenant['tenantName']], 'primary');
 			}
 			print generic_button("Display cookie",['operation'=>'cookie']);
 		}
