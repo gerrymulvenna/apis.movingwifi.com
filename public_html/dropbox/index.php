@@ -30,7 +30,8 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 		{
 			$token = $response['response'];
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
-			$cdata['token'] = $token;
+			$cdata['access_token'] = $token->access_token;
+			$cdata['refresh_token'] = $token->refresh_token;
 			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 			setcookie('challenge',"", time() - 3600, "/");  //delete cookie
 			setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
@@ -82,7 +83,7 @@ elseif (isset($_COOKIE[$cookie]))
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = "$api_base/2/files/list_folder";
 			$path = $_REQUEST['path'];
-			$data = apiRequest($url, $cdata['token']->access_token, 'POST', ["recursive"=>false,"path"=>$path]);
+			$data = apiRequest($url, $cdata['access_token'], 'POST', ["recursive"=>false,"path"=>$path]);
 			if ($data['code'] == 200)
 			{
 				print head("$title | folders", "Home");
@@ -106,12 +107,13 @@ elseif (isset($_COOKIE[$cookie]))
 		$cdata = unserialize($_COOKIE[$cookie]);
 		if ($now >  $cdata['access_token_expiry'])
 		{
-			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['token']->refresh_token, $client_id, $client_secret);
+			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['refresh_token'], $client_id, $client_secret);
 			if ($response['code'] == 200)
 			{
 				$token = $response['response'];
 				$cdata['access_token_expiry'] = time() + $token->expires_in;
-				$cdata['token'] = $token;
+				$cdata['access_token'] = $token->access_token;
+				$cdata['refresh_token'] = $token->refresh_token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Refreshed");
 				print generic_button("Display cookie",['operation'=>'cookie']);
