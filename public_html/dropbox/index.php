@@ -164,7 +164,6 @@ elseif (!isset($_GET['code'])) {
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
 														'token_access_type'=>'offline',
-														'scope'=>implode(' ', $scopes),
 														'state'=>$state,
 														'code_challenge'=>$pkce,
 														'code_challenge_method'=>'plain'], "tertiary", "GET", $urlAuthorize);
