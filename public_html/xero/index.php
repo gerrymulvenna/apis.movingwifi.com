@@ -34,10 +34,20 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
 			$cdata['refresh_token_expiry'] = strtotime('+60 days');
 			// get tenants
-			$tenants = apiRequest($urlConnections, $token->access_token);
+			$response = apiRequest($urlConnections, $token->access_token);
 			if ($tenants['code'] == 200)
 			{
-				$cdata['tenants'] = $tenants['response'];
+//				$cdata['tenants'] = $response['response'];
+				$tenants =  $response['response'];
+				$i = 0;
+				$abridged = [];
+				foreach ($tenants as $tenant)
+				{
+					$abridged[$i]['tenantName'] = $tenant->tenantName;
+					$abridged[$i]['tenantId'] = $tenant->tenantId;
+					$i++;
+				}
+				$cdata['tenants'] = $abridged;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue");
 				print footer("Disconnect", "");
