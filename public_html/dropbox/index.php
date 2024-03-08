@@ -202,7 +202,7 @@ function folders_summary($entries)
 	{
 		$i++;
 		$table[$i][] =(property_exists($folder, 'id')) ? $folder->id : "";
-		$table[$i][] =(property_exists($folder, '.tag')) ? $folder['.tag'] : "";
+		$table[$i][] =(property_exists($folder, '.tag')) ? $folder->{'.tag'} : "";
 		$table[$i][] =(property_exists($folder, 'name')) ? $folder->name : "";
 		$table[$i][] =(property_exists($folder, 'path_lower')) ? $folder->path_lower : "";
 	}
