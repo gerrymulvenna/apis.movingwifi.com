@@ -39,7 +39,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			if ($user_data['code'] == 200)
 			{
 				// just grab what we need to keep cookie small
-				$cdata['name'] = $user_data['response']->data->user->name;
+				$cdata['name'] = $user_data['response']->data->name;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
