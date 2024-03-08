@@ -21,7 +21,7 @@ print head("Some simple API interactions");
 	</div>
 	<div class="row">
 		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
-			<div class="card alignleft fluid warning">
+			<div class="card alignleft warning">
 				<div class="section">
 					<a href="/google" class="primary button">Google Calendar</a>
 				</div>
@@ -32,7 +32,7 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-5 col-lg-4">
-			<div class="card alignleft fluid warning">
+			<div class="card alignleft warning">
 				<div class="section">
 					<a href="/quickbooks" class="primary button">Quickbooks</a>
 				</div>
@@ -43,7 +43,7 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
-			<div class="card alignleft fluid warning">
+			<div class="card alignleft warning">
 				<div class="section">
 					<a href="/twitter" class="primary button">Twitter</a>
 				</div>
@@ -54,7 +54,7 @@ print head("Some simple API interactions");
 			</div>
 		</div>
 		<div class="col-sm-12 col-md-5 col-lg-4">
-			<div class="card alignleft fluid warning">
+			<div class="card alignleft warning">
 				<div class="section">
 					<a href="/xero" class="primary button">Xero</a>
 				</div>
@@ -68,7 +68,7 @@ print head("Some simple API interactions");
 	<div class="row">
 		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 			<h3>Get the code</h3>
-			<div class="card alignleft fluid">
+			<div class="card alignleft">
 				<div class="section">
 					<a href="https://github.com/gerrymulvenna/apis.movingwifi.com" class="button tertiary">View the code on GitHub</a>
 				</div>
