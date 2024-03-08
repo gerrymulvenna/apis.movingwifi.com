@@ -81,7 +81,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			// get user info
 			$cdata = unserialize($_COOKIE[$cookie]);
-			$url = $api_base . "/2/users/get_current_account";
+			$url = $api_base . "/2/openid/userinfo";
 			$response = apiRequest($url, $cdata['token']->access_token);
 			if ($response['code'] == 200)
 			{
