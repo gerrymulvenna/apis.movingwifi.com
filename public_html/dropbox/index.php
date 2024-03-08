@@ -94,8 +94,9 @@ elseif (isset($_COOKIE[$cookie]))
 		elseif($_REQUEST['operation'] == 'user')
 		{
 			// get user info
+			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . "/2/openid/userinfo";
-			$response = apiRequest($url, $token->access_token);
+			$response = apiRequest($url, $cdata['token']->access_token);
 			if ($response['code'] == 200)
 			{
 				print head("$title | user info", "Home");
