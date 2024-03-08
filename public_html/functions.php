@@ -44,9 +44,6 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 	<title>' . $title . '</title>
 	<link rel="stylesheet" href="/css/mini-default.css">
 	<link rel="stylesheet" href="/css/style.css">
-	<style>
-		.card {margin: 0 auto;}
-	</style>
 	</head>
 	';
 	$html .= '<body>
