@@ -10,7 +10,7 @@ print head("Some simple API interactions");
 
 ?>
 	<div class="row">
-		<div class="col-sm-12">
+		<div class="col-sm-12 col-md-10 col-md-offset-1 col-lg-8 col-lg-offset-2">
 			<p class="alignleft">This is a showcase project to present some simple examples of API interactions, where the code (written in PHP) is kept deliberately 
 			minimalist and self-contained, in order to best demonstrate the flow from establishing the Oauth 2.0 connection to issuing an API call 
 			and handling the response data.</p>
@@ -20,7 +20,7 @@ print head("Some simple API interactions");
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-12 col-md-6 col-lg-3">
+		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 			<div class="card alignleft fluid warning">
 				<div class="section">
 					<a href="/google" class="primary button">Google Calendar</a>
@@ -31,7 +31,7 @@ print head("Some simple API interactions");
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-3">
+		<div class="col-sm-12 col-md-5 col-lg-4">
 			<div class="card alignleft fluid warning">
 				<div class="section">
 					<a href="/quickbooks" class="primary button">Quickbooks</a>
@@ -42,7 +42,7 @@ print head("Some simple API interactions");
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-3">
+		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 			<div class="card alignleft fluid warning">
 				<div class="section">
 					<a href="/twitter" class="primary button">Twitter</a>
@@ -53,7 +53,7 @@ print head("Some simple API interactions");
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-6 col-lg-3">
+		<div class="col-sm-12 col-md-5 col-lg-4">
 			<div class="card alignleft fluid warning">
 				<div class="section">
 					<a href="/xero" class="primary button">Xero</a>
@@ -66,7 +66,7 @@ print head("Some simple API interactions");
 		</div>
 	</div>
 	<div class="row">
-		<div class="col-sm-12 col-md-6 col-lg-3">
+		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 			<h3>Get the code</h3>
 			<div class="card alignleft fluid">
 				<div class="section">
