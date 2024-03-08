@@ -77,6 +77,27 @@ elseif (isset($_COOKIE[$cookie]))
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
 		}
+		elseif($_REQUEST['operation'] == 'folders')
+		{
+			$cdata = unserialize($_COOKIE[$cookie]);
+			$url = "$api_base/2/files/list_folder";
+			$data = apiRequest($url, $cdata['token']->access_token, 'POST', ["recursive"=>false, "path": "/"]);
+			if ($data['code'] == 200)
+			{
+				print head("$title | folders", "Home");
+				$table = folder_summary($data['response']->entries);
+				print table_html($table);
+				print footer("Disconnect", "");
+			}
+			else
+			{
+				print head("$title | Error - folders", "Home");
+				print '<pre>';
+				print_r($data);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+		}
 		elseif($_REQUEST['operation'] == 'user')
 		{
 			// get user info
@@ -117,6 +138,7 @@ elseif (isset($_COOKIE[$cookie]))
 				print head($title, "Refreshed");
 				print generic_button("Display cookie",['operation'=>'cookie']);
 				print generic_button("Get user info",['operation'=>'user']);
+				print generic_button("List folders",['operation'=>'folders']);
 			}
 			else
 			{
@@ -131,6 +153,7 @@ elseif (isset($_COOKIE[$cookie]))
 			print head($title, "Home");
 			print generic_button("Display cookie",['operation'=>'cookie']);
 			print generic_button("Get user info",['operation'=>'user']);
+			print generic_button("List folders",['operation'=>'folders']);
 		}
 		print footer("Disconnect", "");
 	}
@@ -170,6 +193,18 @@ elseif (!isset($_GET['code'])) {
 														'code_challenge_method'=>'plain'], "tertiary", "GET", $urlAuthorize);
 }
 
-
-
+function folders_summary($entries)
+{
+	$i = 0;
+	// field names in first row
+	$table[$i] = ['folder_id','name','path_lower'];
+	foreach ($entries as $folder)
+	{
+		$i++;
+		$table[$i][] =(property_exists($folder, 'folder_id')) ? $folder->folder_id : "";
+		$table[$i][] =(property_exists($folder, 'name')) ? $folder->name : "";
+		$table[$i][] =(property_exists($folder, 'path_lower')) ? $folder->path_lower : "";
+	}
+	return $table;
+}	
 ?>
