@@ -15,7 +15,7 @@ print head("Some simple API interactions");
 			minimalist and self-contained, in order to best demonstrate the flow from establishing the Oauth 2.0 connection to issuing an API call 
 			and handling the response data.</p>
 			<p class="alignleft">Getting that initial back and forth correct and your first API call working often requires more head-scratching and debugging
-			than anticipated. Each example (accessed by the menu top right) implements the initial authenticated connection and presents one or two 
+			than anticipated. Each example implements the initial authenticated connection and presents one or two 
 			examples of using the API, hopefully to make the learning curve a bit easier at the start.</p>
 		</div>
 	</div>

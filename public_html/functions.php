@@ -55,6 +55,7 @@ function head($title, $home = "", $subtitle = "simple API interaction")
 			<nav>
 				<label for="drawer-control" class="drawer-close"></label>
 				<a href="/">Start page</a> 
+				<a href="/dropbox/">Dropbox</a>
 				<a href="/google/">Google Calendar</a> 
 				<a href="/quickbooks/">Quickbooks</a>
 				<a href="/twitter/">Twitter</a>
