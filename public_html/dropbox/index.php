@@ -30,26 +30,11 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			$token = $response['response'];
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
 			$cdata['token'] = $token;
-			// get user info
-			$url = $api_base . "/2/openid/userinfo";
-			$user_data = apiRequest($url, $token->access_token,'GET',['user.fields'=>'created_at,profile_image_url,description,location,entities,url,public_metrics']);
-			if ($user_data['code'] == 200)
-			{
-				$cdata['user'] = $user_data['response']->data;
-				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Connected - click to continue", $cdata['user']->name);
-				print footer("Disconnect", "");
-			}
-			else
-			{
-				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Connected - click to continue", "but failed to retrieve user info");
-				print footer("Disconnect", "");
-			}
+			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+			setcookie('challenge',"", time() - 3600, "/");  //delete cookie
+			setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+			print head($title, "Connected - click to continue", $cdata['user']->name);
+			print footer("Disconnect", "");
 		}
 		else
 		{
@@ -95,7 +80,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			// get user info
 			$cdata = unserialize($_COOKIE[$cookie]);
-			$url = $api_base . "/2/openid/userinfo";
+			$url = $api_base . "/2/users/get_current_account";
 			$response = apiRequest($url, $cdata['token']->access_token);
 			if ($response['code'] == 200)
 			{
