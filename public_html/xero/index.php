@@ -37,7 +37,13 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 			$tenants = apiRequest($urlConnections, $token->access_token);
 			if ($tenants['code'] == 200)
 			{
-				$cdata['tenants'] = $tenants['response'];
+				$cdata['tenants'] = 
+				$i = 0;
+				foreach ($tenants['response'] as $tenant)
+				{
+					$cdata['tenants'][$i]->tenantName = $tenant->tenantName;
+					$cdata['tenants'][$i++]->tenantId = $tenant->tenantId;
+				}
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue");
 				print footer("Disconnect", "");
