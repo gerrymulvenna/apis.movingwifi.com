@@ -162,6 +162,7 @@ elseif (!isset($_GET['code'])) {
 	print generic_button($connect,['client_id'=>$client_id,
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
+														'token_access_type'=>'offline',
 														'scope'=>implode(' ', $scopes),
 														'state'=>$state,
 														'code_challenge'=>$pkce,
