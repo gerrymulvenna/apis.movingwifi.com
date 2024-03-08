@@ -40,7 +40,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 				$cdata['user'] = $user_data['response']->data;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+				setcookie($cookie, gzcompress(serialize($cdata), 3), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue", $cdata['user']->name);
 				print footer("Disconnect", "");
 			}
@@ -48,7 +48,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			{
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+				setcookie($cookie, gzcompress(serialize($cdata), 3), strtotime('+6 months'), '/');
 				print head($title, "Connected - click to continue", "but failed to retrieve user info");
 				print footer("Disconnect", "");
 			}
@@ -81,7 +81,7 @@ elseif (isset($_COOKIE[$cookie]))
 	{
 		if($_REQUEST['operation'] == 'cookie')
 		{
-			$cdata = unserialize($_COOKIE[$cookie]);
+			$cdata = unserialize(gzuncompress($_COOKIE[$cookie]));
 			print head("$title | cookie contents", "Home");
 			print '<pre>';
 			print_r($cdata);
@@ -95,7 +95,7 @@ elseif (isset($_COOKIE[$cookie]))
 		}
 		elseif($_REQUEST['operation'] == 'tweet')
 		{
-			$cdata = unserialize($_COOKIE[$cookie]);
+			$cdata = unserialize(gzuncompress($_COOKIE[$cookie]));
 			$url = $api_base . "/2/tweets";
 			$response = apiRequest($url, $cdata['token']->access_token,'POST',['text'=>$_REQUEST['text']]);
 			// note response code of 201 for successfully created tweet
@@ -120,7 +120,7 @@ elseif (isset($_COOKIE[$cookie]))
 	else
 	{
 		$now = time();
-		$cdata = unserialize($_COOKIE[$cookie]);
+		$cdata = unserialize(gzuncompress($_COOKIE[$cookie]));
 		if ($now >  $cdata['access_token_expiry'])
 		{
 			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['token']->refresh_token, $client_id, $client_secret);
@@ -129,7 +129,7 @@ elseif (isset($_COOKIE[$cookie]))
 				$token = $response['response'];
 				$cdata['access_token_expiry'] = time() + $token->expires_in;
 				$cdata['token'] = $token;
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
+				setcookie($cookie, gzcompress(serialize($cdata), 3), strtotime('+6 months'), '/');
 				print head($title, "Refreshed", $cdata['user']->name);
 				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 				print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
