@@ -37,7 +37,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 			$tenants = apiRequest($urlConnections, $token->access_token);
 			if ($tenants['code'] == 200)
 			{
-				$cdata['tenants'] = 
+				$cdata['tenants'] = [];
 				$i = 0;
 				foreach ($tenants['response'] as $tenant)
 				{
