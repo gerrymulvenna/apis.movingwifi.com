@@ -197,11 +197,12 @@ function folders_summary($entries)
 {
 	$i = 0;
 	// field names in first row
-	$table[$i] = ['folder_id','name','path_lower'];
+	$table[$i] = ['id','.tag','name','path_lower'];
 	foreach ($entries as $folder)
 	{
 		$i++;
-		$table[$i][] =(property_exists($folder, 'folder_id')) ? $folder->folder_id : "";
+		$table[$i][] =(property_exists($folder, 'id')) ? $folder->id : "";
+		$table[$i][] =(property_exists($folder, '.tag')) ? $folder->.tag : "";
 		$table[$i][] =(property_exists($folder, 'name')) ? $folder->name : "";
 		$table[$i][] =(property_exists($folder, 'path_lower')) ? $folder->path_lower : "";
 	}
