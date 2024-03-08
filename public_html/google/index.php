@@ -182,6 +182,7 @@ elseif (isset($_COOKIE[$cookie]))
 		else
 		{
 			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
+			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected - click to continue", $cdata['user']->name);
 		}
 		print footer("Disconnect", "");
