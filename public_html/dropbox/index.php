@@ -166,7 +166,7 @@ elseif (!isset($_GET['code'])) {
 	}
 	else
 	{
-		$pkce = getRandomPkceCode(25);
+		$pkce = getRandomPkceCode(64);
 	}
 
     // store state in the session.
