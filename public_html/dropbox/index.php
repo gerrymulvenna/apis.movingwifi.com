@@ -195,17 +195,22 @@ elseif (!isset($_GET['code'])) {
 
 function folders_summary($entries)
 {
+	$items = []
+	foreach ($entries as $entry)
+	{
+		if (property_exists($entry, 'path_lower'))
+		{
+			$key = $entry->path_lower;
+			$items[$key][] = $key;
+			$table[$key][] =(property_exists($entry, 'name')) ? $entry->name : "";
+			$table[$key][] =(property_exists($entry, 'id')) ? $entry->id : "";
+			$table[$key][] =(property_exists($entry, '.tag')) ? $entry->{'.tag'} : "";
+		}
+	}
 	$i = 0;
 	// field names in first row
-	$table[$i] = ['id','.tag','name','path_lower'];
-	foreach ($entries as $folder)
-	{
-		$i++;
-		$table[$i][] =(property_exists($folder, 'id')) ? $folder->id : "";
-		$table[$i][] =(property_exists($folder, '.tag')) ? $folder->{'.tag'} : "";
-		$table[$i][] =(property_exists($folder, 'name')) ? $folder->name : "";
-		$table[$i][] =(property_exists($folder, 'path_lower')) ? $folder->path_lower : "";
-	}
-	return $table;
+	$table[0] = ['path_lower','name','id','.tag'];
+	// append the table values sorted by path_lower
+	return (array_merge(table, array_values(ksort(items))));
 }	
 ?>
