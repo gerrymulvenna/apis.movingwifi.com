@@ -85,7 +85,7 @@ elseif (isset($_COOKIE[$cookie]))
 			if ($data['code'] == 200)
 			{
 				print head("$title | folders", "Home");
-				$table = folder_summary($data['response']->entries);
+				$table = folders_summary($data['response']->entries);
 				print table_html($table);
 				print footer("Disconnect", "");
 			}
