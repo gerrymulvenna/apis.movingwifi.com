@@ -195,7 +195,6 @@ elseif (!isset($_GET['code'])) {
 
 function folders_summary($entries)
 {
-	$items = []
 	foreach ($entries as $entry)
 	{
 		if (property_exists($entry, 'path_lower'))
