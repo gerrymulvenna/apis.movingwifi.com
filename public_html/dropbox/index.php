@@ -34,7 +34,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['c
 			setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 			setcookie('challenge',"", time() - 3600, "/");  //delete cookie
 			setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-			print head($title, "Connected - click to continue", $cdata['user']->name);
+			print head($title, "Connected - click to continue");
 			print footer("Disconnect", "");
 		}
 		else
@@ -114,7 +114,7 @@ elseif (isset($_COOKIE[$cookie]))
 				$cdata['access_token_expiry'] = time() + $token->expires_in;
 				$cdata['token'] = $token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Refreshed", $cdata['user']->name);
+				print head($title, "Refreshed");
 				print generic_button("Display cookie",['operation'=>'cookie']);
 				print generic_button("Get user info",['operation'=>'user']);
 			}
