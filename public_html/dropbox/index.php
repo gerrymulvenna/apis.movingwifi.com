@@ -10,9 +10,8 @@ require "credentials.php";  //$client_id, $client_secret, $redirect_uri
 
 // API details
 $urlAuthorize = 'https://dropbox.com/oauth2/authorize';
-$urlAccessToken = 'https://api.twitter.com/2/oauth2/token';
-$urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
-$api_base = 'https://api.twitter.com';
+$urlAccessToken = 'https://api.dropboxapi.com/oauth2/token';
+$api_base = 'https://api.dropboxapi.com';
 
 $scopes =  ['account_info.read', 'files.metadata.read', 'files.content.read', 'profile', 'openid', 'email'];
 
