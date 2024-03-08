@@ -209,6 +209,6 @@ function folders_summary($entries)
 	// field names in first row
 	$table[0] = ['path_lower','name','id','.tag'];
 	// append the table values sorted by path_lower
-	return (array_merge($table, array_values(ksort(items))));
+	return (array_merge($table, array_values(ksort($items))));
 }	
 ?>
