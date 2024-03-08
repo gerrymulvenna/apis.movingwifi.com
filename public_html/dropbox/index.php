@@ -13,7 +13,7 @@ $urlAuthorize = 'https://dropbox.com/oauth2/authorize';
 $urlAccessToken = 'https://api.dropbox.com/oauth2/token';
 $api_base = 'https://api.dropboxapi.com';
 
-$scopes =  ['openid'];
+$scopes =  ['openid','profile','email'];
 
 // service-specific strings
 $title = "Dropbox";
