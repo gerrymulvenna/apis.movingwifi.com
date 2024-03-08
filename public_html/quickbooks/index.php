@@ -30,7 +30,8 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['real
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
 			$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
 			$cdata['realmId'] = $_GET['realmId'];
-			$cdata['token'] = $token;
+			$cdata['access_token'] = $token->access_token;
+			$cdata['refresh_token'] = $token->refresh_token;
 			// get company info
 			$url = $sandbox_base . "/v3/company/" . $cdata['realmId'] . "/companyinfo/" . $cdata['realmId'];
 			$data = apiRequest($url, $token->access_token);
@@ -95,7 +96,7 @@ elseif (isset($_COOKIE[$cookie]))
 			$query = http_build_query(['query'=>"SELECT * from Invoice order by txndate desc"]);
 			$url = "$sandbox_base/v3/company/" . $cdata['realmId'] . "/query?$query&minorversion=70";
 
-			$data = apiRequest($url, $cdata['token']->access_token);
+			$data = apiRequest($url, $cdata['access_token']);
 			if ($data['code'] == 200)
 			{
 				print head("$title | invoices", "Home", $cdata['CompanyName']);
@@ -116,7 +117,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $sandbox_base . "/v3/company/" . $cdata['realmId'] . "/companyinfo/" . $cdata['realmId'];
-			$data = apiRequest($url, $cdata['token']->access_token);
+			$data = apiRequest($url, $cdata['access_token']);
 			if ($data['code'] == 200)
 			{
 				print head("$title | company", "Home", $cdata['CompanyName']);
@@ -141,13 +142,14 @@ elseif (isset($_COOKIE[$cookie]))
 		$cdata = unserialize($_COOKIE[$cookie]);
 		if ($now > $cdata['access_token_expiry'])
 		{
-			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['token']->refresh_token, $client_id, $client_secret);
+			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['refresh_token'], $client_id, $client_secret);
 			if ($response['code'] == 200)
 			{
 				$token = $response['response'];
 				$cdata['access_token_expiry'] = time() + $token->expires_in;
 				$cdata['refresh_token_expiry'] = time() + $token->x_refresh_token_expires_in;
-				$cdata['token'] = $token;
+				$cdata['access_token'] = $token->access_token;
+				$cdata['refresh_token'] = $token->refresh_token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
 				print head($title, "Refreshed", $cdata['CompanyName']);
 				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
