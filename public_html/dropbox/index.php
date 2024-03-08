@@ -87,7 +87,7 @@ elseif (isset($_COOKIE[$cookie]))
 			{
 				print head("$title | folders", "Home");
 				$table = folders_summary($data['response']->entries);
-				print table_html($table);
+				print table_folders_html($table);
 				print footer("Disconnect", "");
 			}
 			else
@@ -234,7 +234,7 @@ function table_folders_html($data)
 			if ($label == 'path_lower')
 			{
 				// this relies on knowing that the fourth element is .tag, i.e. file or folder
-				if ($row[3] == 'folder'))
+				if ($row[3] == 'folder')
 				{
 					$html .= "<td data-label=\"$label\"><a href=\"./?operation=folders&path=$cell\">$cell</a></td>\n";
 				}
