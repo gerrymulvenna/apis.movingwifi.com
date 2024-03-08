@@ -81,7 +81,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = "$api_base/2/files/list_folder";
-			$data = apiRequest($url, $cdata['token']->access_token, 'POST', ["recursive"=>false]);
+			$data = apiRequest($url, $cdata['token']->access_token, 'POST', ["recursive"=>false,"path"=>""]);
 			if ($data['code'] == 200)
 			{
 				print head("$title | folders", "Home");
