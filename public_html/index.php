@@ -23,6 +23,17 @@ print head("Some simple API interactions");
 		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 			<div class="card alignleft warning">
 				<div class="section">
+					<a href="/dropbox" class="primary button">Dropbox</a>
+				</div>
+				<div class="section")
+					<p>Display a list of folders. Click on any folder in that list.</p>
+					<p><a href="https://www.dropbox.com/developers">The Dropbox Platform for Developers</a></p>
+				</div>
+			</div>
+		</div>
+		<div class="col-sm-12 col-md-5 col-lg-4">
+			<div class="card alignleft warning">
+				<div class="section">
 					<a href="/google" class="primary button">Google Calendar</a>
 				</div>
 				<div class="section")
@@ -31,7 +42,7 @@ print head("Some simple API interactions");
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-5 col-lg-4">
+		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 			<div class="card alignleft warning">
 				<div class="section">
 					<a href="/quickbooks" class="primary button">Quickbooks</a>
@@ -42,7 +53,7 @@ print head("Some simple API interactions");
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
+		<div class="col-sm-12 col-md-5 col-lg-4">
 			<div class="card alignleft warning">
 				<div class="section">
 					<a href="/twitter" class="primary button">Twitter</a>
@@ -53,7 +64,7 @@ print head("Some simple API interactions");
 				</div>
 			</div>
 		</div>
-		<div class="col-sm-12 col-md-5 col-lg-4">
+		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
 			<div class="card alignleft warning">
 				<div class="section">
 					<a href="/xero" class="primary button">Xero</a>
@@ -61,17 +72,6 @@ print head("Some simple API interactions");
 				<div class="section")
 					<p>List the Xero "tenants" and display customers and suppliers.</p>
 					<p><a href="https://developer.xero.com/documentation/api/accounting/overview">The Xero Accounting API Overview</a></p>
-				</div>
-			</div>
-		</div>
-		<div class="col-sm-12 col-md-5 col-md-offset-1 col-lg-4 col-lg-offset-2">
-			<div class="card alignleft warning">
-				<div class="section">
-					<a href="/dropbox" class="primary button">Dropbox</a>
-				</div>
-				<div class="section")
-					<p>Display a list of folders. Click on any folder in that list.</p>
-					<p><a href="https://www.dropbox.com/developers">The Dropbox Platform for Developers</a></p>
 				</div>
 			</div>
 		</div>
