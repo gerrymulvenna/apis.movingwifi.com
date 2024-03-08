@@ -13,7 +13,7 @@ $urlAuthorize = 'https://dropbox.com/oauth2/authorize';
 $urlAccessToken = 'https://api.dropbox.com/oauth2/token';
 $api_base = 'https://api.dropboxapi.com';
 
-$scopes =  ['account_info.read', 'files.metadata.read', 'files.content.read', 'profile', 'openid', 'email'];
+$scopes =  ['openid'];
 
 // service-specific strings
 $title = "Dropbox";
@@ -164,6 +164,7 @@ elseif (!isset($_GET['code'])) {
 	                                                    'response_type'=>'code',
 														'redirect_uri'=>$redirect_uri,
 														'token_access_type'=>'offline',
+														'scope'=>implode(' ', $scopes),
 														'state'=>$state,
 														'code_challenge'=>$pkce,
 														'code_challenge_method'=>'plain'], "tertiary", "GET", $urlAuthorize);
