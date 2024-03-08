@@ -201,15 +201,14 @@ function folders_summary($entries)
 		{
 			$key = $entry->path_lower;
 			$items[$key][] = $key;
-			$table[$key][] =(property_exists($entry, 'name')) ? $entry->name : "";
-			$table[$key][] =(property_exists($entry, 'id')) ? $entry->id : "";
-			$table[$key][] =(property_exists($entry, '.tag')) ? $entry->{'.tag'} : "";
+			$items[$key][] =(property_exists($entry, 'name')) ? $entry->name : "";
+			$items[$key][] =(property_exists($entry, 'id')) ? $entry->id : "";
+			$items[$key][] =(property_exists($entry, '.tag')) ? $entry->{'.tag'} : "";
 		}
 	}
-	$i = 0;
 	// field names in first row
 	$table[0] = ['path_lower','name','id','.tag'];
 	// append the table values sorted by path_lower
-	return (array_merge(table, array_values(ksort(items))));
+	return (array_merge($table, array_values(ksort(items))));
 }	
 ?>
