@@ -35,7 +35,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 			$cdata['refresh_token_expiry'] = strtotime('+60 days');
 			// get tenants
 			$response = apiRequest($urlConnections, $token->access_token);
-			if ($tenants['code'] == 200)
+			if ($response['code'] == 200)
 			{
 //				$cdata['tenants'] = $response['response'];
 				$tenants =  $response['response'];
