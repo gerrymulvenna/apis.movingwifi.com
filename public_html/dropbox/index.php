@@ -81,7 +81,8 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = "$api_base/2/files/list_folder";
-			$data = apiRequest($url, $cdata['token']->access_token, 'POST', ["recursive"=>false,"path"=>""]);
+			$path = $_REQUEST['path'];
+			$data = apiRequest($url, $cdata['token']->access_token, 'POST', ["recursive"=>false,"path"=>$path]);
 			if ($data['code'] == 200)
 			{
 				print head("$title | folders", "Home");
@@ -138,7 +139,7 @@ elseif (isset($_COOKIE[$cookie]))
 				print head($title, "Refreshed");
 				print generic_button("Display cookie",['operation'=>'cookie']);
 				print generic_button("Get user info",['operation'=>'user']);
-				print generic_button("List folders",['operation'=>'folders']);
+				print generic_button("List folders",['operation'=>'folders','path'=>'']);
 			}
 			else
 			{
@@ -153,7 +154,7 @@ elseif (isset($_COOKIE[$cookie]))
 			print head($title, "Home");
 			print generic_button("Display cookie",['operation'=>'cookie']);
 			print generic_button("Get user info",['operation'=>'user']);
-			print generic_button("List folders",['operation'=>'folders']);
+			print generic_button("List folders",['operation'=>'folders','path'=>'']);
 		}
 		print footer("Disconnect", "");
 	}
@@ -211,5 +212,46 @@ function folders_summary($entries)
 	// append the table values sorted by path_lower
 	ksort($items);
 	return (array_merge($table, array_values($items)));
-}	
+}
+
+function table_folders_html($data)
+{
+	$html = "<table class=\"tight\"><thead><tr>\n";
+	$headings = array_shift($data);
+	foreach ($headings as $fieldname)
+	{
+		$html .= "<th data-label=\"$fieldname\">$fieldname</th>\n";
+	}
+	$html .= "</tr></thead><tbody>\n";
+	
+	foreach ($data as $row)
+	{
+		$i = 0;
+		$html .= "<tr>\n";
+		foreach ($row as $cell)
+		{
+			$label = $headings[$i++];
+			if ($label == 'path_lower')
+			{
+				// this relies on knowing that the fourth element is .tag, i.e. file or folder
+				if ($row[3] == 'folder'))
+				{
+					$html .= "<td data-label=\"$label\"><a href=\"./?operation=folders&path=$cell\">$cell</a></td>\n";
+				}
+				else
+				{
+					$html .= "<td data-label=\"$label\">$cell</td>\n";
+				}
+			}
+			else
+			{
+				$html .= "<td data-label=\"$label\">$cell</td>\n";
+			}
+		}
+		$html .= "</tr>\n";
+	}
+	$html .= "</tbody></table>\n";
+	return $html;
+}
+	
 ?>
