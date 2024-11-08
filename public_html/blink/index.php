@@ -37,7 +37,7 @@ if (isset($_REQUEST['operation']))
 	elseif($_REQUEST['operation'] == 'revoke')
 	{
 		setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-		print head($title, "Disconnected");
+		print head($title, "Disconnected", "Token revoked");
 	}
 	elseif($_REQUEST['operation'] == 'token')
 	{
@@ -46,8 +46,7 @@ if (isset($_REQUEST['operation']))
 		{
 			$token = $data['response'];
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
-			print head($title, "Connected", "Token acquired");
-			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+			print head($title, "Connected - click to continue", "Token acquired");
 		}
 		else
 		{
@@ -62,6 +61,7 @@ if (isset($_REQUEST['operation']))
 elseif(isset($_COOKIE[$cookie]))
 {
 	print head($title, "Home", "Ready for payments");
+	print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 	print footer("Disconnect", "");
 }
 else 
