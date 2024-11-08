@@ -68,53 +68,20 @@ function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
 	{
 		$params[$key] = $value;
 	}
-	
+	$headers = array(
+		"Content-Type: application/json",
+		"Accept: application/json",
+	);	
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
-    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/json', 'Accept' => 'application/json']);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
-    // Output the header in the response.
-    curl_setopt($ch, CURLOPT_HEADER, TRUE);
-	
     $response = curl_exec($ch);
-    $error = curl_error($ch);
-    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
-    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     curl_close($ch);
 
-    // Set the header, response, error and http code.
-	$data = [];
-	$data['header'] = substr($response, 0, $header_size);
-    $data['response'] = json_decode(substr($response, $header_size));
-    $data['error'] = $error;
-    $data['code'] = $http_code;
-	return $data;
+	return $response;
 }
 
-
-// OPTIONS:   curl_setopt($curl, CURLOPT_URL, $url);   curl_setopt($curl, CURLOPT_HTTPHEADER, array(      'APIKEY: 111111111111111111111',      'Content-Type: application/json',   ));   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);   curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);   // EXECUTE:   $result = curl_exec($curl);   if(!$result){die("Connection Failure");}   curl_close($curl);   return $result;
-function callAPI($method, $url, $data)
-{
-	$curl = curl_init();
-	switch (strtoupper($method))
-	{      
-		case "POST":
-			curl_setopt($curl, CURLOPT_POST, 1);
-			if ($data)
-				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-			break;
-		case "PUT":
-			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
-			if ($data)
-				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
-			break;
-		default:
-			if ($data)
-				$url = sprintf("%s?%s", $url, http_build_query($data));
-	}
-}
 ?>
