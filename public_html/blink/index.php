@@ -81,6 +81,14 @@ elseif(isset($_COOKIE[$cookie]))
 		print generic_button("Get SALE intent",['operation'=>'sale-intent'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 		print footer("Disconnect", "Access expires on " . $token['expired_on']);
+	}
+	else
+	{
+		print head($title, "Click to continue", "Invalid token data");
+		print "<pre>\n";
+		print_r($token);
+		print "</pre>\n";
+	}
 }
 else 
 {
