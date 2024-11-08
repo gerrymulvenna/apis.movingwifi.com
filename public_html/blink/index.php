@@ -1,5 +1,5 @@
 <?php
-// a simple Twitter API example using PHP
+// a simple Blink API example using PHP
 error_reporting(-1);
 //set Timezone
 date_default_timezone_set('Europe/London');
@@ -35,7 +35,7 @@ if (isset($_REQUEST['operation']))
 	elseif($_REQUEST['operation'] == 'token')
 	{
 		$response = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key);
-		print head($title, "Token response");
+		print head($title, "Home", "Token response");
 		print_r($response);
 	}
 }
