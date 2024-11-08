@@ -10,7 +10,7 @@ require "credentials.php";  //$secret_key, $api_key
 
 // API details
 $urlAccessToken = 'https://secure.blinkpayment.co.uk/api/pay/v1/tokens';
-$api_base = 'https://secure.blinkpayment.co.uk/';
+$api_base = 'https://secure.blinkpayment.co.uk';
 
 // service-specific strings
 $title = "Blink";
