@@ -6,7 +6,7 @@ date_default_timezone_set('Europe/London');
 
 require "../functions.php";
 // you will need to create the credentials.php file and define your unique credentials for this service
-require "credentials.php";  //$client_id, $client_secret, $redirect_uri
+require "credentials.php";  //$secret_key, $api_key
 
 // API details
 $urlAccessToken = 'https://secure.blinkpayment.co.uk/api/pay/v1/tokens';
@@ -34,39 +34,12 @@ if (isset($_COOKIE[$cookie]))
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
 		}
-	}
-	else
-	{
-		$now = time();
-		$cdata = unserialize($_COOKIE[$cookie]);
-		if ($now >  $cdata['access_token_expiry'])
+		elseif($_REQUEST['operation'] == 'token')
 		{
-			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['refresh_token'], $client_id, $client_secret);
-			if ($response['code'] == 200)
-			{
-				$token = $response['response'];
-				$cdata['access_token_expiry'] = time() + $token->expires_in;
-				$cdata['access_token'] = $token->access_token;
-				$cdata['refresh_token'] = $token->refresh_token;
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Refreshed", $cdata['name']);
-				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			}
-			else
-			{
-				setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				print head($title, "Refresh failed - click to continue");
-			}	
+			$response = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key);
+			print head($title, "Token response");
+			print_r($response);
 		}
-		else
-		{
-			print head($title, "Home", $cdata['name']);
-			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
-		}
-		print footer("Disconnect", "");
 	}
 }
 // If we don't have an authorization code then get one
