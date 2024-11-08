@@ -64,6 +64,8 @@ if (isset($_REQUEST['operation']))
 		{
 			$token = unserialize($_COOKIE[$cookie]);
 			$data = blinkAPIrequest($api_base . "/api/pay/v1/intents", $token->access_token, array(
+				"transaction_type" => "SALE",
+				"payment_type" => "credit-card",
 				"amount" => 10.00, 
 				"currency" => "GBP", 
 				"return_url" => "https://apis.movingwifi.com/blink/return.php",
