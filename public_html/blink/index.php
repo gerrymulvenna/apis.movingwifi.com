@@ -76,7 +76,7 @@ if (isset($_REQUEST['operation']))
 			{
 				print blink_head($title, "Click to continue", "Intent response");
 				print "<form method=\"POST\" action=\"process\" id=\"payment\">\n";
-				print $data["response"]["element"]["ccMotoElement"];
+				print $data["response"]->element->ccMotoElement;
 				print "<input type=\"hidden\" id=\"merchant_data\" name=\"merchant_data\" value=\"{\\\"order_id\\\": \\\"12345\\\"}\" />\n";
 				print "<button type=\"submit\">Pay</button>\n";
 				print "</form>\n";
