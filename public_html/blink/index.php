@@ -59,9 +59,7 @@ else
 function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
 {
 	//build the default parameters
-	$params = [];
-	$params['api_key'] = $api_key;
-	$params['secret_key'] = $secret_key;
+	$params = array("api_key" => $api_key, "secret_key" => $secret_key);
 	
 	// add any extra params
 	foreach($extra_params as $key => $value)
