@@ -89,6 +89,8 @@ function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
     $response = curl_exec($ch);
     $error = curl_error($ch);
     $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
