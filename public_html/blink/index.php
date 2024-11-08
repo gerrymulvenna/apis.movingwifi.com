@@ -80,7 +80,7 @@ elseif(isset($_COOKIE[$cookie]))
 		print head($title, "Home", "Ready for payments");
 		print generic_button("Get SALE intent",['operation'=>'sale-intent'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-		print footer("Disconnect", "Access expires on " . $token->expired_on);
+		print footer("Disconnect", "Access expires on " . $token->expired_on . " vs " . $now);
 	}
 	else
 	{
