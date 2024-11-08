@@ -16,30 +16,27 @@ $title = "Blink";
 $connect = "Get Blink Token";
 $cookie = "movingwifi-blink";
 
-if (isset($_COOKIE[$cookie]))
+if (isset($_REQUEST['operation']))
 {
-	if (isset($_REQUEST['operation']))
+	if($_REQUEST['operation'] == 'cookie')
 	{
-		if($_REQUEST['operation'] == 'cookie')
-		{
-			$cdata = unserialize($_COOKIE[$cookie]);
-			print head("$title | cookie contents", "Home");
-			print '<pre>';
-			print_r($cdata);
-			print '</pre>';
-			print footer("Disconnect", "");
-		}
-		elseif($_REQUEST['operation'] == 'revoke')
-		{
-			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-			print head($title, "Disconnected");
-		}
-		elseif($_REQUEST['operation'] == 'token')
-		{
-			$response = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key);
-			print head($title, "Token response");
-			print_r($response);
-		}
+		$cdata = unserialize($_COOKIE[$cookie]);
+		print head("$title | cookie contents", "Home");
+		print '<pre>';
+		print_r($cdata);
+		print '</pre>';
+		print footer("Disconnect", "");
+	}
+	elseif($_REQUEST['operation'] == 'revoke')
+	{
+		setcookie($cookie,"", time() - 3600, "/");  //delete cookie
+		print head($title, "Disconnected");
+	}
+	elseif($_REQUEST['operation'] == 'token')
+	{
+		$response = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key);
+		print head($title, "Token response");
+		print_r($response);
 	}
 }
 // If we don't have an authorization code then get one
