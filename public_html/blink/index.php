@@ -58,6 +58,11 @@ if (isset($_REQUEST['operation']))
 			print "</pre>\n";
 		}	
 	}
+	elseif($_REQUEST['operation'] == 'payment-form')
+	{
+		print blink_head($title, "Home", "Make payment");
+		print payment_form();
+	}
 	elseif($_REQUEST['operation'] == 'sale-intent')
 	{
 		if (isset($_COOKIE[$cookie]))
@@ -75,11 +80,9 @@ if (isset($_REQUEST['operation']))
 			if ($data['code'] == 201)
 			{
 				print blink_head($title, "Click to continue", "Intent response");
-				print "<form method=\"POST\" action=\"process\" id=\"payment\">\n";
-				print $data["response"]->element->ccMotoElement;
-				print "<input type=\"hidden\" id=\"merchant_data\" name=\"merchant_data\" value=\"{\\\"order_id\\\": \\\"12345\\\"}\" />\n";
-				print "<button type=\"submit\">Pay</button>\n";
-				print "</form>\n";
+				print "<pre>\n";
+				print_r($data["response"]);
+				print "</pre>\n";
 			}
 			else
 			{
@@ -115,7 +118,8 @@ elseif(isset($_COOKIE[$cookie]))
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 		}
 		print blink_head($title, "Home", "Ready for payments");
-		print generic_button("Create payment form",['operation'=>'sale-intent'], "tertiary", "GET", "./");
+		print generic_button("Get intent",['operation'=>'sale-intent'], "tertiary", "GET", "./");
+		print generic_button("Payment form",['operation'=>'payment-form'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 		print footer("Disconnect", "Access expires " . $token->expired_on . "<br>Time now " . $now );
 	}
@@ -260,6 +264,47 @@ function blink_head($title, $home = "", $subtitle = "simple API interaction")
 			<p>' . $subtitle . '</p>
 		</div>';
 	}
+	return $html;
+}
+
+
+function payment_form (
+{
+	$html = '<form id="BlinkForm" method="POST" action="./">
+		<input type="hidden" id="operation" value="payment">
+		<table class="table" style="width:fit-content;">
+			<tbody>
+				<tr>
+					<td><label for="BlinkAmount" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">AMOUNT</label></td>
+					<td><input type="text" style="padding:10px;" id="BlinkAmount" value="" placeholder="AMOUNT TO PAY" required></td>
+				</tr>
+				<tr>
+					<td><label for="BlinkCardNo" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">CARD NO</label></td>
+					<td><input type="text" style="padding:10px;" id="BlinkCardNo" value="" placeholder="16 DIGIT CARD NUMBER" required></td>
+				</tr>
+				<tr>
+					<td><label for="BlinkExpiry" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">EXPIRY</label></td>
+					<td>
+						<input type="text" style="width:5rem;padding:10px;" id="BlinkExpiry" value="" placeholder="MM/YY" maxlength="5" required>
+					</td>
+				</tr>
+				<tr>
+					<td><label for="BlinkCVV" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">CVC NO</label></td>
+					<td><input type="text" style="padding:10px;" id="BlinkCVV" value="" placeholder="3 DIGITS FROM BACK" inputmode="numeric" maxlength="3" required></td>
+				</tr>
+			</tbody>
+		</table>
+		<div>
+			<h4 style="color:red;">Please note:</h4>
+			<ul>
+				<li>We never store credit card numbers.</li>
+				<li>Your card number is only used to process <strong>this</strong> payment.</li>
+			</ul>
+		</div>
+		<div>
+			<button id="BlinkSubmit" type="submit" class="tertiary" style="padding:3px;margin-left:10px;">Make payment</button>
+		</div>
+	</form>';
 	return $html;
 }
 
