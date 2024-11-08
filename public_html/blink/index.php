@@ -62,6 +62,7 @@ if (isset($_REQUEST['operation']))
 elseif(isset($_COOKIE[$cookie]))
 {
 	print head($title, "Home", "Ready for payments");
+	print footer("Disconnect", "");
 }
 else 
 {
