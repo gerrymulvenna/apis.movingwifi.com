@@ -60,9 +60,27 @@ if (isset($_REQUEST['operation']))
 }
 elseif(isset($_COOKIE[$cookie]))
 {
-	print head($title, "Home", "Ready for payments");
-	print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-	print footer("Disconnect", "");
+	$token = unserialize($_COOKIE[$cookie]);
+	if (isset($token['expired_on']))
+	{
+		$now = time();
+		if ($now >  $token['expired_on'])
+		{
+			$data = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key, array("enable_moto_payments" => true, "application_name" => "MOT Manager Sandbox", "source_site"=>"apis.movingwifi.com"));
+			if ($data['code'] == 201)
+			{
+				$token = $data['response'];
+				setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
+			}
+		}
+		else
+		{
+			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
+		}
+		print head($title, "Home", "Ready for payments");
+		print generic_button("Get SALE intent",['operation'=>'sale-intent'], "tertiary", "GET", "./");
+		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+		print footer("Disconnect", "Access expires on " . $token['expired_on']);
 }
 else 
 {
