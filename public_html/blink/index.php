@@ -225,7 +225,7 @@ function blinkAPIrequest($url, $access_token, $params = [])
  * @param string $subtitle Subtitle text
  * @return string
  */
-function blink_head($title, $home = "", $subtitle = "simple API interaction")
+function blink_head($title, $home = "", $subtitle = "Blink API demo")
 {
 	$html = '<html>
 	<head>
@@ -268,7 +268,7 @@ function blink_head($title, $home = "", $subtitle = "simple API interaction")
 }
 
 
-function payment_form (
+function payment_form ()
 {
 	$html = '<form id="BlinkForm" method="POST" action="./">
 		<input type="hidden" id="operation" value="payment">
