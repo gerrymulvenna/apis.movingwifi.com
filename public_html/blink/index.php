@@ -20,12 +20,19 @@ if (isset($_REQUEST['operation']))
 {
 	if($_REQUEST['operation'] == 'cookie')
 	{
-		$cdata = unserialize($_COOKIE[$cookie]);
-		print head("$title | cookie contents", "Home");
-		print '<pre>';
-		print_r($cdata);
-		print '</pre>';
-		print footer("Disconnect", "");
+		if (isset($_COOKIE[$cookie]))
+		{
+			$cdata = unserialize($_COOKIE[$cookie]);
+			print head("$title | cookie contents", "Home", "Cookie contents");
+			print '<pre>';
+			print_r($cdata);
+			print '</pre>';
+			print footer("Disconnect", "");
+		}
+		else
+		{
+			print head("$title", "Click to continue", "No cookie found");
+		}
 	}
 	elseif($_REQUEST['operation'] == 'revoke')
 	{
@@ -51,6 +58,10 @@ if (isset($_REQUEST['operation']))
 			print "</pre>\n";
 		}	
 	}
+}
+elseif(isset($_COOKIE[$cookie]))
+{
+	print head($title, "Home", "Ready for payments");
 }
 else 
 {
