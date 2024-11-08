@@ -68,6 +68,8 @@ function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
 	{
 		$params[$key] = $value;
 	}
+	
+	return json_encode($params);
     // Set up cURL options.
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
