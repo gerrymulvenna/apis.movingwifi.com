@@ -35,8 +35,7 @@ if (isset($_REQUEST['operation']))
 	elseif($_REQUEST['operation'] == 'token')
 	{
 		$data = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key, array("enable_moto_payments" => true, "application_name" => "MOT Manager Sandbox", "source_site"=>"apis.movingwifi.com"));
-//		if ($data['code'] == 200 || $data['code'] == 201)
-		if ($data['code'] == 4000)	
+		if ($data['code'] == 201)
 		{
 			$token = $data['response'];
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
