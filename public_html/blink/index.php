@@ -24,7 +24,7 @@ if (isset($_REQUEST['operation']))
 		if (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
-			print head("$title | cookie contents", "Home", "Cookie contents");
+			print blink_head("$title | cookie contents", "Home", "Cookie contents");
 			print '<pre>';
 			print_r($cdata);
 			print '</pre>';
@@ -32,13 +32,13 @@ if (isset($_REQUEST['operation']))
 		}
 		else
 		{
-			print head("$title", "Click to continue", "No cookie found");
+			print blink_head("$title", "Click to continue", "No cookie found");
 		}
 	}
 	elseif($_REQUEST['operation'] == 'revoke')
 	{
 		setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-		print head($title, "Disconnected", "Token revoked");
+		print blink_head($title, "Disconnected", "Token revoked");
 	}
 	elseif($_REQUEST['operation'] == 'token')
 	{
@@ -47,12 +47,12 @@ if (isset($_REQUEST['operation']))
 		{
 			$token = $data['response'];
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
-			print head($title, "Connected - click to continue", "Token acquired");
+			print blink_head($title, "Connected - click to continue", "Token acquired");
 		}
 		else
 		{
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-			print head($title, "Click to continue", "Request failed");
+			print blink_head($title, "Click to continue", "Request failed");
 			print "<pre>\n";
 			print_r($data);
 			print "</pre>\n";
@@ -74,14 +74,16 @@ if (isset($_REQUEST['operation']))
 			);
 			if ($data['code'] == 201)
 			{
-				print head($title, "Click to continue", "Intent response");
-				print "<pre>\n";
-				print_r($data['response']);
-				print "</pre>\n";
+				print blink_head($title, "Click to continue", "Intent response");
+				print "<form method=\"POST\" action=\"process\" id=\"payment\">\n";
+				print $data["response"]["element"]["ccMotoElement"];
+				print "<input type=\"hidden\" id=\"merchant_data\" name=\"merchant_data\" value=\"{\\\"order_id\\\": \\\"12345\\\"}\" />\n";
+				print "<button type=\"submit\">Pay</button>\n";
+				print "</form>\n";
 			}
 			else
 			{
-				print head($title, "Click to continue", "Request failed");
+				print blink_head($title, "Click to continue", "Request failed");
 				print "<pre>\n";
 				print_r($data);
 				print "</pre>\n";
@@ -89,7 +91,7 @@ if (isset($_REQUEST['operation']))
 		}
 		else
 		{
-			print head($title, "Click to continue", "No cookie found");
+			print blink_head($title, "Click to continue", "No cookie found");
 		}
 	}
 }
@@ -112,14 +114,14 @@ elseif(isset($_COOKIE[$cookie]))
 		{
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 		}
-		print head($title, "Home", "Ready for payments");
-		print generic_button("Get SALE intent",['operation'=>'sale-intent'], "tertiary", "GET", "./");
+		print blink_head($title, "Home", "Ready for payments");
+		print generic_button("Create payment form",['operation'=>'sale-intent'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 		print footer("Disconnect", "Access expires " . $token->expired_on . "<br>Time now " . $now );
 	}
 	else
 	{
-		print head($title, "Click to continue", "Invalid token data");
+		print blink_head($title, "Click to continue", "Invalid token data");
 		print "<pre>\n";
 		print_r($token);
 		print "</pre>\n";
@@ -128,7 +130,7 @@ elseif(isset($_COOKIE[$cookie]))
 else 
 {
     // display get token button
-	print head($title);
+	print blink_head($title);
 	print generic_button($connect,['operation'=>'token'], "tertiary", "GET", "./");
 }
 
@@ -210,5 +212,59 @@ function blinkAPIrequest($url, $access_token, $params = [])
     $data['code'] = $http_code;
 	return $data;
 }
+
+/**
+ * Returns HTML for <head>  + start of <body> sections
+ *
+ * @param string $title Title text
+ * @param string $home Display this text on home button, if blank don't include a home button
+ * @param string $subtitle Subtitle text
+ * @return string
+ */
+function blink_head($title, $home = "", $subtitle = "simple API interaction")
+{
+	$html = '<html>
+	<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>' . $title . '</title>
+	<link rel="stylesheet" href="/css/mini-default.css">
+	<link rel="stylesheet" href="/css/style.css">
+	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
+	<script src="https://gateway2.blinkpayment.co.uk/sdk/web/v1/js/hostedfields.min.js"></script>
+	<script src="https://secure.blinkpayment.co.uk/assets/js/api/custom.js"></script>
+	</head>
+	';
+	$html .= '<body>
+	<header class="sticky">
+		<div>
+			<h3 class="headline">' . $title . '</h3>
+			<label for="drawer-control" class="drawer-toggle persistent"></label> 
+			<input type="checkbox" id="drawer-control" class="drawer persistent">
+			<nav>
+				<label for="drawer-control" class="drawer-close"></label>
+				<a href="/">Start page</a> 
+				<a href="/dropbox/">Dropbox</a>
+				<a href="/google/">Google Calendar</a> 
+				<a href="/quickbooks/">Quickbooks</a>
+				<a href="/twitter/">Twitter</a>
+				<a href="/xero/">Xero</a>
+				<a href="https://github.com/gerrymulvenna/apis.movingwifi.com">View code on GitHub</a>
+			</nav>
+		</div>
+	</header>
+	<div class="container">';
+	if (!empty($home))
+	{
+		$html .= '
+		<div class="card large">
+			<a id="home" class="button primary" href="./">' . $home . '</a>
+			<p>' . $subtitle . '</p>
+		</div>';
+	}
+	return $html;
+}
+
 
 ?>
