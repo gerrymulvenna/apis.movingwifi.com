@@ -72,10 +72,20 @@ if (isset($_REQUEST['operation']))
 				"notification_url" => "https://apis.movingwifi.com/blink/notification.php",
 				)
 			);
-			print head($title, "Click to continue", "Intent response");
-			print "<pre>\n";
-			print_r($data);
-			print "</pre>\n";
+			if ($data['code'] == 201)
+			{
+				print head($title, "Click to continue", "Intent response");
+				print "<pre>\n";
+				print_r($data['response']);
+				print "</pre>\n";
+			}
+			else
+			{
+				print head($title, "Click to continue", "Request failed");
+				print "<pre>\n";
+				print_r($data);
+				print "</pre>\n";
+			}
 		}
 		else
 		{
