@@ -36,7 +36,9 @@ if (isset($_REQUEST['operation']))
 	{
 		$response = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key);
 		print head($title, "Home", "Token response");
+		print "<pre>\n";
 		print_r($response);
+		print "</pre>\n";
 	}
 }
 // If we don't have an authorization code then get one
@@ -67,20 +69,14 @@ function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
 		$params[$key] = $value;
 	}
 	
-	return json_encode($params);
     // Set up cURL options.
     $ch = curl_init();
-	curl_setopt($ch, CURLOPT_VERBOSE, true);
-	$eh = fopen('curl.log', 'w+');
-	curl_setopt($ch, CURLOPT_STDERR, $eh);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/json', 'Accept' => 'application/json']);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
-    curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
 	curl_setopt($ch, CURLOPT_POST, true);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
-	
-	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type' => 'application/json', 'Accept' => 'application/json']);
     // Output the header in the response.
     curl_setopt($ch, CURLOPT_HEADER, TRUE);
 	
@@ -100,4 +96,25 @@ function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
 }
 
 
+// OPTIONS:   curl_setopt($curl, CURLOPT_URL, $url);   curl_setopt($curl, CURLOPT_HTTPHEADER, array(      'APIKEY: 111111111111111111111',      'Content-Type: application/json',   ));   curl_setopt($curl, CURLOPT_RETURNTRANSFER, 1);   curl_setopt($curl, CURLOPT_HTTPAUTH, CURLAUTH_BASIC);   // EXECUTE:   $result = curl_exec($curl);   if(!$result){die("Connection Failure");}   curl_close($curl);   return $result;
+function callAPI($method, $url, $data)
+{
+	$curl = curl_init();
+	switch (strtoupper($method))
+	{      
+		case "POST":
+			curl_setopt($curl, CURLOPT_POST, 1);
+			if ($data)
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+			break;
+		case "PUT":
+			curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "PUT");
+			if ($data)
+				curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+			break;
+		default:
+			if ($data)
+				$url = sprintf("%s?%s", $url, http_build_query($data));
+	}
+}
 ?>
