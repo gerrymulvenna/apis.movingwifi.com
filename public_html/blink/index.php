@@ -225,15 +225,12 @@ function blink_head($title, $home = "", $subtitle = "simple API interaction")
 {
 	$html = '<html>
 	<head>
-	<meta charset="utf-8">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-	<title>' . $title . '</title>
-	<link rel="stylesheet" href="/css/mini-default.css">
-	<link rel="stylesheet" href="/css/style.css">
-	<script src="https://code.jquery.com/jquery-3.6.3.min.js"></script>
-	<script src="https://gateway2.blinkpayment.co.uk/sdk/web/v1/js/hostedfields.min.js"></script>
-	<script src="https://secure.blinkpayment.co.uk/assets/js/api/custom.js"></script>
+		<meta charset="utf-8">
+		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<title>' . $title . '</title>
+		<link rel="stylesheet" href="/css/mini-default.css">
+		<link rel="stylesheet" href="/css/style.css">
 	</head>
 	';
 	$html .= '<body>
