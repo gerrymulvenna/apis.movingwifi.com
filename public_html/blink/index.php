@@ -173,7 +173,7 @@ function blinkAPIrequest($url, $access_token, $params = [])
 	$headers = array(
 		"Content-Type: application/json",
 		"Accept: application/json",
-		"Authorizations: Bearer $access_token",
+		"Authorization: Bearer $access_token",
 	);	
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_URL, $url);
