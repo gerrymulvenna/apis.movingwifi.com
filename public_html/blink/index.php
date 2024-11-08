@@ -34,14 +34,24 @@ if (isset($_REQUEST['operation']))
 	}
 	elseif($_REQUEST['operation'] == 'token')
 	{
-		$response = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key);
-		print head($title, "Home", "Token response");
-		print "<pre>\n";
-		print_r($response);
-		print "</pre>\n";
+		$data = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key, array("enable_moto_payments" => true, "application_name" => "MOT Manager Sandbox", "source_site"=>"apis.movingwifi.com"));
+		if ($data['code'] == 200 || $data['code'] == 201)
+		{
+			$token = $data['response'];
+			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
+			print head($title, "Connected", "Token acquired");
+			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+		}
+		else
+		{
+			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
+			print head($title, "Click to continue", "Request failed");
+			print "<pre>\n";
+			print_r($data);
+			print "</pre>\n";
+		}	
 	}
 }
-// If we don't have an authorization code then get one
 else 
 {
     // display get token button
@@ -79,9 +89,17 @@ function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
     $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
     curl_close($ch);
 
-	return $response;
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
 }
-
 ?>
