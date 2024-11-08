@@ -10,6 +10,7 @@ require "credentials.php";  //$secret_key, $api_key
 
 // API details
 $urlAccessToken = 'https://secure.blinkpayment.co.uk/api/pay/v1/tokens';
+$api_base = 'https://secure.blinkpayment.co.uk/';
 
 // service-specific strings
 $title = "Blink";
@@ -57,6 +58,28 @@ if (isset($_REQUEST['operation']))
 			print "</pre>\n";
 		}	
 	}
+	elseif($_REQUEST['operation'] == 'sale-intent')
+	{
+		if (isset($_COOKIE[$cookie]))
+		{
+			$token = unserialize($_COOKIE[$cookie]);
+			$data = blinkAPIrequest($api_base . "/api/pay/v1/intents", $token->access_token, array(
+				"amount" => 10.00, 
+				"currency" => "GBP", 
+				"return_url" => "https://apis.movingwifi.com/blink/return.php",
+				"notification_url" => "https://apis.movingwifi.com/blink/notification.php",
+				)
+			);
+			print head($title, "Click to continue", "Intent response");
+			print "<pre>\n";
+			print_r($data);
+			print "</pre>\n";
+		}
+		else
+		{
+			print head($title, "Click to continue", "No cookie found");
+		}
+	}
 }
 elseif(isset($_COOKIE[$cookie]))
 {
@@ -80,7 +103,7 @@ elseif(isset($_COOKIE[$cookie]))
 		print head($title, "Home", "Ready for payments");
 		print generic_button("Get SALE intent",['operation'=>'sale-intent'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-		print footer("Disconnect", "Access expires on " . $token->expired_on . " vs " . $now);
+		print footer("Disconnect", "Access expires " . $token->expired_on . "<br>Time now " . $now );
 	}
 	else
 	{
@@ -142,4 +165,38 @@ function getBlinkAccessToken($url, $api_key, $secret_key, $extra_params = [])
     $data['code'] = $http_code;
 	return $data;
 }
+
+function blinkAPIrequest($url, $access_token, $params = [])
+{
+	//build the default parameters
+    // Set up cURL options.
+	$headers = array(
+		"Content-Type: application/json",
+		"Accept: application/json",
+		"Authorizations: Bearer $access_token",
+	);	
+    $ch = curl_init();
+	curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, json_encode($params));
+	
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+	
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
+
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
+}
+
 ?>
