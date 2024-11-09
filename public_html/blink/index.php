@@ -11,6 +11,7 @@ require "credentials.php";  //$secret_key, $api_key
 // API details
 $urlAccessToken = 'https://secure.blinkpayment.co.uk/api/pay/v1/tokens';
 $api_base = 'https://secure.blinkpayment.co.uk';
+$urlPaymentToken = 'https://gateway2.blinkpayment.co.uk/paymentform';
 
 // service-specific strings
 $title = "Blink";
@@ -62,6 +63,56 @@ if (isset($_REQUEST['operation']))
 	{
 		print blink_head($title, "Home", "Make payment");
 		print payment_form();
+	}
+	elseif($_REQUEST['operation'] == 'payment')
+	{
+		if (isset($_COOKIE[$cookie]))
+		{
+			$amount = $_REQUEST['BlinkAmount'];
+			$token = unserialize($_COOKIE[$cookie]);
+			// 1. get intent
+			$intent_data = blinkAPIrequest($api_base . "/api/pay/v1/intents", $token->access_token, array(
+				"transaction_type" => "SALE",
+				"payment_type" => "credit-card",
+				"amount" => $amount, 
+				"currency" => "GBP", 
+				"return_url" => "https://apis.movingwifi.com/blink/return.php",
+				"notification_url" => "https://apis.movingwifi.com/blink/notification.php",
+				)
+			);
+			if ($intent_data["code"] == 201)
+			{
+				$cardNo = $_REQUEST['BlinkCardNo'];
+				$expiry = $_REQUEST['BlinkExpiry'];
+				$cvv = $_REQUEST['BlinkCVV'];
+				$merchantID = $intent_data["response"]->merchant_id;
+				// 2. get paymentToken
+				$payment_token_data = getBlinkPaymentToken($urlPaymentToken, array(
+					"process" => "tokenise",
+					"merchantID" => $merchantID,
+					"tokenType" => "card", 
+					"tokenData[cardNumber]" => $cardNo, 
+					"tokenData[cardExpiryDate]" => $expiry,
+					"tokenData[cardCVV]" => $cvv
+					)
+				);
+				print blink_head($title, "Click to continue", "Intent response");
+				print "<pre>\n";
+				print_r($payment_token_data]);
+				print "</pre>\n";
+			}
+			else
+			{
+				print blink_head($title, "Click to continue", "Intent request failed");
+				print "<pre>\n";
+				print_r($data);
+				print "</pre>\n";
+			}
+		}
+		else
+		{
+			print blink_head($title, "Click to continue", "No cookie found");
+		}
 	}
 	elseif($_REQUEST['operation'] == 'sale-intent')
 	{
@@ -309,4 +360,32 @@ function payment_form ()
 }
 
 
+function getBlinkPaymentToken($url, $params)
+{
+	$headers = array(
+		"Content-Type: multipart/form",
+		"Accept: application/json",
+	);	
+    // Set up cURL options.
+    $ch = curl_init();
+    curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
+
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
+}
 ?>
