@@ -86,6 +86,8 @@ if (isset($_REQUEST['operation']))
 				$expiry = $_REQUEST['BlinkExpiry'];
 				$cvv = $_REQUEST['BlinkCVV'];
 				$merchantID = $intent_data["response"]->merchant_id;
+				$payment_intent = $intent_data["response"]->payment_intent;
+				$transaction_unique = $intent_data["response"]->transaction_unique;
 				// 2. get paymentToken
 				$payment_token_data = getBlinkPaymentToken($urlPaymentToken, array(
 					"process" => "tokenise",
@@ -96,10 +98,40 @@ if (isset($_REQUEST['operation']))
 					"tokenData[cardCVV]" => $cvv
 					)
 				);
-				print blink_head($title, "Click to continue", "Payment token response");
-				print "<pre>\n";
-				print_r($payment_token_data);
-				print "</pre>\n";
+				if ($payment_token_data["code"] == 200)
+				{
+					if (property_exists($payment_token_data["response"], "paymentToken"))
+					{
+						$paymentToken = $payment_token_data["response"]->paymentToken;
+						// 3. submit payment
+						$payment_response = blinkAPIrequest($api_base . "/api/pay/v1/creditcards", $token->access_token, array(
+							"payment_intent" => $payment_intent,
+							"paymentToken" => $paymentToken,
+							"type" => 2, 
+							"customer_email" => "jobloggs@gmail.com", 
+							"customer_name" => "Jo Bloggs",
+							"transaction_unique" => $transaction_unique
+						));
+						print blink_head($title, "Click to continue", "Credit card payment response");
+						print "<pre>\n";
+						print_r($payment_response);
+						print "</pre>\n";
+					}
+					else
+					{
+						print blink_head($title, "Click to continue", "No paymentToken");
+						print "<pre>\n";
+						print_r($payment_token_data);
+						print "</pre>\n";
+					}
+				}
+				else
+				{
+					print blink_head($title, "Click to continue", "Payment token request failed");
+					print "<pre>\n";
+					print_r($intent_data);
+					print "</pre>\n";
+				}
 			}
 			else
 			{
