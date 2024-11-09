@@ -18,8 +18,6 @@ $title = "Blink";
 $connect = "Get Blink Token";
 $cookie = "movingwifi-blink";
 
-print "Content-Type: application/json\n\n";
-
 print json_encode($_POST);
 
 
