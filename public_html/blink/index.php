@@ -98,7 +98,7 @@ if (isset($_REQUEST['operation']))
 				);
 				print blink_head($title, "Click to continue", "Intent response");
 				print "<pre>\n";
-				print_r($payment_token_data]);
+				print_r($payment_token_data);
 				print "</pre>\n";
 			}
 			else
