@@ -279,7 +279,7 @@ function blink_head($title, $home = "", $subtitle = "Blink API demo")
 
 function payment_form ()
 {
-	$html = '<form id="BlinkForm" method="POST" action="./?operation=payment">
+	$html = '<form id="BlinkForm" method="post" action="?">
 		<input type="hidden" id="operation" value="payment">
 		<table class="table" style="width:fit-content;">
 			<tbody>
@@ -311,7 +311,7 @@ function payment_form ()
 			</ul>
 		</div>
 		<div>
-			<button id="BlinkSubmit" type="submit" class="tertiary" style="padding:3px;margin-left:10px;">Make payment</button>
+			<input type="submit" id="BlinkSubmit" class="button tertiary" style="padding:3px;margin-left:10px;" value="Make payment">
 		</div>
 	</form>';
 	return $html;
