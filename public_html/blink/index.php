@@ -100,7 +100,7 @@ if (isset($_REQUEST['operation']))
 				);
 				if ($payment_token_data["code"] == 200)
 				{
-					$paymentToken = $payment_token_data["response"]->paymentToken;
+					$paymentToken = $payment_token_data["response"]["paymentToken"];
 					// 3. submit payment
 					$payment_response = blinkAPIrequest($api_base . "/api/pay/v1/creditcards", $token->access_token, array(
 						"payment_intent" => $payment_intent,
