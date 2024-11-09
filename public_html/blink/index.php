@@ -369,6 +369,9 @@ function getBlinkPaymentToken($url, $params)
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	$eh = fopen('curl.log', 'w+');
+	curl_setopt($ch, CURLOPT_STDERR, $eh);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
