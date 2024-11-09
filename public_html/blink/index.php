@@ -96,7 +96,7 @@ if (isset($_REQUEST['operation']))
 					"tokenData[cardCVV]" => $cvv
 					)
 				);
-				print blink_head($title, "Click to continue", "Intent response");
+				print blink_head($title, "Click to continue", "Payment token response");
 				print "<pre>\n";
 				print_r($payment_token_data);
 				print "</pre>\n";
@@ -383,7 +383,7 @@ function getBlinkPaymentToken($url, $params)
     // Set the header, response, error and http code.
 	$data = [];
 	$data['header'] = substr($response, 0, $header_size);
-    $data['response'] = json_decode(substr($response, $header_size));
+    $data['response'] = substr($response, $header_size);
     $data['error'] = $error;
     $data['code'] = $http_code;
 	return $data;
