@@ -105,7 +105,7 @@ if (isset($_REQUEST['operation']))
 			{
 				print blink_head($title, "Click to continue", "Intent request failed");
 				print "<pre>\n";
-				print_r($data);
+				print_r($intent_data);
 				print "</pre>\n";
 			}
 		}
