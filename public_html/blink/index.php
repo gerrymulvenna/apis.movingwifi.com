@@ -100,36 +100,26 @@ if (isset($_REQUEST['operation']))
 				);
 				if ($payment_token_data["code"] == 200)
 				{
-					if (property_exists($payment_token_data["response"], "paymentToken"))
-					{
-						$paymentToken = $payment_token_data["response"]->paymentToken;
-						// 3. submit payment
-						$payment_response = blinkAPIrequest($api_base . "/api/pay/v1/creditcards", $token->access_token, array(
-							"payment_intent" => $payment_intent,
-							"paymentToken" => $paymentToken,
-							"type" => 2, 
-							"customer_email" => "jobloggs@gmail.com", 
-							"customer_name" => "Jo Bloggs",
-							"transaction_unique" => $transaction_unique
-						));
-						print blink_head($title, "Click to continue", "Credit card payment response");
-						print "<pre>\n";
-						print_r($payment_response);
-						print "</pre>\n";
-					}
-					else
-					{
-						print blink_head($title, "Click to continue", "No paymentToken");
-						print "<pre>\n";
-						print_r($payment_token_data);
-						print "</pre>\n";
-					}
+					$paymentToken = $payment_token_data["response"]->paymentToken;
+					// 3. submit payment
+					$payment_response = blinkAPIrequest($api_base . "/api/pay/v1/creditcards", $token->access_token, array(
+						"payment_intent" => $payment_intent,
+						"paymentToken" => $paymentToken,
+						"type" => 2, 
+						"customer_email" => "jobloggs@gmail.com", 
+						"customer_name" => "Jo Bloggs",
+						"transaction_unique" => $transaction_unique
+					));
+					print blink_head($title, "Click to continue", "Credit card payment response");
+					print "<pre>\n";
+					print_r($payment_response);
+					print "</pre>\n";
 				}
 				else
 				{
 					print blink_head($title, "Click to continue", "Payment token request failed");
 					print "<pre>\n";
-					print_r($intent_data);
+					print_r($payment_token_data);
 					print "</pre>\n";
 				}
 			}
