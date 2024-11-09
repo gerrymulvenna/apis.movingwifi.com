@@ -371,6 +371,7 @@ function getBlinkPaymentToken($url, $params)
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+	curl_setopt($ch, CURLOPT_POST, 1);
 	curl_setopt($ch, CURLOPT_POSTFIELDS, $params);
     // Output the header in the response.
     curl_setopt($ch, CURLOPT_HEADER, TRUE);
