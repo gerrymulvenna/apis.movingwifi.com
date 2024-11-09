@@ -280,26 +280,26 @@ function blink_head($title, $home = "", $subtitle = "Blink API demo")
 function payment_form ()
 {
 	$html = '<form id="BlinkForm" method="post" action="post.php">
-		<input type="hidden" id="operation" value="payment">
+		<input type="hidden" id="operation" name="operation" value="payment">
 		<table class="table" style="width:fit-content;">
 			<tbody>
 				<tr>
 					<td><label for="BlinkAmount" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">AMOUNT</label></td>
-					<td><input type="text" style="padding:10px;" id="BlinkAmount" value="" placeholder="AMOUNT TO PAY" required></td>
+					<td><input type="text" style="padding:10px;" id="BlinkAmount" name="BlinkAmount" value="" placeholder="AMOUNT TO PAY" required></td>
 				</tr>
 				<tr>
 					<td><label for="BlinkCardNo" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">CARD NO</label></td>
-					<td><input type="text" style="padding:10px;" id="BlinkCardNo" value="" placeholder="16 DIGIT CARD NUMBER" required></td>
+					<td><input type="text" style="padding:10px;" id="BlinkCardNo" name="BlinkCardNo" value="" placeholder="16 DIGIT CARD NUMBER" required></td>
 				</tr>
 				<tr>
 					<td><label for="BlinkExpiry" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">EXPIRY</label></td>
 					<td>
-						<input type="text" style="width:5rem;padding:10px;" id="BlinkExpiry" value="" placeholder="MM/YY" maxlength="5" required>
+						<input type="text" style="width:5rem;padding:10px;" id="BlinkExpiry" name="BlinkExpiry" value="" placeholder="MM/YY" maxlength="5" required>
 					</td>
 				</tr>
 				<tr>
 					<td><label for="BlinkCVV" style="width:100%;padding:10px;background-color:#E0E0E0;text-align:right;">CVC NO</label></td>
-					<td><input type="text" style="padding:10px;" id="BlinkCVV" value="" placeholder="3 DIGITS FROM BACK" inputmode="numeric" maxlength="3" required></td>
+					<td><input type="text" style="padding:10px;" id="BlinkCVV" name="BlinkCVV" value="" placeholder="3 DIGITS FROM BACK" inputmode="numeric" maxlength="3" required></td>
 				</tr>
 			</tbody>
 		</table>
@@ -311,7 +311,7 @@ function payment_form ()
 			</ul>
 		</div>
 		<div>
-			<input type="submit" id="BlinkSubmit" class="button tertiary" style="padding:3px;margin-left:10px;" value="Make payment">
+			<input type="submit" name="Submit" class="button tertiary" style="padding:3px;margin-left:10px;" value="Make payment">
 		</div>
 	</form>';
 	return $html;
