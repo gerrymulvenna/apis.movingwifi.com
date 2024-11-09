@@ -87,7 +87,7 @@ if (isset($_REQUEST['operation']))
 				$cvv = $_REQUEST['BlinkCVV'];
 				$merchantID = $intent_data["response"]->merchant_id;
 				// 2. get paymentToken
-				$payment_token_data = getBlinkPaymentToken("https://apis.movingwifi.com/blink/post.php", array(
+				$payment_token_data = getBlinkPaymentToken($urlPaymentToken, array(
 					"process" => "tokenise",
 					"merchantID" => $merchantID,
 					"tokenType" => "card", 
@@ -369,9 +369,6 @@ function getBlinkPaymentToken($url, $params)
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
-	curl_setopt($ch, CURLOPT_VERBOSE, true);
-	$eh = fopen('curl.log', 'w+');
-	curl_setopt($ch, CURLOPT_STDERR, $eh);
 	curl_setopt($ch, CURLOPT_HTTPHEADER, $headers);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
 	curl_setopt($ch, CURLOPT_POST, 1);
