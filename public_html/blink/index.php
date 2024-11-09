@@ -362,7 +362,10 @@ function payment_form ()
 
 function getBlinkPaymentToken($url, $params)
 {
-	$headers = array("Content-Type: multipart/form-data");	
+	$headers = array(
+		"Content-Type: multipart/form-data",
+		"Accept: application/json"
+	);	
     // Set up cURL options.
     $ch = curl_init();
     curl_setopt($ch, CURLOPT_URL, $url);
