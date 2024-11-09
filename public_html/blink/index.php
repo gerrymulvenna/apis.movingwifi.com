@@ -87,7 +87,7 @@ if (isset($_REQUEST['operation']))
 				$cvv = $_REQUEST['BlinkCVV'];
 				$merchantID = $intent_data["response"]->merchant_id;
 				// 2. get paymentToken
-				$payment_token_data = getBlinkPaymentToken($urlPaymentToken, array(
+				$payment_token_data = getBlinkPaymentToken("post.php", array(
 					"process" => "tokenise",
 					"merchantID" => $merchantID,
 					"tokenType" => "card", 
