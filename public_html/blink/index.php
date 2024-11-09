@@ -43,7 +43,14 @@ if (isset($_REQUEST['operation']))
 	}
 	elseif($_REQUEST['operation'] == 'token')
 	{
-		$data = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key, array("enable_moto_payments" => true, "application_name" => "MOT Manager Sandbox", "source_site"=>"apis.movingwifi.com"));
+		$data = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key, 
+			array(
+				"enable_moto_payments" => true, 
+				"application_name" => "MOVINGWIFI Sandbox", 
+				"application_description" => "Gerry Mulvenna running some initial tests in PHP", 
+				"source_site"=>"apis.movingwifi.com"
+			)
+		);
 		if ($data['code'] == 201)
 		{
 			$token = $data['response'];
@@ -104,12 +111,17 @@ if (isset($_REQUEST['operation']))
 					if (property_exists($pdata, "paymentToken"))
 					{
 						// 3. submit payment
+						$ref = getRandomState(16);
+						$order = getRandomState(8);
 						$payment_response = blinkAPIrequest($api_base . "/api/pay/v1/creditcards", $token->access_token, array(
 							"payment_intent" => $payment_intent,
 							"paymentToken" => $pdata->paymentToken,
 							"type" => 2, 
 							"customer_email" => "jobloggs@gmail.com", 
 							"customer_name" => "Jo Bloggs",
+							"customer_address" => "7 Merevale Avenue, Leicester",
+							"customer_postcode" => "LE10 2BU",
+							"merchant_data" => "{\"order_id\":\"$order\",\"reference\":\"$ref\"}",
 							"transaction_unique" => $transaction_unique
 						));
 						print blink_head($title, "Click to continue", "Credit card payment response");
