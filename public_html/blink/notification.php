@@ -5,7 +5,7 @@ error_reporting(-1);
 date_default_timezone_set('Europe/London');
 
 $handle = fopen("notification.log", "a");
-fwrite($handle, json_encode($_REQUEST));
+fwrite($handle, json_encode($_REQUEST) . "\n");
 fclose($handle);
 
 ?>

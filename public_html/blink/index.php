@@ -113,6 +113,7 @@ if (isset($_REQUEST['operation']))
 						// 3. submit payment
 						$ref = getRandomState(16);
 						$order = getRandomState(8);
+						$merchant_data = (object) array("reference" => $ref, "order_id" => $order);
 						$payment_response = blinkAPIrequest($api_base . "/api/pay/v1/creditcards", $token->access_token, array(
 							"payment_intent" => $payment_intent,
 							"paymentToken" => $pdata->paymentToken,
@@ -121,7 +122,7 @@ if (isset($_REQUEST['operation']))
 							"customer_name" => "Jo Bloggs",
 							"customer_address" => "7 Merevale Avenue, Leicester",
 							"customer_postcode" => "LE10 2BU",
-							"merchant_data" => "{\"order_id\":\"$order\",\"reference\":\"$ref\"}",
+							"merchant_data" => json_encode($merchant_data),
 							"transaction_unique" => $transaction_unique
 						));
 						print blink_head($title, "Click to continue", "Credit card payment response");
