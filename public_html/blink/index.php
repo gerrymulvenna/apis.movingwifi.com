@@ -100,19 +100,9 @@ if (isset($_REQUEST['operation']))
 				);
 				if ($payment_token_data["code"] == 200)
 				{
-					$paymentToken = $payment_token_data["response"]["paymentToken"];
-					// 3. submit payment
-					$payment_response = blinkAPIrequest($api_base . "/api/pay/v1/creditcards", $token->access_token, array(
-						"payment_intent" => $payment_intent,
-						"paymentToken" => $paymentToken,
-						"type" => 2, 
-						"customer_email" => "jobloggs@gmail.com", 
-						"customer_name" => "Jo Bloggs",
-						"transaction_unique" => $transaction_unique
-					));
-					print blink_head($title, "Click to continue", "Credit card payment response");
+					print blink_head($title, "Click to continue", "Payment token response");
 					print "<pre>\n";
-					print_r($payment_response);
+					print_r($payment_token_data["response"]);
 					print "</pre>\n";
 				}
 				else
