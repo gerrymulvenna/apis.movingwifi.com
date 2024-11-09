@@ -100,9 +100,10 @@ if (isset($_REQUEST['operation']))
 				);
 				if ($payment_token_data["code"] == 200)
 				{
+					$pdata = json_decode($payment_token_data["response"]);
 					print blink_head($title, "Click to continue", "Payment token response");
 					print "<pre>\n";
-					print_r($payment_token_data["response"]);
+					print_r($pdata);
 					print "</pre>\n";
 				}
 				else
