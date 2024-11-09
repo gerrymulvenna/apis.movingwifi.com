@@ -4,6 +4,6 @@ error_reporting(-1);
 //set Timezone
 date_default_timezone_set('Europe/London');
 
-print json_encode($_POST);
+print json_encode($_REQUEST);
 
 ?>
