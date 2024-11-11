@@ -14,13 +14,13 @@ $mdata = json_decode(urldecode($_GET["merchant_data"]));
 
 print "<div class=\"card large warning\">
 <h3 class=\"section\">Transaction</h3>
-<p class=\"section\" style=\"text-align: left;\">
+<p class=\"section double-padded\" style=\"text-align: left;\">
 <strong>transaction_id:</strong> $id<br/>
 <strong>note:</strong> $note<br/>
 <strong>status:</strong> $status</p>
 </div>\n";
 
-$html = "<div class=\"card large primary\"><h3 class=\"section\">Merchant data</h3>\n<p class=\"section\" style=\"text-align:left;\">";
+$html = "<div class=\"card large primary\"><h3 class=\"section\">Merchant data</h3>\n<p class=\"section double-padded\" style=\"text-align:left;\">";
 foreach (get_object_vars($mdata) as $key => $value)
 {
 	$html .= "<strong>$key:</strong> $value<br/>\n";
