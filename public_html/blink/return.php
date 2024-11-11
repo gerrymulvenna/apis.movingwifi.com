@@ -10,24 +10,23 @@ print head($title, "Click to continue", "Payment response");
 $id = $_GET["transaction_id"];
 $note = $_GET["note"];
 $status = $_GET["status"];
+
+print "<div class=\"card large warning\">
+<h3 class=\"section\">Transaction</h3>
+<p class=\"section\">
+<strong>transaction_id:</strong> $id<br/>
+<strong>note:</strong> $note<br/>
+<strong>status:</strong> $status</p>
+</div>\n";
+
 $mdata = json_decode(urldecode($_GET["merchant_data"]));
-$html = "<dt>merchant_data</dt><dd><dl>\n";
+$html = "<div class=\"card large error\"><h3 class=\"section\">merchant_data</h3>\n<p class=\"section\">";
 foreach (get_object_vars($mdata) as $key => $value)
 {
-	$html .= "<dt>$key</dt><dd>$value</dd>\n";
+	$html .= "<strong>$key:</strong> $value<br/>\n";
 }
-$html .= "</dl></dd>\n";
+$html .= "</p></div>\n";
 
-print "<div class=\"card large\">
-<dl>
-<dt>transaction_id</dt>
-<dd>$id</dd>
-<dt>note</dt>
-<dd>$note</dd>
-<dt>status</dt>
-<dd>$status</dd>
-$html
-</dl>
-</div>\n";
+print $html;
 
 ?>
