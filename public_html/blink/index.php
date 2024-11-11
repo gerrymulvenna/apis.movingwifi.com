@@ -127,10 +127,18 @@ if (isset($_REQUEST['operation']))
 						));
 						if ($payment_response["code"] == 200)
 						{
-							print blink_head($title, "Click to continue", "Credit card payment response");
-							print "<pre>\n";
-							print_r($payment_response["response"]);
-							print "</pre>\n";
+							$paydata = $payment_response["response"];
+							if (property_exists($paydata, "url"))
+							{
+								header('Location: ' . $paydata->url);
+							}
+							else
+							{
+								print blink_head($title, "Click to continue", "No url in payment response");
+								print "<pre>\n";
+								print_r($paydata);
+								print "</pre>\n";
+							}
 						}
 						else
 						{
