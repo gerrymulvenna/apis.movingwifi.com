@@ -10,7 +10,7 @@ print head($title, "Click to continue", "Payment response");
 $id = $_GET["transaction_id"];
 $note = urldecode($_GET["note"]);
 $status = $_GET["status"];
-$mdata = json_decode(urldecode($_GET["Merchant data"]));
+$mdata = json_decode(urldecode($_GET["merchant_data"]));
 
 print "<div class=\"card large warning\">
 <h3 class=\"section\">Transaction</h3>
@@ -20,7 +20,7 @@ print "<div class=\"card large warning\">
 <strong>status:</strong> $status</p>
 </div>\n";
 
-$html = "<div class=\"card large error\"><h3 class=\"section\">merchant_data</h3>\n<p class=\"section\" style=\"text-align:left;\">";
+$html = "<div class=\"card large primary\"><h3 class=\"section\">Merchant data</h3>\n<p class=\"section\" style=\"text-align:left;\">";
 foreach (get_object_vars($mdata) as $key => $value)
 {
 	$html .= "<strong>$key:</strong> $value<br/>\n";
