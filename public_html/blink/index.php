@@ -15,7 +15,6 @@ $urlPaymentToken = 'https://gateway2.blinkpayment.co.uk/paymentform';
 
 // service-specific strings
 $title = "Blink payment sandbox";
-$connect = "Get Blink Token";
 $cookie = "movingwifi-blink";
 
 if (isset($_REQUEST['operation']))
@@ -214,7 +213,7 @@ else
 {
     // display get token button
 	print head($title, "Home", "Blink access token required");
-	print generic_button($connect,['operation'=>'token'], "tertiary", "GET", "./");
+	print generic_button("Get Blink access token",['operation'=>'token'], "tertiary", "GET", "./");
 }
 
 
