@@ -25,7 +25,7 @@ if (isset($_REQUEST['operation']))
 		if (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
-			print blink_head("$title | cookie contents", "Home", "Cookie contents");
+			print head("$title | cookie contents", "Home", "Cookie contents");
 			print '<pre>';
 			print_r($cdata);
 			print '</pre>';
@@ -33,13 +33,13 @@ if (isset($_REQUEST['operation']))
 		}
 		else
 		{
-			print blink_head("$title", "Click to continue", "No cookie found");
+			print head("$title", "Click to continue", "No cookie found");
 		}
 	}
 	elseif($_REQUEST['operation'] == 'revoke')
 	{
 		setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-		print blink_head($title, "Disconnected", "Token revoked");
+		print head($title, "Disconnected", "Token revoked");
 	}
 	elseif($_REQUEST['operation'] == 'token')
 	{
@@ -55,12 +55,12 @@ if (isset($_REQUEST['operation']))
 		{
 			$token = $data['response'];
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
-			print blink_head($title, "Connected - click to continue", "Token acquired");
+			print head($title, "Connected - click to continue", "Token acquired");
 		}
 		else
 		{
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-			print blink_head($title, "Click to continue", "Request failed");
+			print head($title, "Click to continue", "Request failed");
 			print "<pre>\n";
 			print_r($data);
 			print "</pre>\n";
@@ -68,7 +68,7 @@ if (isset($_REQUEST['operation']))
 	}
 	elseif($_REQUEST['operation'] == 'moto-payment-form')
 	{
-		print blink_head($title, "Home", "Test MOTO payment");
+		print head($title, "Home", "Test MOTO payment");
 		print payment_form("moto-payment");
 	}
 	elseif($_REQUEST['operation'] == 'moto-payment')
@@ -134,7 +134,7 @@ if (isset($_REQUEST['operation']))
 							}
 							else
 							{
-								print blink_head($title, "Click to continue", "No url in payment response");
+								print head($title, "Click to continue", "No url in payment response");
 								print "<pre>\n";
 								print_r($paydata);
 								print "</pre>\n";
@@ -142,7 +142,7 @@ if (isset($_REQUEST['operation']))
 						}
 						else
 						{
-							print blink_head($title, "Click to continue", "Payment request failed");
+							print head($title, "Click to continue", "Payment request failed");
 							print "<pre>\n";
 							print_r($payment_response);
 							print "</pre>\n";
@@ -150,7 +150,7 @@ if (isset($_REQUEST['operation']))
 					}
 					else
 					{
-						print blink_head($title, "Click to continue", "No paymentToken");
+						print head($title, "Click to continue", "No paymentToken");
 						print "<pre>\n";
 						print_r($pdata);
 						print "</pre>\n";
@@ -158,7 +158,7 @@ if (isset($_REQUEST['operation']))
 				}
 				else
 				{
-					print blink_head($title, "Click to continue", "Payment token request failed");
+					print head($title, "Click to continue", "Payment token request failed");
 					print "<pre>\n";
 					print_r($payment_token_data);
 					print "</pre>\n";
@@ -166,7 +166,7 @@ if (isset($_REQUEST['operation']))
 			}
 			else
 			{
-				print blink_head($title, "Click to continue", "Intent request failed");
+				print head($title, "Click to continue", "Intent request failed");
 				print "<pre>\n";
 				print_r($intent_data);
 				print "</pre>\n";
@@ -174,7 +174,7 @@ if (isset($_REQUEST['operation']))
 		}
 		else
 		{
-			print blink_head($title, "Click to continue", "No cookie found");
+			print head($title, "Click to continue", "No cookie found");
 		}
 	}
 }
@@ -197,14 +197,14 @@ elseif(isset($_COOKIE[$cookie]))
 		{
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 		}
-		print blink_head($title, "Home", "Ready for payments");
+		print head($title, "Home", "Ready for payments");
 		print generic_button("Test MOTO payment",['operation'=>'moto-payment-form'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 		print footer("Disconnect", "Access expires " . $token->expired_on . "<br>Time now " . $now );
 	}
 	else
 	{
-		print blink_head($title, "Click to continue", "Invalid token data");
+		print head($title, "Click to continue", "Invalid token data");
 		print "<pre>\n";
 		print_r($token);
 		print "</pre>\n";
@@ -213,7 +213,7 @@ elseif(isset($_COOKIE[$cookie]))
 else 
 {
     // display get token button
-	print blink_head($title);
+	print head($title, "Home", "Blink access token required");
 	print generic_button($connect,['operation'=>'token'], "tertiary", "GET", "./");
 }
 
@@ -295,57 +295,6 @@ function blinkAPIrequest($url, $access_token, $params = [])
     $data['code'] = $http_code;
 	return $data;
 }
-
-/**
- * Returns HTML for <head>  + start of <body> sections
- *
- * @param string $title Title text
- * @param string $home Display this text on home button, if blank don't include a home button
- * @param string $subtitle Subtitle text
- * @return string
- */
-function blink_head($title, $home = "", $subtitle = "Blink API demo")
-{
-	$html = '<html>
-	<head>
-		<meta charset="utf-8">
-		<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
-		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<title>' . $title . '</title>
-		<link rel="stylesheet" href="/css/mini-default.css">
-		<link rel="stylesheet" href="/css/style.css">
-	</head>
-	';
-	$html .= '<body>
-	<header class="sticky">
-		<div>
-			<h3 class="headline">' . $title . '</h3>
-			<label for="drawer-control" class="drawer-toggle persistent"></label> 
-			<input type="checkbox" id="drawer-control" class="drawer persistent">
-			<nav>
-				<label for="drawer-control" class="drawer-close"></label>
-				<a href="/">Start page</a> 
-				<a href="/dropbox/">Dropbox</a>
-				<a href="/google/">Google Calendar</a> 
-				<a href="/quickbooks/">Quickbooks</a>
-				<a href="/twitter/">Twitter</a>
-				<a href="/xero/">Xero</a>
-				<a href="https://github.com/gerrymulvenna/apis.movingwifi.com">View code on GitHub</a>
-			</nav>
-		</div>
-	</header>
-	<div class="container">';
-	if (!empty($home))
-	{
-		$html .= '
-		<div class="card large">
-			<a id="home" class="button primary" href="./">' . $home . '</a>
-			<p>' . $subtitle . '</p>
-		</div>';
-	}
-	return $html;
-}
-
 
 function payment_form ($operation)
 {
