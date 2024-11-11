@@ -11,17 +11,23 @@ $id = $_GET["transaction_id"];
 $note = $_GET["note"];
 $status = $_GET["status"];
 $mdata = json_decode(urldecode($_GET["merchant_data"]));
-$html = "<tr><td style=\"text-align:center;\" colspan=\"2\">merchant_data</td></tr>\n";
+$html = "<dt>merchant_data</dt><dd><dl>\n";
 foreach (get_object_vars($mdata) as $key => $value)
 {
-	$html .= "<tr><td style=\"text-align:right;\">$key</td><td>$value</td></tr>\n";
+	$html .= "<dt>$key</dt><dd>$value</dd>\n";
 }
+$html .= "</dl></dd>\n";
 
-print "<table style=\"text-align:center;width:fit-content;\">
-<tr><td style=\"text-align:right;\">transaction_id</td><td>$id</td></tr>
-<tr><td style=\"text-align:right;\">note</td><td>$note</td></tr>
-<tr><td style=\"text-align:right;\">status</td><td>$status</td></tr>
+print "<div class=\"card large\">
+<dl>
+<dt>transaction_id</dt>
+<dd>$id</dd>
+<dt>note</dt>
+<dd>$note</dd>
+<dt>status</dt>
+<dd>$status</dd>
 $html
-</table>\n";
+</dl>
+</div>\n";
 
 ?>
