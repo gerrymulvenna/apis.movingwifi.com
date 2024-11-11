@@ -14,7 +14,7 @@ $api_base = 'https://secure.blinkpayment.co.uk';
 $urlPaymentToken = 'https://gateway2.blinkpayment.co.uk/paymentform';
 
 // service-specific strings
-$title = "Blink";
+$title = "Blink payment sandbox";
 $connect = "Get Blink Token";
 $cookie = "movingwifi-blink";
 
@@ -159,40 +159,6 @@ if (isset($_REQUEST['operation']))
 			print blink_head($title, "Click to continue", "No cookie found");
 		}
 	}
-	elseif($_REQUEST['operation'] == 'sale-intent')
-	{
-		if (isset($_COOKIE[$cookie]))
-		{
-			$token = unserialize($_COOKIE[$cookie]);
-			$data = blinkAPIrequest($api_base . "/api/pay/v1/intents", $token->access_token, array(
-				"transaction_type" => "SALE",
-				"payment_type" => "credit-card",
-				"amount" => 10.00, 
-				"currency" => "GBP", 
-				"return_url" => "https://apis.movingwifi.com/blink/return.php",
-				"notification_url" => "https://apis.movingwifi.com/blink/notification.php",
-				)
-			);
-			if ($data['code'] == 201)
-			{
-				print blink_head($title, "Click to continue", "Intent response");
-				print "<pre>\n";
-				print_r($data["response"]);
-				print "</pre>\n";
-			}
-			else
-			{
-				print blink_head($title, "Click to continue", "Request failed");
-				print "<pre>\n";
-				print_r($data);
-				print "</pre>\n";
-			}
-		}
-		else
-		{
-			print blink_head($title, "Click to continue", "No cookie found");
-		}
-	}
 }
 elseif(isset($_COOKIE[$cookie]))
 {
@@ -214,7 +180,6 @@ elseif(isset($_COOKIE[$cookie]))
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 		}
 		print blink_head($title, "Home", "Ready for payments");
-		print generic_button("Get intent",['operation'=>'sale-intent'], "tertiary", "GET", "./");
 		print generic_button("Payment form",['operation'=>'payment-form'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 		print footer("Disconnect", "Access expires " . $token->expired_on . "<br>Time now " . $now );
