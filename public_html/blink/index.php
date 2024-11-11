@@ -66,12 +66,12 @@ if (isset($_REQUEST['operation']))
 			print "</pre>\n";
 		}	
 	}
-	elseif($_REQUEST['operation'] == 'payment-form')
+	elseif($_REQUEST['operation'] == 'moto-payment-form')
 	{
-		print blink_head($title, "Home", "Make payment");
-		print payment_form();
+		print blink_head($title, "Home", "Test MOTO payment");
+		print payment_form("moto-payment");
 	}
-	elseif($_REQUEST['operation'] == 'payment')
+	elseif($_REQUEST['operation'] == 'moto-payment')
 	{
 		if (isset($_COOKIE[$cookie]))
 		{
@@ -125,10 +125,20 @@ if (isset($_REQUEST['operation']))
 							"merchant_data" => json_encode($merchant_data),
 							"transaction_unique" => $transaction_unique
 						));
-						print blink_head($title, "Click to continue", "Credit card payment response");
-						print "<pre>\n";
-						print_r($payment_response);
-						print "</pre>\n";
+						if ($payment_response["code"] == 200)
+						{
+							print blink_head($title, "Click to continue", "Credit card payment response");
+							print "<pre>\n";
+							print_r($payment_response["response"]);
+							print "</pre>\n";
+						}
+						else
+						{
+							print blink_head($title, "Click to continue", "Payment request failed");
+							print "<pre>\n";
+							print_r($payment_response);
+							print "</pre>\n";
+						}
 					}
 					else
 					{
@@ -180,7 +190,7 @@ elseif(isset($_COOKIE[$cookie]))
 			setcookie($cookie, serialize($token), strtotime('+6 months'), '/');
 		}
 		print blink_head($title, "Home", "Ready for payments");
-		print generic_button("Payment form",['operation'=>'payment-form'], "tertiary", "GET", "./");
+		print generic_button("Test MOTO payment",['operation'=>'moto-payment-form'], "tertiary", "GET", "./");
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 		print footer("Disconnect", "Access expires " . $token->expired_on . "<br>Time now " . $now );
 	}
@@ -329,10 +339,10 @@ function blink_head($title, $home = "", $subtitle = "Blink API demo")
 }
 
 
-function payment_form ()
+function payment_form ($operation)
 {
 	$html = '<form id="BlinkForm" method="post" action="./">
-		<input type="hidden" id="operation" name="operation" value="payment">
+		<input type="hidden" id="operation" name="operation" value="$operation">
 		<table class="table" style="width:fit-content;">
 			<tbody>
 				<tr>
