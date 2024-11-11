@@ -20,7 +20,7 @@ print "<div class=\"card large warning\">
 <strong>status:</strong> $status</p>
 </div>\n";
 
-$html = "<div class=\"card large primary\"><h3 class=\"section\">Merchant data</h3>\n<p class=\"section double-padded\" style=\"text-align:left;\">";
+$html = "<div class=\"card large error\"><h3 class=\"section\">Merchant data</h3>\n<p class=\"section double-padded\" style=\"text-align:left;\">";
 foreach (get_object_vars($mdata) as $key => $value)
 {
 	$html .= "<strong>$key:</strong> $value<br/>\n";
