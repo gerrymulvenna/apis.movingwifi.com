@@ -35,9 +35,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['code
 			{
 				// just grab what we need to keep cookie small
 				$cdata['user_id'] = $debug['response']->data->user_id;
-				$cdata['type'] = $debug['response']->data->type;
-				$cdata['app_id'] = $debug['response']->data->app_id;
-				$cdata['scopes'] = $debug['response']->data->scopes;
+				$cdata['debug'] = $debug['response']->data;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+60 days'), '/');
 				print head($title, "Connected - click to continue", $cdata['user_id']);
