@@ -91,7 +91,7 @@ elseif (isset($_COOKIE[$cookie]))
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
 		}
-		elseif($_REQUEST['operation'] == 'tweet')
+		elseif($_REQUEST['operation'] == 'post')
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . "/2/tweets";
@@ -143,9 +143,9 @@ elseif (isset($_COOKIE[$cookie]))
 		}
 		else
 		{
-			print head($title, "Home", $cdata['name']);
+			print head($title, "Home", $cdata['user_id']);
 			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
+			print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
 		}
 		print footer("Disconnect", "");
 	}
