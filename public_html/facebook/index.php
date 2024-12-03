@@ -275,7 +275,7 @@ function debugToken($input_token, $app_token)
 	return $data;
 }
 
-function getAccounts($access_token)
+function listAccounts($access_token)
 {
 	global $urlAccounts;
 	
