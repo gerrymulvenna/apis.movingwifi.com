@@ -12,6 +12,7 @@ require "credentials.php";  //$app_id, $app_secret, $redirect_uri, $app_token, $
 $urlAuthorize = 'https://www.facebook.com/v21.0/dialog/oauth';
 $urlAccessToken = 'https://graph.facebook.com/v21.0/oauth/access_token';
 $urlDebugToken = 'https://graph.facebook.com/debug_token';
+$urlAccounts = 'https://graph.facebook.com/me/accounts';
 $api_base = 'https://graph.facebook.com/v21.0/';
 
 // service-specific strings
@@ -91,12 +92,34 @@ elseif (isset($_COOKIE[$cookie]))
 			setcookie($cookie,"", time() - 3600, "/");  //delete cookie
 			print head($title, "Disconnected");
 		}
+		elseif($_REQUEST['operation'] == 'accounts')
+		{
+			$cdata = unserialize($_COOKIE[$cookie]);
+			$response = listAccounts($cdata['access_token']);
+			// note response code of 201 for successfully api call
+			if ($response['code'] == 201)
+			{
+				print head("$title | List account access", "Home", $cdata['user_id']);
+				print '<pre>';
+				print json_encode($response['response']);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+			else
+			{
+				print head("$title | Tweet unsuccessful", "Home", $cdata['user_id']);
+				print '<pre>';
+				print json_encode($response);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+		}
 		elseif($_REQUEST['operation'] == 'post')
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . $page_id . "/feed";
 			$response = apiRequest($url, $cdata['access_token'],'POST',['message'=>$_REQUEST['text'],'published'=>true]);
-			// note response code of 201 for successfully created tweet
+			// note response code of 201 for successfully created post
 			if ($response['code'] == 201)
 			{
 				print head("$title | Tweet success", "Home", $cdata['user_id']);
@@ -129,9 +152,10 @@ elseif (isset($_COOKIE[$cookie]))
 				$cdata['access_token'] = $token->access_token;
 				$cdata['refresh_token'] = $token->refresh_token;
 				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Refreshed", $cdata['name']);
+				print head($title, "Home", $cdata['user_id']);
 				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-				print post_button("Post Tweet",['operation'=>'tweet'], "text", "Enter your tweet here");
+				print generic_button("List account access",['operation'=>'accounts'], "tertiary", "GET", "./");
+				print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
 			}
 			else
 			{
@@ -145,6 +169,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			print head($title, "Home", $cdata['user_id']);
 			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+			print generic_button("List account access",['operation'=>'accounts'], "tertiary", "GET", "./");
 			print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
 		}
 		print footer("Disconnect", "");
@@ -227,6 +252,41 @@ function debugToken($input_token, $app_token)
 	$eh = fopen('curl.log', 'w+');
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
 	$url = $urlDebugToken . "?" . http_build_query($params);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+	
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
+
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
+}
+
+function getAccounts($access_token)
+{
+	global $urlAccounts;
+	
+	//build the default parameters
+	$params = array('access_token' => $access_token);
+    // Set up cURL options.
+    $ch = curl_init();
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	$eh = fopen('curl.log', 'w+');
+	curl_setopt($ch, CURLOPT_STDERR, $eh);
+	$url = $urlAccounts . "?" . http_build_query($params);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
