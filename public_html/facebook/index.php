@@ -226,7 +226,7 @@ function debugToken($input_token, $app_token)
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	$eh = fopen('curl.log', 'w+');
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
-	$url = $urlAccessToken . "?" . http_build_query($params);
+	$url = $urlDebugToken . "?" . http_build_query($params);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
