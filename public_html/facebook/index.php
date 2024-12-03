@@ -146,11 +146,32 @@ elseif (isset($_COOKIE[$cookie]))
 			// note response code of 200 for successfully created upload of a photo
 			if ($response['code'] == 200)
 			{
-				print head("$title | Photo upload success", "Home", $cdata['user_id']);
-				print '<pre>';
-				print json_encode($response['response']);
-				print '</pre>';
-				print footer("Disconnect", "");
+				$id = $response['response']->id;
+				$url = $api_base . $page_id . "/feed";
+				$data = apiRequest($url, $page_access_token,'POST',array(
+					'message'=>"Our schedule for today on Indy Live Radio.",
+					'published'=>true,
+					'attached_media'=>array(
+						array('media_fbid'=>$id)
+					)
+				));
+				// note response code of 200 for successfully created post
+				if ($data['code'] == 200)
+				{
+					print head("$title | Photo post success", "Home", $cdata['user_id']);
+					print '<pre>';
+					print json_encode($data['response']);
+					print '</pre>';
+					print footer("Disconnect", "");
+				}
+				else
+				{
+					print head("$title | Photo post unsuccessful", "Home", $cdata['user_id']);
+					print '<pre>';
+					print json_encode($data);
+					print '</pre>';
+					print footer("Disconnect", "");
+				}
 			}
 			else
 			{
