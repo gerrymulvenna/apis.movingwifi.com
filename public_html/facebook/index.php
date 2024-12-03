@@ -41,6 +41,9 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['code
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
 				setcookie($cookie, serialize($cdata), strtotime('+60 days'), '/');
 				print head($title, "Connected - click to continue", $cdata['user_id']);
+				print '<pre>';
+				print json_encode($debug['response']);
+				print '</pre>';
 				print footer("Disconnect", "");
 			}
 			else
