@@ -115,7 +115,7 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . $page_id . "/feed";
-			$response = apiRequest($url, $page_access_request,'POST',['message'=>$_REQUEST['text'],'published'=>true]);
+			$response = apiRequest($url, $page_access_token,'POST',['message'=>$_REQUEST['text'],'published'=>true]);
 			// note response code of 200 for successfully created post
 			if ($response['code'] == 200)
 			{
@@ -141,7 +141,10 @@ elseif (isset($_COOKIE[$cookie]))
 		print head($title, "Home", $cdata['user_id']);
 		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
 		print generic_button("List account access",['operation'=>'accounts'], "tertiary", "GET", "./");
-		print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
+		if (isset($page_access_token))
+		{
+			print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
+		}
 		print footer("Disconnect", "");
 	}
 }
