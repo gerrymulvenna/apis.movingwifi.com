@@ -95,21 +95,21 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . "/2/tweets";
-			$response = apiRequest($url, $cdata['access_token'],'POST',['text'=>$_REQUEST['text']]);
+			$response = apiRequest($url, $cdata['access_token'],'POST',['message'=>$_REQUEST['text'],'published'=>true]);
 			// note response code of 201 for successfully created tweet
 			if ($response['code'] == 201)
 			{
-				print head("$title | Tweet success", "Home", $cdata['name']);
+				print head("$title | Tweet success", "Home", $cdata['user_id']);
 				print '<pre>';
-				print_r($response['response']);
+				print json_encode($response['response']);
 				print '</pre>';
 				print footer("Disconnect", "");
 			}
 			else
 			{
-				print head("$title | Tweet unsuccessful", "Home", $cdata['name']);
+				print head("$title | Tweet unsuccessful", "Home", $cdata['user_id']);
 				print '<pre>';
-				print_r($response);
+				print json_encode($response);
 				print '</pre>';
 				print footer("Disconnect", "");
 			}
