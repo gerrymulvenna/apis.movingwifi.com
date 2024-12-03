@@ -22,7 +22,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['code
 {
 	if ($_GET['state'] == $_COOKIE['oauth2state'])
 	{
-		$token_data = accessTokenRequest($_REQUEST['code'], $app_id, $app_secret, $redirect_uri);
+		$response = accessTokenRequest($_REQUEST['code'], $app_id, $app_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
