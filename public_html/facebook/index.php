@@ -11,6 +11,7 @@ require "credentials.php";  //$app_id, $app_secret, $redirect_uri, $app_token, $
 // API details
 $urlAuthorize = 'https://www.facebook.com/v21.0/dialog/oauth';
 $urlAccessToken = 'https://graph.facebook.com/v21.0/oauth/access_token';
+$urlDebugToken = 'https://graph.facebook.com/debug_token';
 $api_base = 'https://graph.facebook.com/v21.0/';
 
 // service-specific strings
@@ -181,6 +182,8 @@ elseif (!isset($_GET['code']))
 
 function accessTokenRequest($code, $client_id, $client_secret, $callback)
 {
+	global $urlAccessToken;
+	
 	//build the default parameters
 	$params = array('code'=> $code, 'redirect_uri' => $callback, 'client_id'=>$client_id, 'client_secret'=>$client_secret);
     // Set up cURL options.
@@ -214,6 +217,8 @@ function accessTokenRequest($code, $client_id, $client_secret, $callback)
 
 function debugToken($input_token, $app_token)
 {
+	global $urlDebugToken;
+	
 	//build the default parameters
 	$params = array('input_token'=> $input_token, 'access_token' => $app_token);
     // Set up cURL options.
