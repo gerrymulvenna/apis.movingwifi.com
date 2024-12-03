@@ -151,6 +151,13 @@ elseif (isset($_COOKIE[$cookie]))
 		print footer("Disconnect", "");
 	}
 }
+// display any error message
+elseif (isset($_GET['error_code']))
+{
+	$error_code = $_GET['error_code'];
+	$error_msg = $_GET['error_message'];
+	print head($title, "Error - click to continue", $error_msg);
+}
 // If we don't have an authorization code then get one
 elseif (!isset($_GET['code'])) {
 	if (isset($_COOKIE['oauth2state']))
