@@ -104,7 +104,7 @@ elseif (isset($_COOKIE[$cookie]))
 			}
 			else
 			{
-				print head("$title | Tweet unsuccessful", "Home", $cdata['user_id']);
+				print head("$title | request unsuccessful", "Home", $cdata['user_id']);
 				print '<pre>';
 				print json_encode($response);
 				print '</pre>';
@@ -115,11 +115,11 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . $page_id . "/feed";
-			$response = apiRequest($url, $cdata['access_token'],'POST',['message'=>$_REQUEST['text'],'published'=>true]);
+			$response = apiRequest($url, $page_access_request,'POST',['message'=>$_REQUEST['text'],'published'=>true]);
 			// note response code of 200 for successfully created post
 			if ($response['code'] == 200)
 			{
-				print head("$title | Tweet success", "Home", $cdata['user_id']);
+				print head("$title | Post success", "Home", $cdata['user_id']);
 				print '<pre>';
 				print json_encode($response['response']);
 				print '</pre>';
@@ -127,7 +127,7 @@ elseif (isset($_COOKIE[$cookie]))
 			}
 			else
 			{
-				print head("$title | Tweet unsuccessful", "Home", $cdata['user_id']);
+				print head("$title | Post unsuccessful", "Home", $cdata['user_id']);
 				print '<pre>';
 				print json_encode($response);
 				print '</pre>';
