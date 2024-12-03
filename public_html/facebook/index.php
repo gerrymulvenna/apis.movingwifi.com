@@ -134,6 +134,33 @@ elseif (isset($_COOKIE[$cookie]))
 				print footer("Disconnect", "");
 			}
 		}
+		elseif($_REQUEST['operation'] == 'photo')
+		{
+			$cdata = unserialize($_COOKIE[$cookie]);
+			$url = $api_base . $page_id . "/photos";
+			$response = apiRequest($url, $page_access_token,'POST',[
+				'url'=>$_REQUEST['url'],
+				'published'=>false,
+				'temporary'=>true
+			]);
+			// note response code of 200 for successfully created upload of a photo
+			if ($response['code'] == 200)
+			{
+				print head("$title | Photo upload success", "Home", $cdata['user_id']);
+				print '<pre>';
+				print json_encode($response['response']);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+			else
+			{
+				print head("$title | Photo upload unsuccessful", "Home", $cdata['user_id']);
+				print '<pre>';
+				print json_encode($response);
+				print '</pre>';
+				print footer("Disconnect", "");
+			}
+		}
 	}
 	else
 	{
@@ -144,6 +171,7 @@ elseif (isset($_COOKIE[$cookie]))
 		if (isset($page_access_token))
 		{
 			print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
+			print post_button("Upload image from URL",['operation'=>'photo'], "url", "Enter your image URL here");
 		}
 		print footer("Disconnect", "");
 	}
