@@ -17,13 +17,14 @@ $title = "Facebook";
 $connect = "Facebook Login";
 $cookie = "movingwifi-facebook";
 
-if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
+if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['code']))
 {
-	print_r($_REQUEST);
-	exit(0);
 	if ($_GET['state'] == $_COOKIE['oauth2state'])
 	{
-		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
+		$token_data = accessTokenRequest($urlAccessToken, $_REQUEST['code'], $app_id, $app_secret, $redirect_uri);
+		print "<pre>\n";
+		print json_encode($token_data);
+		exit(0);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
@@ -156,10 +157,11 @@ elseif (isset($_GET['error_code']))
 {
 	$error_code = $_GET['error_code'];
 	$error_msg = $_GET['error_message'];
-	print head($title, "Error - click to continue", $error_msg);
+	print head($title, "Error $error_code - click to continue", $error_msg);
 }
 // If we don't have an authorization code then get one
-elseif (!isset($_GET['code'])) {
+elseif (!isset($_GET['code'])) 
+{
 	if (isset($_COOKIE['oauth2state']))
 	{
 		$state = $_COOKIE['oauth2state'];
@@ -168,18 +170,8 @@ elseif (!isset($_GET['code'])) {
 	{
 		$state = getRandomState();
 	}
-	if (isset($_COOKIE['challenge']))
-	{
-		$pkce = $_COOKIE['challenge'];
-	}
-	else
-	{
-		$pkce = getRandomPkceCode(25);
-	}
-
     // store state in the session.
 	setcookie('oauth2state', $state, time() + 600, '/');
-	setcookie('challenge', $pkce, time() + 600, '/');
 
     // display Connect to button
 	print head($title);
@@ -190,6 +182,43 @@ elseif (!isset($_GET['code'])) {
 	], "tertiary", "GET", $urlAuthorize);
 }
 
+function accessTokenRequest($url, $code, $client_id, $client_secret, $callback, $extra_params = [])
+{
+	//build the default parameters
+	$params = array('code'=> $code, 'redirect_uri' => $callback, 'client_id'=>$client_id, 'client_secret'=>$client_secret);
+	// add any extra params
+	foreach($extra_params as $key => $value)
+	{
+		$params[$key] = $value;
+	}
+    // Set up cURL options.
+    $ch = curl_init();
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	$eh = fopen('curl.log', 'w+');
+	curl_setopt($ch, CURLOPT_STDERR, $eh);
+	$url = (strpos($url,"?") === false) ? $url . "?" . http_build_query($params) : $url . "&" . http_build_query($params);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+	
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
+
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
+}
 
 
 ?>
