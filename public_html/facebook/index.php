@@ -94,7 +94,7 @@ elseif (isset($_COOKIE[$cookie]))
 		elseif($_REQUEST['operation'] == 'post')
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
-			$url = $api_base . "/2/tweets";
+			$url = $api_base . $page_id . "/feed";
 			$response = apiRequest($url, $cdata['access_token'],'POST',['message'=>$_REQUEST['text'],'published'=>true]);
 			// note response code of 201 for successfully created tweet
 			if ($response['code'] == 201)
