@@ -96,8 +96,8 @@ elseif (isset($_COOKIE[$cookie]))
 		{
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$response = listAccounts($cdata['access_token']);
-			// note response code of 201 for successfully api call
-			if ($response['code'] == 201)
+			// note response code of 200 for successfully api call
+			if ($response['code'] == 200)
 			{
 				print head("$title | List account access", "Home", $cdata['user_id']);
 				print '<pre>';
@@ -119,8 +119,8 @@ elseif (isset($_COOKIE[$cookie]))
 			$cdata = unserialize($_COOKIE[$cookie]);
 			$url = $api_base . $page_id . "/feed";
 			$response = apiRequest($url, $cdata['access_token'],'POST',['message'=>$_REQUEST['text'],'published'=>true]);
-			// note response code of 201 for successfully created post
-			if ($response['code'] == 201)
+			// note response code of 200 for successfully created post
+			if ($response['code'] == 200)
 			{
 				print head("$title | Tweet success", "Home", $cdata['user_id']);
 				print '<pre>';
