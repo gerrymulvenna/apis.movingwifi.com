@@ -28,6 +28,8 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['code
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
+			print json_encode($token);
+			exit(0);
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
 			$cdata['access_token'] = $token->access_token;
 			// debug token
