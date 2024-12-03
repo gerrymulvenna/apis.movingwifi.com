@@ -6,7 +6,7 @@ date_default_timezone_set('Europe/London');
 
 require "../functions.php";
 // you will need to create the credentials.php file and define your unique credentials for this service
-require "credentials.php";  //$app_id, $app_secret, $redirect_uri, $page_id
+require "credentials.php";  //$app_id, $app_secret, $redirect_uri, $app_token, $page_id
 
 // API details
 $urlAuthorize = 'https://www.facebook.com/v21.0/dialog/oauth';
@@ -22,35 +22,31 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['code
 {
 	if ($_GET['state'] == $_COOKIE['oauth2state'])
 	{
-		$token_data = accessTokenRequest($urlAccessToken, $_REQUEST['code'], $app_id, $app_secret, $redirect_uri);
-		print "<pre>\n";
-		print json_encode($token_data);
-		exit(0);
+		$token_data = accessTokenRequest($_REQUEST['code'], $app_id, $app_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
 			$cdata['access_token_expiry'] = time() + $token->expires_in;
 			$cdata['access_token'] = $token->access_token;
-			$cdata['refresh_token'] = $token->refresh_token;
-			// get user info
-			$url = $api_base . "/2/users/me";
-			$user_data = apiRequest($url, $token->access_token,'GET',['user.fields'=>'created_at,profile_image_url,description,location,entities,url,public_metrics']);
-			if ($user_data['code'] == 200)
+			// debug token
+			$debug = debugToken($token->access_token, $app_token);
+			if ($debug['code'] == 200)
 			{
 				// just grab what we need to keep cookie small
-				$cdata['name'] = $user_data['response']->data->name;
+				$cdata['user_id'] = $debug['response']->data->user_id;
+				$cdata['type'] = $debug['response']->data->type;
+				$cdata['app_id'] = $debug['response']->data->app_id;
+				$cdata['scopes'] = $debug['response']->data->scopes;
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Connected - click to continue", $cdata['name']);
+				setcookie($cookie, serialize($cdata), strtotime('+60 days'), '/');
+				print head($title, "Connected - click to continue", $cdata['user_id']);
 				print footer("Disconnect", "");
 			}
 			else
 			{
 				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Connected - click to continue", "but failed to retrieve user info");
+				setcookie($cookie, serialize($cdata), strtotime('+60 days'), '/');
+				print head($title, "Connected - click to continue", "but failed to debug token");
 				print footer("Disconnect", "");
 			}
 		}
@@ -58,7 +54,7 @@ if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_GET['code
 		{
 			print head($title, "Error - not connected");
 			print '<pre>';
-			print_r($response);
+			print json_encode($response);
 			print '</pre>';
 		}
 	}
@@ -183,21 +179,16 @@ elseif (!isset($_GET['code']))
 	], "tertiary", "GET", $urlAuthorize);
 }
 
-function accessTokenRequest($url, $code, $client_id, $client_secret, $callback, $extra_params = [])
+function accessTokenRequest($code, $client_id, $client_secret, $callback)
 {
 	//build the default parameters
 	$params = array('code'=> $code, 'redirect_uri' => $callback, 'client_id'=>$client_id, 'client_secret'=>$client_secret);
-	// add any extra params
-	foreach($extra_params as $key => $value)
-	{
-		$params[$key] = $value;
-	}
     // Set up cURL options.
     $ch = curl_init();
 	curl_setopt($ch, CURLOPT_VERBOSE, true);
 	$eh = fopen('curl.log', 'w+');
 	curl_setopt($ch, CURLOPT_STDERR, $eh);
-	$url = (strpos($url,"?") === false) ? $url . "?" . http_build_query($params) : $url . "&" . http_build_query($params);
+	$url = $urlAccessToken . "?" . http_build_query($params);
     curl_setopt($ch, CURLOPT_URL, $url);
     curl_setopt($ch, CURLOPT_TIMEOUT, 30);
     curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
@@ -221,5 +212,37 @@ function accessTokenRequest($url, $code, $client_id, $client_secret, $callback, 
 	return $data;
 }
 
+function debugToken($input_token, $app_token)
+{
+	//build the default parameters
+	$params = array('input_token'=> $input_token, 'access_token' => $app_token);
+    // Set up cURL options.
+    $ch = curl_init();
+	curl_setopt($ch, CURLOPT_VERBOSE, true);
+	$eh = fopen('curl.log', 'w+');
+	curl_setopt($ch, CURLOPT_STDERR, $eh);
+	$url = $urlAccessToken . "?" . http_build_query($params);
+    curl_setopt($ch, CURLOPT_URL, $url);
+    curl_setopt($ch, CURLOPT_TIMEOUT, 30);
+    curl_setopt($ch, CURLOPT_RETURNTRANSFER, TRUE);
+    curl_setopt($ch, CURLOPT_USERAGENT, "MOVINGWIFI_PHP/1.0");
+	curl_setopt($ch, CURLOPT_HTTPHEADER, ['Content-Type: application/x-www-form-urlencoded']);
+    // Output the header in the response.
+    curl_setopt($ch, CURLOPT_HEADER, TRUE);
+	
+    $response = curl_exec($ch);
+    $error = curl_error($ch);
+    $http_code = curl_getinfo($ch, CURLINFO_HTTP_CODE);
+    $header_size = curl_getinfo($ch, CURLINFO_HEADER_SIZE);
+    curl_close($ch);
+
+    // Set the header, response, error and http code.
+	$data = [];
+	$data['header'] = substr($response, 0, $header_size);
+    $data['response'] = json_decode(substr($response, $header_size));
+    $data['error'] = $error;
+    $data['code'] = $http_code;
+	return $data;
+}
 
 ?>
