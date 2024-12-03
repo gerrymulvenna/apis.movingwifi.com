@@ -10,6 +10,7 @@ require "credentials.php";  //$app_id, $app_secret, $redirect_uri, $page_id
 
 // API details
 $urlAuthorize = 'https://www.facebook.com/v21.0/dialog/oauth';
+$urlAccessToken = 'https://graph.facebook.com/v21.0/oauth/access_token';
 $api_base = 'https://graph.facebook.com/v21.0/';
 
 // service-specific strings
