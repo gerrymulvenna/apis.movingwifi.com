@@ -6,27 +6,24 @@ date_default_timezone_set('Europe/London');
 
 require "../functions.php";
 // you will need to create the credentials.php file and define your unique credentials for this service
-require "credentials.php";  //$client_id, $client_secret, $redirect_uri
+require "credentials.php";  //$app_id, $app_secret, $redirect_uri, $page_id
 
 // API details
 $urlAuthorize = 'https://www.facebook.com/v21.0/dialog/oauth';
-$urlAccessToken = 'https://api.twitter.com/2/oauth2/token';
-$urlResourceOwnerDetails = 'https://openidconnect.googleapis.com/v1/userinfo';
 $api_base = 'https://graph.facebook.com/v21.0/';
-
-$scopes =  ['tweet.read','tweet.write','users.read offline.access'];
 
 // service-specific strings
 $title = "Facebook";
 $connect = "Facebook Login";
 $cookie = "movingwifi-facebook";
 
-if (isset($_GET['state']) && isset($_COOKIE['oauth2state']) && isset($_COOKIE['challenge']))
+if (isset($_GET['state']) && isset($_COOKIE['oauth2state']))
 {
+	print_r($_REQUEST);
+	exit(0);
 	if ($_GET['state'] == $_COOKIE['oauth2state'])
 	{
-		$verifier = $_COOKIE['challenge'];
-		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri, ['code_verifier'=>$verifier]);
+		$response = basicAuthRequest($urlAccessToken, "authorization_code", $_REQUEST['code'], $client_id, $client_secret, $redirect_uri);
 		if ($response['code'] == 200)
 		{
 			$token = $response['response'];
@@ -179,13 +176,11 @@ elseif (!isset($_GET['code'])) {
 
     // display Connect to button
 	print head($title);
-	print generic_button($connect,['client_id'=>$client_id,
-	                                                    'response_type'=>'code',
-														'redirect_uri'=>$redirect_uri,
-														'scope'=>implode(' ', $scopes),
-														'state'=>$state,
-														'code_challenge'=>$pkce,
-														'code_challenge_method'=>'plain'], "tertiary", "GET", $urlAuthorize);
+	print generic_button($connect,[
+		'client_id'=>$app_id,
+		'redirect_uri'=>$redirect_uri,
+		'state'=>$state
+	], "tertiary", "GET", $urlAuthorize);
 }
 
 
