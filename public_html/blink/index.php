@@ -185,7 +185,7 @@ elseif(isset($_COOKIE[$cookie]))
 		$now = substr(date("c"),0,19); // yyyy-mm-ddThh:mm:ss is 19 chars
 		if ($now >  substr($token->expired_on, 0, 19))
 		{
-			$data = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key, array("enable_moto_payments" => true, "application_name" => "MOT Manager Sandbox", "source_site"=>"apis.movingwifi.com"));
+			$data = getBlinkAccessToken($urlAccessToken, $api_key, $secret_key, array("enable_moto_payments" => true, "application_name" => "MOVINGWIFI Sandbox", "source_site"=>"apis.movingwifi.com"));
 			if ($data['code'] == 201)
 			{
 				$token = $data['response'];
