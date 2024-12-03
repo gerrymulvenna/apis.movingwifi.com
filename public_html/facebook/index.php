@@ -139,38 +139,10 @@ elseif (isset($_COOKIE[$cookie]))
 	}
 	else
 	{
-		$now = time();
-		$cdata = unserialize($_COOKIE[$cookie]);
-		if ($now >  $cdata['access_token_expiry'])
-		{
-			$response = basicRefreshRequest($urlAccessToken, "refresh_token", $cdata['refresh_token'], $client_id, $client_secret);
-			if ($response['code'] == 200)
-			{
-				$token = $response['response'];
-				$cdata['access_token_expiry'] = time() + $token->expires_in;
-				$cdata['access_token'] = $token->access_token;
-				$cdata['refresh_token'] = $token->refresh_token;
-				setcookie($cookie, serialize($cdata), strtotime('+6 months'), '/');
-				print head($title, "Home", $cdata['user_id']);
-				print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-				print generic_button("List account access",['operation'=>'accounts'], "tertiary", "GET", "./");
-				print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
-			}
-			else
-			{
-				setcookie($cookie,"", time() - 3600, "/");  //delete cookie
-				setcookie('oauth2state',"", time() - 3600, "/");  //delete cookie
-				setcookie('challenge',"", time() - 3600, "/");  //delete cookie
-				print head($title, "Refresh failed - click to continue");
-			}	
-		}
-		else
-		{
-			print head($title, "Home", $cdata['user_id']);
-			print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
-			print generic_button("List account access",['operation'=>'accounts'], "tertiary", "GET", "./");
-			print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
-		}
+		print head($title, "Home", $cdata['user_id']);
+		print generic_button("Display cookie",['operation'=>'cookie'], "tertiary", "GET", "./");
+		print generic_button("List account access",['operation'=>'accounts'], "tertiary", "GET", "./");
+		print post_button("Submit post to page",['operation'=>'post'], "text", "Enter your post text here");
 		print footer("Disconnect", "");
 	}
 }
